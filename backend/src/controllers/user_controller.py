@@ -10,7 +10,7 @@ router = APIRouter()
 async def get_all_users():
     try:
         users = read_users()
-        return users.data
+        return users
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error fetching users")
 
@@ -19,7 +19,7 @@ async def get_all_users():
 async def add_new_user(user: User):
     try:
         result = create_user(user) # TODO: Check what returns
-        return result.data
+        return result
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error creating user")
 

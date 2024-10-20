@@ -1,21 +1,20 @@
 import uuid
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
-
+# Define the User class
 class User(BaseModel):
-    # Constructor
-    def __init__(self, email: str, username: str, password: str):
-        self._id = (
-            uuid.uuid4()
-        )  # Generates an UUID with format: xxxxxxxx-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx
-        self._email = email
-        self._username = username
-        self._password = password
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))  # Generate UUID as a string by default
+    email: str
+    username: str
+    password: str
+
+    def __repr__(self):
+        return f"User(id='{self.id}', email='{self.email}', username='{self.username}', password='{self.password}')"
+
+    class Config:
+        from_attributes = True
 
     # Getters
-    @property
-    def id(self) -> str:
-        return str(self._id)  # String to simplify management
 
     @property
     def email(self) -> str:
@@ -28,9 +27,3 @@ class User(BaseModel):
     @property
     def password(self) -> str:
         return self._password
-
-    def __repr__(self):
-        return f"User(id={self.id}, email='{self.email}', username='{self.username}', password='{self.password}')"
-
-    class Config:
-        orm_mode = True
