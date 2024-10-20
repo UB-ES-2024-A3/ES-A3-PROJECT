@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import NavBar from '@/components/navbar';
 
 const MainPage: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Determines wether the user is logged in or not
+  const [tabSelected, setTabSelected] = useState('profile'); // Stores the selected tab
   const router = useRouter();
 
   // If the user it's not authenticated it gets redirected to the login page 
@@ -22,14 +24,26 @@ const MainPage: React.FC = () => {
     router.push('/login');
   };
 
+  // Updates the navigation bar tab selected
+  const handleNavBarSelection = (tab: string) => {
+    setTabSelected(tab); 
+  };
+
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
       {isAuthenticated ? (
         <>
           {/*If the user is authenticated it shows the page of the selected tab and the NavBar*/}
-          <div style={{ flex: 1, padding: '20px' }}>
-            <button onClick={handleLogout}>Logout</button>
-          </div>
+          <div style={{ width: '250px' }}>
+            <NavBar handleNavBarSelection={handleNavBarSelection} tabSelected={tabSelected} />
+          </div>          
+            {tabSelected === 'timeline' ? (
+              <div>Timeline Page</div>
+            ):(
+              <div style={{ flex: 1, padding: '20px' }}>
+                <button onClick={handleLogout}>Logout</button>
+              </div>
+            )}
         </>
       ) : (
         <>
