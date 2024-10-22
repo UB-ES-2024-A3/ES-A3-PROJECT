@@ -5,13 +5,16 @@ import NavBar from '@/components/navbar';
 const MainPage: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Determines wether the user is logged in or not
   const [tabSelected, setTabSelected] = useState('profile'); // Stores the selected tab
+  const [username, setUsername] = useState(''); // Stores the user's username
   const router = useRouter();
 
   // If the user it's not authenticated it gets redirected to the login page 
   useEffect(() => {
     const authStatus = localStorage.getItem('isAuthenticated');
+    const nameoftheuser = localStorage.getItem('userName');
     if (authStatus === 'true') {
       setIsAuthenticated(true);
+      setUsername(nameoftheuser ? nameoftheuser : "");
     } else {
       router.push('/login');
     }
@@ -20,6 +23,8 @@ const MainPage: React.FC = () => {
   // Function to log out the user deleting the session and redirecting to the login page
   const handleLogout = () => {
     localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userAuthToken');
     setIsAuthenticated(false);
     router.push('/login');
   };
