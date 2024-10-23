@@ -1,17 +1,17 @@
   button {
     padding: 10px 20px;
     border: none;
-    background-color: #0379C7;
+    background-color: #417154;
     color: white;
     cursor: pointer;
     border-radius: 5px;
   }
   
   button:hover {
-    background-color: #0263a3;
+    background-color: #417154d5;
   }
   
   :root { 
-    --icon-selected: #0379C7; 
+    --icon-selected: #417154; 
     --icon-normal: #000000; 
   }
