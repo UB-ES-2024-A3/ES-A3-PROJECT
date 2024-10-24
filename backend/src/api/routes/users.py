@@ -1,7 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from typing import List
-from ..models.user_model import User
-from ..api_db import *
+from backend.src.crud.user import *
 
 router = APIRouter()
 

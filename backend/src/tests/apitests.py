@@ -1,10 +1,8 @@
-from unittest.mock import patch, MagicMock
-from fastapi import HTTPException
-from backend.src.api_db import (
+from backend.src.crud.user import (
     read_users,
     create_user,
     delete_user,
-) 
+)
 from backend.src.models.user_model import User
 import random
 
