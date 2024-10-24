@@ -13,7 +13,7 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', backgroundColor: '#fafaf5', height: '100vh'}}>
+    <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', height: '100vh'}}>
       <div style={{ boxShadow: "0 1px 1px 0 grey", margin: 20, padding: 25, backgroundColor: 'white', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center'}}>
         <h2 style={{ margin: '10px 0px' }}>Login</h2>
         <form>
@@ -38,15 +38,9 @@ const LoginPage: React.FC = () => {
           </div>
         </form>
         <div style={{ margin: 5}}>
-          <button style={{ color: '#417154', backgroundColor: 'white', padding: 0, width: '100%'}} className="linkButton">
+          <button style={{ padding: 0, width: '100%' }} className="secondaryButton">
             <u>Don't have an account? Register</u>
           </button>
-          {/* Styled JSX block */}
-          <style jsx>{`
-            .linkButton:hover {
-              color: #417154d5;
-            }
-          `}</style>
         </div>
       </div>
     </div>
