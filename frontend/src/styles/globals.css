@@ -1,17 +1,34 @@
+  :root { 
+    --icon-selected: #417154; 
+    --icon-normal: #000000; 
+    --primary-green: #417154; 
+    --hover-green: #417154d5;
+    --primary-beige: #fafaf5;
+  }
+
+  html {
+    background-color: var(--primary-beige);
+  }
+
   button {
     padding: 10px 20px;
     border: none;
-    background-color: #0379C7;
+    background-color: var(--primary-green);
     color: white;
     cursor: pointer;
     border-radius: 5px;
   }
   
   button:hover {
-    background-color: #0263a3;
+    background-color: var(--hover-green);
   }
-  
-  :root { 
-    --icon-selected: #0379C7; 
-    --icon-normal: #000000; 
+
+  .secondaryButton {
+    color: var(--primary-green);
+    background-color: white;
+  }
+
+  .secondaryButton:hover{
+    color: var(--hover-green);
+    background-color: white;
   }
