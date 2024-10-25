@@ -2,7 +2,7 @@ import os
 from fastapi import HTTPException
 from supabase import create_client
 from dotenv import load_dotenv
-from backend.src.models.user_model import User
+from ..models.user_model import User
 
 # Getter client
 def get_db_client():
