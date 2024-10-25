@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from src.api.routes import users
+from .api.routes import users
 app = FastAPI()
 
 origins = ["*"
