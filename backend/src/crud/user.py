@@ -3,7 +3,7 @@ from fastapi import HTTPException
 from supabase import create_client
 from dotenv import load_dotenv
 from backend.src.models.user_model import User
-
+import re
 # Getter client
 def get_db_client():
     load_dotenv()
@@ -49,3 +49,26 @@ def delete_user(user_id: str):
     except Exception as e:
         print(f"Error deleting user with id {user_id}: {e}")
         return False
+
+# Method that checks if a user with a certain identifier (either email or username) and password exists
+def authenticate(identifier: str, password: str):
+    supabase = get_db_client()
+    if(re.search(r'@', identifier)):
+        try:
+            # Result will have a single value in the data array as users are unique
+            result = supabase.table("users").select('*').eq('email', identifier).execute()
+        except Exception as e:
+            print(f"Error looking for user with email {identifier}: {e}")
+            return False
+    else:
+        try:
+            result = supabase.table("users").select('*').eq('username', identifier).execute()
+        except Exception as e:
+            print(f"Error looking for user with username {identifier}: {e}")
+            return False
+    # If result data is empty the user with the specified identifier doesn't exist.
+    # If the user exists in the db we check if the password is correct.
+    if(result.data != [] and result.data[0]['password'] == password):
+        return True
+
+    return False
