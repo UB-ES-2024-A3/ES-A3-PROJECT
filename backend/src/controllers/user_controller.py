@@ -1,16 +1,8 @@
 import re
 import uuid
-from backend.src.crud.user import (
-    read_users,
-    create_user,
-    delete_user,
-    search_by_username,
-    search_by_email,
-    search_by_id,
-)
+from ..crud.user import *
+from ..models.user_model import User
 from fastapi import HTTPException
-from backend.src.models.user_model import User
-
 
 class UserController:
 
