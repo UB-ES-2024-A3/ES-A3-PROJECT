@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from typing import List
-from backend.src.models.user_model import User
+from ...models.user_model import User
 from ...controllers.user_controller import UserController
 
 userController = UserController()
