@@ -1,31 +1,40 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
-const LoginPage: React.FC = () => {
+const RegisterPage: React.FC = () => {
   const router = useRouter();
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // Fakes a login 
-  const handleLogin = () => {
+  // Fakes a register
+  const handleRegister = () => {
     localStorage.setItem('isAuthenticated', 'true');
     router.push('/');
   };
 
-  const handleRegister = () => {
-    router.push('/register');
+  const handleLogin = () => {
+    router.push('/login');
   };
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', height: '100vh'}}>
       <div style={{ boxShadow: "0 1px 1px 0 grey", margin: 20, padding: 25, backgroundColor: 'white', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center'}}>
-        <h2 style={{ margin: '10px 0px' }}>Login</h2>
+        <h2 style={{ margin: '10px 0px' }}>Register</h2>
         <form>
           <div style={{ margin: 5}}>
-            <label> Username or email:</label><br />
+            <label> Username: </label><br />
             <input type="text" id="username" 
               value={username} 
               onChange={(e) => setUsername(e.target.value)} required
+              style={{padding: 3}}
+            /><br />
+          </div>
+          <div style={{ margin: 5}}>
+            <label> Email: </label><br />
+            <input type="email" id="email" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} required
               style={{padding: 3}}
             /><br />
           </div>
@@ -38,12 +47,12 @@ const LoginPage: React.FC = () => {
             /><br />
           </div>
           <div style={{ margin: '10px 5px'}}>
-            <button type="submit" onClick={handleLogin} style={{ width: '100%'}}>Login</button><br />
+            <button type="submit" onClick={handleRegister} style={{ width: '100%'}}>Register</button><br />
           </div>
         </form>
         <div style={{ margin: 5}}>
-          <button style={{ padding: 0, width: '100%' }} className="secondaryButton" onClick={handleRegister}>
-            <u>Don&apos;t have an account? Register</u>
+          <button style={{ padding: 0, width: '100%' }} className="secondaryButton" onClick={handleLogin}>
+            <u>Already have an account? Login</u>
           </button>
         </div>
       </div>
@@ -51,4 +60,4 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
