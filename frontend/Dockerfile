@@ -10,6 +10,7 @@ RUN npm install
 # Copy the rest of the application code into the container
 COPY . .
 
+
 # Expose port 300 to the outside world
 EXPOSE 3000
 
