@@ -59,24 +59,36 @@ def test_delete_user_success(userId):
 def test_authenticate_user_email():
     users = read_users()
     result1 = authenticate(users[0].email, users[0].password)
-    result2 = authenticate("nonExistingEmail@gmail.com", "wrongPassword")
-    result3 = authenticate(users[0].email, "wrongPassword")
-    result4 = authenticate("wrongEmail@gmail.com", users[0].password)
-    assert result1 == True, "Error authenticating user with email"
-    assert result2 == False
-    assert result3 == False
-    assert result4 == False
+    assert result1 == None
+    try:
+        result2 = authenticate("nonExistingEmail@gmail.com", "wrongPassword")
+    except Exception as e:
+        assert e.detail == "Incorrect username/email or password"
+    try:
+        result3 = authenticate(users[0].email, "wrongPassword")
+    except Exception as e:
+        assert e.detail == "Incorrect username/email or password"
+    try:
+        result4 = authenticate("wrongEmail@gmail.com", users[0].password)
+    except Exception as e:
+        assert e.detail == "Incorrect username/email or password"
 
 def test_authenticate_user_username():
     users = read_users()
     result1 = authenticate(users[0].username, users[0].password)
-    result2 = authenticate("wrongUsername", "wrongPassword")
-    result3 = authenticate(users[0].username, "wrongPassword")
-    result4 = authenticate("wrongUsername", users[0].password)
-    assert result1 == True, "Error authenticating user with username"
-    assert result2 == False
-    assert result3 == False
-    assert result4 == False
+    assert result1 == None
+    try:
+        result2 = authenticate("wrongUsername", "wrongPassword")
+    except Exception as e:
+        assert e.detail == "Incorrect username/email or password"
+    try:
+        result3 = authenticate(users[0].username, "wrongPassword")
+    except Exception as e:
+        assert e.detail == "Incorrect username/email or password"
+    try:
+        result4 = authenticate("wrongUsername", users[0].password)
+    except Exception as e:
+        assert e.detail == "Incorrect username/email or password"
 
 test_read_users()
 

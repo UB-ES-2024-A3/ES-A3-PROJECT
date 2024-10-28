@@ -58,17 +58,15 @@ def authenticate(identifier: str, password: str):
             # Result will have a single value in the data array as users are unique
             result = supabase.table("users").select('*').eq('email', identifier).execute()
         except Exception as e:
-            print(f"Error looking for user with email {identifier}: {e}")
-            return False
+            raise HTTPException(status_code=500, detail=str(e))
     else:
         try:
             result = supabase.table("users").select('*').eq('username', identifier).execute()
         except Exception as e:
-            print(f"Error looking for user with username {identifier}: {e}")
-            return False
+            raise HTTPException(status_code=500, detail=str(e))
     # If result data is empty the user with the specified identifier doesn't exist.
     # If the user exists in the db we check if the password is correct.
     if(result.data != [] and result.data[0]['password'] == password):
-        return True
+        return None
 
-    return False
+    raise HTTPException(status_code=500, detail="Incorrect username/email or password")
