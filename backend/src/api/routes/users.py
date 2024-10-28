@@ -23,6 +23,8 @@ async def add_new_user(user: User):
         return result
     except HTTPException as e:
         raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error creating user")
 
 # Endpoint to delete a user by id
 @router.delete("/users/{user_id}")
@@ -34,6 +36,8 @@ async def remove_user(user_id: str):
         return {"message": f"User with id {user_id} has been deleted"}
     except HTTPException as e:
         raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error deleting user: {e}")
 
 # Endpoint to search for a user by username
 @router.get("/users/username/{username}", response_model=User)
@@ -60,7 +64,6 @@ async def get_user_by_email(email: str):
         raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error searching user by email")
-
 
 # Endpoint to search for a user by id
 @router.get("/users/id/{user_id}", response_model=User)

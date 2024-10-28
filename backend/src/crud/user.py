@@ -4,12 +4,14 @@ from supabase import create_client
 from dotenv import load_dotenv
 from src.models.user_model import User
 
+
 # Getter client
 def get_db_client():
     load_dotenv()
     return create_client(
         os.environ.get("SUPABASE_URL"), os.environ.get("SUPABASE_KEY")
     )  # Keys are in .env
+
 
 # Method to read all users from database
 def read_users():
@@ -77,7 +79,7 @@ def create_user(user: User):
                 status_code=500,
                 detail="Error inserting user: No data returned from Supabase",
             )
-            created_user = User(
+        created_user = User(
             id=result.data[0]["id"],
             email=result.data[0]["email"],
             username=result.data[0]["username"],
