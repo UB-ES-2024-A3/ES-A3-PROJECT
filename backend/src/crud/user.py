@@ -69,4 +69,4 @@ def authenticate(identifier: str, password: str):
     if(result.data != [] and result.data[0]['password'] == password):
         return None
 
-    raise HTTPException(status_code=500, detail="Incorrect username/email or password")
+    raise HTTPException(status_code=500, detail={"credentials": "Incorrect username/email or password"})
