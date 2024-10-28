@@ -1,16 +1,15 @@
 from fastapi import APIRouter, HTTPException
 from typing import List
-from src.models.user_model import User
-from src.controllers.user_controller import UserController
+from src.crud.user import *
 
-userController = UserController()
+
 router = APIRouter()
 
 # Endpoint to read all users
 @router.get("/users", response_model=List[User])
 async def get_all_users():
     try:
-        users = userController.read_users_query()
+        users = read_users()
         return users
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error fetching users")
@@ -19,10 +18,8 @@ async def get_all_users():
 @router.post("/users", response_model=User)
 async def add_new_user(user: User):
     try:
-        result = userController.create_user_command(user)
+        result = create_user(user) # TODO: Check what returns
         return result
-    except HTTPException as e:
-        raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error creating user")
 
@@ -30,50 +27,9 @@ async def add_new_user(user: User):
 @router.delete("/users/{user_id}")
 async def remove_user(user_id: str):
     try:
-        success = userController.delete_user_command(user_id)
+        success = delete_user(user_id)
         if not success:
             raise HTTPException(status_code=404, detail="User not found")
         return {"message": f"User with id {user_id} has been deleted"}
-    except HTTPException as e:
-        raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error deleting user: {e}")
-
-# Endpoint to search for a user by username
-@router.get("/users/username/{username}", response_model=User)
-async def get_user_by_username(username: str):
-    try:
-        user = userController.search_by_username(username)
-        if user == -1:
-            raise HTTPException(status_code=404, detail="User not found")
-        return user
-    except HTTPException as e:
-        raise e
-    except Exception as e:
-        raise HTTPException(status_code=500, detail="Error searching user by username")
-
-# Endpoint to search for a user by email
-@router.get("/users/email/{email}", response_model=User)
-async def get_user_by_email(email: str):
-    try:
-        user = userController.search_by_email(email)
-        if user == -1:
-            raise HTTPException(status_code=404, detail="User not found")
-        return user
-    except HTTPException as e:
-        raise e
-    except Exception as e:
-        raise HTTPException(status_code=500, detail="Error searching user by email")
-
-# Endpoint to search for a user by id
-@router.get("/users/id/{user_id}", response_model=User)
-async def get_user_by_id(user_id: str):
-    try:
-        user = userController.search_by_id(user_id)
-        if user == -1:
-            raise HTTPException(status_code=404, detail="User not found")
-        return user
-    except HTTPException as e:
-        raise e
-    except Exception as e:
-        raise HTTPException(status_code=500, detail="Error searching user by id")
