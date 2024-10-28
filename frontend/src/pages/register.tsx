@@ -6,11 +6,14 @@ const RegisterPage: React.FC = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [repeatedPassword, setRepeatedPassword] = useState('');
 
   // Fakes a register
   const handleRegister = () => {
-    localStorage.setItem('isAuthenticated', 'true');
-    router.push('/');
+    if(password == repeatedPassword) {
+      localStorage.setItem('isAuthenticated', 'true');
+      router.push('/');
+    }
   };
 
   const handleLogin = () => {
@@ -43,6 +46,14 @@ const RegisterPage: React.FC = () => {
             <input type="password" id="password"  
               value={password} 
               onChange={(e) => setPassword(e.target.value)} required
+              style={{padding: 3}}
+            /><br />
+          </div>
+          <div style={{ margin: 5}}>
+            <label> Repeat the password: </label><br />
+            <input type="password" id="repPassword"  
+              value={repeatedPassword} 
+              onChange={(e) => setRepeatedPassword(e.target.value)} required
               style={{padding: 3}}
             /><br />
           </div>
