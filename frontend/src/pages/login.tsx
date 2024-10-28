@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import LoginService from '../services/loginService';
 
 const LoginPage: React.FC = () => {
   const router = useRouter();
@@ -8,19 +9,31 @@ const LoginPage: React.FC = () => {
 
   // Fakes a login 
   const handleLogin = () => {
+    authenticate1();
     localStorage.setItem('isAuthenticated', 'true');
-    router.push('/');
+    // router.push('/');
+  };
+
+  const authenticate1 = () => {
+    LoginService.loginRequest(username, password)
+      .then(res => {
+        console.log(res);
+      });
   };
 
   const handleRegister = () => {
     router.push('/register');
   };
 
+  const dontRefresh = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  }
+
   return (
     <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', height: '100vh'}}>
       <div style={{ boxShadow: "0 1px 1px 0 grey", margin: 20, padding: 25, backgroundColor: 'white', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center'}}>
         <h2 style={{ margin: '10px 0px' }}>Login</h2>
-        <form>
+        <form onSubmit={dontRefresh}>
           <div style={{ margin: 5}}>
             <label> Username or email:</label><br />
             <input type="text" id="username" 
