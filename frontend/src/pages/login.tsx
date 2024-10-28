@@ -12,7 +12,7 @@ const LoginPage: React.FC = () => {
     const newErrors = { username: '', password: '', credentials: '' };
     let validInputs = true;
     if (!username) {
-      newErrors.username = 'Email is required';
+      newErrors.username = 'Email or username is required';
       validInputs = false;
     }
     if (!password) {
