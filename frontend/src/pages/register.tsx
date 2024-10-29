@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import RegisterService from '@/services/registerService';
 
 const RegisterPage: React.FC = () => {
   const router = useRouter();
@@ -7,13 +8,37 @@ const RegisterPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [repeatedPassword, setRepeatedPassword] = useState('');
+  const [errors, setErrors] = useState({message: '', isUsername: false, isEmail: false});
 
   // Fakes a register
-  const handleRegister = () => {
+  const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault(); // Prevents the page from rerendering when the form is submitted
     if(password == repeatedPassword) {
-      localStorage.setItem('isAuthenticated', 'true');
-      router.push('/');
+      if (await sendRequest()) {
+        localStorage.setItem('isAuthenticated', 'true');
+        router.push('/');
+      }
     }
+  };
+
+  const sendRequest = async () => {
+    return RegisterService.registerRequest(
+      username,
+      email,
+      password
+    )
+    .then(result => {
+      console.log(result);
+      setErrors({message: '', isUsername: false, isEmail: false});
+      return true;
+    })
+    .catch(errorMsg => {
+      const isUsernameError = errorMsg.toLowerCase().includes('username');
+      const isEmailError = errorMsg.toLowerCase().includes('email');
+      console.log(errorMsg);
+      setErrors({message: errorMsg, isUsername: isUsernameError, isEmail: isEmailError});
+      return false;
+    });
   };
 
   const handleLogin = () => {
@@ -24,7 +49,7 @@ const RegisterPage: React.FC = () => {
     <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', height: '100vh'}}>
       <div style={{ boxShadow: "0 1px 1px 0 grey", margin: 20, padding: 25, backgroundColor: 'white', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center'}}>
         <h2 style={{ margin: '10px 0px' }}>Register</h2>
-        <form>
+        <form onSubmit={handleRegister}>
           <div style={{ margin: 5}}>
             <label> Username: </label><br />
             <input type="text" id="username" 
@@ -58,7 +83,7 @@ const RegisterPage: React.FC = () => {
             /><br />
           </div>
           <div style={{ margin: '10px 5px'}}>
-            <button type="submit" onClick={handleRegister} style={{ width: '100%'}}>Register</button><br />
+            <button type="submit" style={{ width: '100%'}}>Register</button><br />
           </div>
         </form>
         <div style={{ margin: 5}}>
