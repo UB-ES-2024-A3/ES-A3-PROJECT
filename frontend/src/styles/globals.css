@@ -1,3 +1,6 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
   :root { 
     --icon-selected: #417154; 
     --icon-normal: #000000; 
