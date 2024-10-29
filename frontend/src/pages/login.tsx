@@ -33,13 +33,18 @@ const LoginPage: React.FC = () => {
     )
     .then(result => {
       // Login success
-      console.log(result);
+      console.log(result.result);
       setErrors({username: '', password: '', credentials: ''});
       return true;
     })
-    .catch(errorMsg => {
-      console.log(errorMsg);
-      setErrors({ username: '', password: '', credentials: errorMsg });
+    .catch(errorMsgs => {
+      console.log(errorMsgs);
+      Object.keys(errorMsgs).forEach(key => {
+        setErrors(prevErrors => ({
+          ...prevErrors,
+          [key]: errorMsgs[key]
+        }));
+      });
       return false;
     });
   }
