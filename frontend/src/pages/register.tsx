@@ -10,7 +10,8 @@ const RegisterPage: React.FC = () => {
   const [repeatedPassword, setRepeatedPassword] = useState('');
 
   // Fakes a register
-  const handleRegister = async () => {
+  const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault(); // Prevents the page from rerendering when the form is submitted
     if(password == repeatedPassword) {
       if (await sendRequest()) {
         localStorage.setItem('isAuthenticated', 'true');
@@ -43,7 +44,7 @@ const RegisterPage: React.FC = () => {
     <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', height: '100vh'}}>
       <div style={{ boxShadow: "0 1px 1px 0 grey", margin: 20, padding: 25, backgroundColor: 'white', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center'}}>
         <h2 style={{ margin: '10px 0px' }}>Register</h2>
-        <form>
+        <form onSubmit={handleRegister}>
           <div style={{ margin: 5}}>
             <label> Username: </label><br />
             <input type="text" id="username" 
@@ -77,7 +78,7 @@ const RegisterPage: React.FC = () => {
             /><br />
           </div>
           <div style={{ margin: '10px 5px'}}>
-            <button type="submit" onClick={handleRegister} style={{ width: '100%'}}>Register</button><br />
+            <button type="submit" style={{ width: '100%'}}>Register</button><br />
           </div>
         </form>
         <div style={{ margin: 5}}>
