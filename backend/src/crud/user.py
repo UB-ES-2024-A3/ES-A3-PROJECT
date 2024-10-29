@@ -67,6 +67,5 @@ def authenticate(identifier: str, password: str):
     # If result data is empty the user with the specified identifier doesn't exist.
     # If the user exists in the db we check if the password is correct.
     if(result.data != [] and result.data[0]['password'] == password):
-        return None
-
-    raise HTTPException(status_code=500, detail={"credentials": "Incorrect username/email or password"})
+        return True
+    return False
