@@ -1,13 +1,16 @@
+import endpoint from '../endpoints.config';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import NavBar from '@/components/navbar';
 
 const MainPage: React.FC = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Determines wether the user is logged in or not
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // Determines whether the user is logged in or not
   const [tabSelected, setTabSelected] = useState('profile'); // Stores the selected tab
+  const [fetchedData, setFetchedData] = useState(null); // Stores the data from the GET request
   const router = useRouter();
 
-  // If the user it's not authenticated it gets redirected to the login page 
   useEffect(() => {
     const authStatus = localStorage.getItem('isAuthenticated');
     if (authStatus === 'true') {
@@ -17,37 +20,47 @@ const MainPage: React.FC = () => {
     }
   }, [router]);
 
-  // Function to log out the user deleting the session and redirecting to the login page
+  useEffect(() => {
+    if (isAuthenticated) {
+      axios.get(endpoint.dbURL) // Now correctly accessing dbURL
+        .then(response => {
+          console.log('Fetched Data:', response.data);
+          setFetchedData(response.data);
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    }
+  }, [isAuthenticated]);
+
   const handleLogout = () => {
     localStorage.removeItem('isAuthenticated');
     setIsAuthenticated(false);
     router.push('/login');
   };
 
-  // Updates the navigation bar tab selected
   const handleNavBarSelection = (tab: string) => {
-    setTabSelected(tab); 
+    setTabSelected(tab);
   };
 
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
       {isAuthenticated ? (
         <>
-          {/*If the user is authenticated it shows the page of the selected tab and the NavBar*/}
           <div style={{ width: '250px' }}>
             <NavBar handleNavBarSelection={handleNavBarSelection} tabSelected={tabSelected} />
-          </div>          
-            {tabSelected === 'timeline' ? (
-              <div>Timeline Page</div>
-            ):(
-              <div style={{ flex: 1, padding: '20px' }}>
-                <button onClick={handleLogout}>Logout</button>
-              </div>
-            )}
+          </div>
+          {tabSelected === 'timeline' ? (
+            <div>Timeline Page</div>
+          ) : (
+            <div style={{ flex: 1, padding: '20px' }}>
+              <button onClick={handleLogout}>Logout</button>
+              {fetchedData && <pre>{JSON.stringify(fetchedData, null, 2)}</pre>}
+            </div>
+          )}
         </>
       ) : (
         <>
-          {/*If the user is not authenticated it shows this message while it's being redirected*/}
           <p>Redirecting to login...</p>
         </>
       )}
