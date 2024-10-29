@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import RegisterService from '@/services/registerService';
+import InputField from '@/components/input_field';
 
 const RegisterPage: React.FC = () => {
   const router = useRouter();
@@ -8,16 +9,77 @@ const RegisterPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [repeatedPassword, setRepeatedPassword] = useState('');
-  const [errors, setErrors] = useState({message: '', isUsername: false, isEmail: false});
+  const [errors, setErrors] = useState({ email: '', username: '', password: '', repeatedPassword: ''});
+
+  const validateEmail = () => {
+    const emailRegex = /^[\w\.-]+@[a-zA-Z0-9\.-]+\.[a-zA-Z]{2,}$/;
+    if (!email) {
+      return 'Email is required';
+    }
+    else if (!emailRegex.test(email)) {
+      return "Email format is incorrect. Please enter a valid email address (e.g., name@company.com)";
+    }
+    return '';
+  }
+
+  const validateUsername = () => {
+    const usernameRegex = /^[a-zA-Z0-9._]+$/;
+    if (!username) {
+      return 'Username is required';
+    }
+    if (!usernameRegex.test(username)){
+      return 'Username contains invalid characters. Only letters, numbers, periods, and underscores are allowed';
+    }
+    return '';
+  }
+
+  const validatePassword = () => {
+    if (!password) {
+      return 'Password is required';
+    }
+    if (password.length < 8){
+      return "The password must be at least 8 characters long";
+    }
+    return '';
+  }
+  
+  const validateRepeatedPassword = () => {
+    if (!repeatedPassword) {
+      return 'Repeating the password is required';
+    }
+    if (password != repeatedPassword){
+      return "The passwords introduced doesn't match";
+    }
+    if (repeatedPassword.length < 8){
+      return "The password must be at least 8 characters long";
+    }
+    return '';
+  }
+
+  const validateInputs = () => {
+    const emailError = validateEmail();
+    const usernameError = validateUsername();
+    const passwordError = validatePassword();
+    const repeatedPasswordError = validateRepeatedPassword();
+
+    const newErrors = { 
+      email: emailError, 
+      username: usernameError, 
+      password: passwordError, 
+      repeatedPassword: repeatedPasswordError 
+    };
+
+    setErrors(newErrors);
+
+    return !emailError && !usernameError && !passwordError && !repeatedPasswordError; 
+  };
 
   // Fakes a register
   const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); // Prevents the page from rerendering when the form is submitted
-    if(password == repeatedPassword) {
-      if (await sendRequest()) {
-        localStorage.setItem('isAuthenticated', 'true');
-        router.push('/');
-      }
+    if (validateInputs() && await sendRequest()) {
+      localStorage.setItem('isAuthenticated', 'true');
+      router.push('/');
     }
   };
 
@@ -29,14 +91,16 @@ const RegisterPage: React.FC = () => {
     )
     .then(result => {
       console.log(result);
-      setErrors({message: '', isUsername: false, isEmail: false});
+      setErrors({ email: '', username: '', password: '', repeatedPassword: ''});
       return true;
     })
     .catch(errorMsg => {
-      const isUsernameError = errorMsg.toLowerCase().includes('username');
-      const isEmailError = errorMsg.toLowerCase().includes('email');
+      const errorType = errorMsg.toLowerCase().includes('username') ? "username": "email";
       console.log(errorMsg);
-      setErrors({message: errorMsg, isUsername: isUsernameError, isEmail: isEmailError});
+      setErrors(prevErrors => ({
+        ...prevErrors,
+        [errorType]: errorMsg
+      }));
       return false;
     });
   };
@@ -45,43 +109,28 @@ const RegisterPage: React.FC = () => {
     router.push('/login');
   };
 
+
+
   return (
-    <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', height: '100vh'}}>
-      <div style={{ boxShadow: "0 1px 1px 0 grey", margin: 20, padding: 25, backgroundColor: 'white', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center'}}>
-        <h2 style={{ margin: '10px 0px' }}>Register</h2>
-        <form onSubmit={handleRegister}>
-          <div style={{ margin: 5}}>
-            <label> Username: </label><br />
-            <input type="text" id="username" 
-              value={username} 
-              onChange={(e) => setUsername(e.target.value)} required
-              style={{padding: 3}}
-            /><br />
-          </div>
-          <div style={{ margin: 5}}>
-            <label> Email: </label><br />
-            <input type="email" id="email" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} required
-              style={{padding: 3}}
-            /><br />
-          </div>
-          <div style={{ margin: 5}}>
-            <label> Password: </label><br />
-            <input type="password" id="password"  
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} required
-              style={{padding: 3}}
-            /><br />
-          </div>
-          <div style={{ margin: 5}}>
-            <label> Repeat the password: </label><br />
-            <input type="password" id="repPassword"  
-              value={repeatedPassword} 
-              onChange={(e) => setRepeatedPassword(e.target.value)} required
-              style={{padding: 3}}
-            /><br />
-          </div>
+    <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', height: '100vh' }}>
+      <div style={{ 
+        boxShadow: "0 1px 1px 0 grey", 
+        margin: "10%", 
+        padding: "4%", 
+        backgroundColor: 'white', 
+        display: 'flex', 
+        alignItems: 'center', 
+        flexDirection: 'column', 
+        justifyContent: 'center', 
+        width: '33%',  
+        borderRadius: "5%"
+      }}>
+        <h1 style={{ margin: '10px 0px', width: '100%', textAlign: 'center' }}>Register</h1>
+        <form onSubmit={handleRegister} style={{ width: '100%' }}>
+          <InputField label={"Username:"} type={"text"} id={"username"} value={username} onChange={setUsername} error={errors.username}/>
+          <InputField label={"Email:"} type={"text"} id={"email"} value={email} onChange={setEmail} error={errors.email}/>
+          <InputField label={"Password:"} type={"password"} id={"password"} value={password} onChange={setPassword} error={errors.password}/>
+          <InputField label={"Password (repeat):"} type={"password"} id={"password2"} value={repeatedPassword} onChange={setRepeatedPassword} error={errors.repeatedPassword}/>
           <div style={{ margin: '10px 5px'}}>
             <button type="submit" style={{ width: '100%'}}>Register</button><br />
           </div>

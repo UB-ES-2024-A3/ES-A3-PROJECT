@@ -27,7 +27,7 @@ const LoginPage: React.FC = () => {
   // Here's where the request will be done
   // Returns true if the user is correctly authenticated and false otherwise
   const authenticate = () =>{
-    setErrors({ username: '', password: '', credentials: 'Incorrect username/email or password' });
+    setErrors({ username: '', password: '', credentials: 'Icorrect username/email or password' });
     return false;
   }
 
@@ -51,10 +51,21 @@ const LoginPage: React.FC = () => {
     router.push('/register');
   };
   return (
-    <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', height: '100vh'}}>
-      <div style={{ boxShadow: "0 1px 1px 0 grey", margin: 20, padding: 25, backgroundColor: 'white', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', width: '%'}}>
-        <h2 style={{ margin: '10px 0px' }}>Login</h2>
-        <form onSubmit={handleLogin}>
+    <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', height: '100vh' }}>
+      <div style={{ 
+        boxShadow: "0 1px 1px 0 grey", 
+        margin: "10%", 
+        padding: "4%", 
+        backgroundColor: 'white', 
+        display: 'flex', 
+        alignItems: 'center', 
+        flexDirection: 'column', 
+        justifyContent: 'center', 
+        width: '33%',  
+        borderRadius: "5%"
+      }}>
+        <h1 style={{ margin: '10px 0px', width: '100%', textAlign: 'center' }}>Login</h1>
+        <form onSubmit={handleLogin} style={{ width: '100%' }}>
           <InputField label={"Username or email:"} type={"text"} id={"username"} value={username} onChange={setUsername} error={errors.username}/>
           <InputField label={"Password:"} type={"password"} id={"password"} value={password} onChange={setPassword} error={errors.password}/>
           <div style={{ margin: '10px 5px'}}>
