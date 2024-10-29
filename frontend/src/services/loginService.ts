@@ -27,13 +27,15 @@ const LoginService = {
         /* Axios call 2 backend
         return axios.post(
                 endpoint.dbURL + '/login',
-                {username: user, password: password}
+                {credentials: user, password: password}
             )
-            .then(() => {
+            .then(response => {
                 return 'OK';
             })
             .catch((e) => {
-                return e.detail;
+                const detail = e.detail;
+                if (detail.credentials) throw detail.credentials;
+                else throw detail;
             });
         */
     }
