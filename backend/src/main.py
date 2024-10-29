@@ -1,12 +1,18 @@
 from fastapi import FastAPI
+from src.api.routes import users, login
 from fastapi.middleware.cors import CORSMiddleware
-from .api.routes import users
+
+
 app = FastAPI()
+
+#app.include_router(user_controller.router)
+app.include_router(users.router)
+app.include_router(login.router)
+
 
 origins = ["*"
 ]
 
-app.include_router(users.router)
 
 app.add_middleware(
     CORSMiddleware,
