@@ -8,6 +8,7 @@ const RegisterPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [repeatedPassword, setRepeatedPassword] = useState('');
+  const [errors, setErrors] = useState({message: '', isUsername: false, isEmail: false});
 
   // Fakes a register
   const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -28,10 +29,14 @@ const RegisterPage: React.FC = () => {
     )
     .then(result => {
       console.log(result);
+      setErrors({message: '', isUsername: false, isEmail: false});
       return true;
     })
     .catch(errorMsg => {
+      const isUsernameError = errorMsg.toLowerCase().includes('username');
+      const isEmailError = errorMsg.toLowerCase().includes('email');
       console.log(errorMsg);
+      setErrors({message: errorMsg, isUsername: isUsernameError, isEmail: isEmailError});
       return false;
     });
   };
