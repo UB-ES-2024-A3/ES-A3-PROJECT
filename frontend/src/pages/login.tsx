@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import InputField from '@/components/input_field';
 
 const LoginPage: React.FC = () => {
   const router = useRouter();
@@ -26,7 +27,7 @@ const LoginPage: React.FC = () => {
   // Here's where the request will be done
   // Returns true if the user is correctly authenticated and false otherwise
   const authenticate = () =>{
-    setErrors({ username: '', password: '', credentials: 'Incorrect username/email or password' });
+    setErrors({ username: '', password: '', credentials: 'Icorrect username/email or password' });
     return false;
   }
 
@@ -49,43 +50,24 @@ const LoginPage: React.FC = () => {
   const handleRegister = () => {
     router.push('/register');
   };
-
   return (
-    <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', height: '100vh'}}>
-      <div style={{ boxShadow: "0 1px 1px 0 grey", margin: 20, padding: 25, backgroundColor: 'white', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center'}}>
-        <h2 style={{ margin: '10px 0px' }}>Login</h2>
-        <form onSubmit={handleLogin}>
-          <div style={{ margin: 5}}>
-            <label> Username or email:</label><br />
-            <input type="text" id="username" 
-              value={username} 
-              onChange={(e) => setUsername(e.target.value)} 
-              className={`w-full px-3 py-2 pr-10 border ${
-                errors.username ? 'border-red-500' : 'border-gray-300'
-              } rounded-md focus:outline-none focus:ring-2 ${
-                errors.username ? 'focus:ring-red-500' : 'focus:ring-blue-500'
-              } transition-colors`}
-            />
-            {errors.username && (
-              <p className="mt-1 text-sm text-red-500">{errors.username}</p>
-            )}
-          </div>
-          <div style={{ margin: 5}}>
-            <label> Password: </label><br />
-            <input type="password" id="password"  
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-              className={`w-full px-3 py-2 pr-10 border ${
-                errors.password ? 'border-red-500' : 'border-gray-300'
-              } rounded-md focus:outline-none focus:ring-2 ${
-                errors.password ? 'focus:ring-red-500' : 'focus:ring-blue-500'
-              } transition-colors`}
-            /> 
-            {errors.password && (
-              <p className="mt-1 text-sm text-red-500">{errors.password}</p>
-            )}
-            
-          </div>
+    <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', height: '100vh' }}>
+      <div style={{ 
+        boxShadow: "0 1px 1px 0 grey", 
+        margin: "10%", 
+        padding: "4%", 
+        backgroundColor: 'white', 
+        display: 'flex', 
+        alignItems: 'center', 
+        flexDirection: 'column', 
+        justifyContent: 'center', 
+        width: '33%',  
+        borderRadius: "5%"
+      }}>
+        <h1 style={{ margin: '10px 0px', width: '100%', textAlign: 'center' }}>Login</h1>
+        <form onSubmit={handleLogin} style={{ width: '100%' }}>
+          <InputField label={"Username or email:"} type={"text"} id={"username"} value={username} onChange={setUsername} error={errors.username}/>
+          <InputField label={"Password:"} type={"password"} id={"password"} value={password} onChange={setPassword} error={errors.password}/>
           <div style={{ margin: '10px 5px'}}>
             <button type="submit" style={{ width: '100%'}}>Login</button><br />
           </div>
