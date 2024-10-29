@@ -26,20 +26,33 @@ const LoginPage: React.FC = () => {
 
   // Here's where the request will be done
   // Returns true if the user is correctly authenticated and false otherwise
-  const authenticate = () =>{
-    setErrors({ username: '', password: '', credentials: 'Incorrect username/email or password' });
-    return false;
+  const authenticate = async () =>{
+    return LoginService.loginRequest(
+      username,
+      password
+    )
+    .then(result => {
+      // Login success
+      console.log(result);
+      setErrors({username: '', password: '', credentials: ''});
+      return true;
+    })
+    .catch(errorMsg => {
+      console.log(errorMsg);
+      setErrors({ username: '', password: '', credentials: errorMsg });
+      return false;
+    });
   }
 
   // Handles login form submission
-  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); // Prevents the page from rerendering when the form is submited
     
     if (!validateInputs()){
       return;
     }
 
-    const isAuthenticated = authenticate();
+    const isAuthenticated = await authenticate();
 
     if (isAuthenticated){
       localStorage.setItem('isAuthenticated', 'true');

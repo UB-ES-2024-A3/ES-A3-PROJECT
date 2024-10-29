@@ -19,7 +19,7 @@ const LoginService = {
         )
         .then((res) => {
             if (res) {
-                return res.detail;
+                throw res.detail;
             }
             return 'OK';
         });
