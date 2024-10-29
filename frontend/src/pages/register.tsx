@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import RegisterService from '@/services/registerService';
 
 const RegisterPage: React.FC = () => {
   const router = useRouter();
@@ -9,11 +10,29 @@ const RegisterPage: React.FC = () => {
   const [repeatedPassword, setRepeatedPassword] = useState('');
 
   // Fakes a register
-  const handleRegister = () => {
+  const handleRegister = async () => {
     if(password == repeatedPassword) {
-      localStorage.setItem('isAuthenticated', 'true');
-      router.push('/');
+      if (await sendRequest()) {
+        localStorage.setItem('isAuthenticated', 'true');
+        router.push('/');
+      }
     }
+  };
+
+  const sendRequest = async () => {
+    return RegisterService.registerRequest(
+      username,
+      email,
+      password
+    )
+    .then(result => {
+      console.log(result);
+      return true;
+    })
+    .catch(errorMsg => {
+      console.log(errorMsg);
+      return false;
+    });
   };
 
   const handleLogin = () => {

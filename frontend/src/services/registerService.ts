@@ -5,25 +5,28 @@ const RegisterService = {
     registerRequest: async (username: string, email: string, password: string) => {
         const data = {
             username: username,
-            email: email,
-            password: password
+            password: password,
+            email: email
         };
-        
+
+        const header = {'Content-Type': 'application/json'};
+
         // Send post request to backend
         return axios.post(
             endpoint.dbURL + '/users',
-            data
+            data,
+            {headers: header}
         )
         .then(result => {
             return "Success!";
         })
         .catch(except => {
-            if (except.status_code === 400) {
+            if (except.status == 400) {
                 // Error in entered data.
-                return except.detail;
+                throw except.response.data.detail;
             } else {
-                console.error(except.detail);
-                return "Unknown error. Please, try again.";
+                console.log(except);
+                throw "Unknown error. Please, try again.";
             }
         });
     }
