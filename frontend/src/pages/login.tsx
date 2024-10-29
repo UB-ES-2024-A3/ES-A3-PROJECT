@@ -26,7 +26,7 @@ const LoginPage: React.FC = () => {
   // Here's where the request will be done
   // Returns true if the user is correctly authenticated and false otherwise
   const authenticate = () =>{
-    setErrors({ username: '', password: '', credentials: 'Icorrect username/email or password' });
+    setErrors({ username: '', password: '', credentials: 'Incorrect username/email or password' });
     return false;
   }
 
