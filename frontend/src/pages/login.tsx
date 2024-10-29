@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import LoginService from '../services/loginService';
+import LoginService from '@/services/loginService';
 
 const LoginPage: React.FC = () => {
   const router = useRouter();
@@ -63,10 +63,6 @@ const LoginPage: React.FC = () => {
   const handleRegister = () => {
     router.push('/register');
   };
-
-  const dontRefresh = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-  }
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', height: '100vh'}}>
