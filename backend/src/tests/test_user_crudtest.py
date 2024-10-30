@@ -1,5 +1,5 @@
-from ..crud.user import *
-from ..models.user_model import User
+from src.crud.user import *
+from src.models.user_model import User
 import random
 
 ############################################################################################################

@@ -17,7 +17,7 @@ const RegisterService = {
             data,
             {headers: header}
         )
-        .then(result => {
+        .then(() => {
             return "Success!";
         })
         .catch(except => {
