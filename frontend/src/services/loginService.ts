@@ -24,7 +24,15 @@ const LoginService = {
                 const bracesIdx = detailRaw.indexOf('{');       // Find where the "object" starts
                 const detail = detailRaw.substring(bracesIdx)   // Ignore the beginning
                                         .replaceAll("'", '"');  // and give the string JSON format
-                throw JSON.parse(detail);                       // Throw the resulting object
+
+                let errorObject = null;
+                try {
+                    errorObject = JSON.parse(detail);           // Parse the JSON object
+                } catch(e) {}
+
+                if (errorObject) {
+                    throw errorObject;                          // Throw the resulting object
+                }
             }
 
             console.log(detailRaw);
