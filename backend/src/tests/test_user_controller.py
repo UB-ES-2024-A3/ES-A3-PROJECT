@@ -1,6 +1,6 @@
 import pytest
-from ..controllers.user_controller import UserController
-from ..models.user_model import User
+from src.controllers.user_controller import UserController
+from src.models.user_model import User
 import random
 from fastapi import HTTPException
 userController = UserController()

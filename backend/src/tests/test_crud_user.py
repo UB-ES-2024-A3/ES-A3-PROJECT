@@ -1,10 +1,10 @@
-from backend.src.crud.user import (
+from src.crud.user import (
     read_users,
     create_user,
     delete_user,
     authenticate
 )
-from backend.src.models.user_model import User
+from src.models.user_model import User
 import random
 import pytest
 

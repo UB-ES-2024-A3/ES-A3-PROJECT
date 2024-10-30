@@ -4,7 +4,7 @@ interface InputFieldProps {
     type: "text" | "password";
     id: string;
     value: string;
-    onChange: Function;
+    onChange: (value: string) => void;
     error: string;
   }
 

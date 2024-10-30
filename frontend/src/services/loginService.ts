@@ -15,7 +15,7 @@ const LoginService = {
             data,
             {headers: header}
         )
-        .then(response => {
+        .then(() => {
             return {result: 'OK'};
         })
         .catch((except) => {
@@ -28,7 +28,7 @@ const LoginService = {
                 let errorObject = null;
                 try {
                     errorObject = JSON.parse(detail);           // Parse the JSON object
-                } catch(e) {}
+                } catch {}
 
                 if (errorObject) {
                     throw errorObject;                          // Throw the resulting object
