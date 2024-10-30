@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import LoginService from '@/services/loginService';
 import InputField from '@/components/input_field';
 
 const LoginPage: React.FC = () => {
@@ -26,20 +27,38 @@ const LoginPage: React.FC = () => {
 
   // Here's where the request will be done
   // Returns true if the user is correctly authenticated and false otherwise
-  const authenticate = () =>{
-    setErrors({ username: '', password: '', credentials: 'Icorrect username/email or password' });
-    return false;
+  const authenticate = async () =>{
+    return LoginService.loginRequest(
+      username,
+      password
+    )
+    .then(result => {
+      // Login success
+      console.log(result.result);
+      setErrors({username: '', password: '', credentials: ''});
+      return true;
+    })
+    .catch(errorMsgs => {
+      console.log(errorMsgs);
+      Object.keys(errorMsgs).forEach(key => {
+        setErrors(prevErrors => ({
+          ...prevErrors,
+          [key]: errorMsgs[key]
+        }));
+      });
+      return false;
+    });
   }
 
   // Handles login form submission
-  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); // Prevents the page from rerendering when the form is submited
     
     if (!validateInputs()){
       return;
     }
 
-    const isAuthenticated = authenticate();
+    const isAuthenticated = await authenticate();
 
     if (isAuthenticated){
       localStorage.setItem('isAuthenticated', 'true');

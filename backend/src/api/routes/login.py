@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Response
-from backend.src import crud
+from src import crud
 
 router = APIRouter()
 from pydantic import BaseModel
