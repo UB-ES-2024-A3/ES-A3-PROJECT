@@ -24,4 +24,4 @@ app.add_middleware(
 
 @app.get("/")
 def main():
-    return {"message": "Hi, good morning!"}
+    return {"message": "Hola, buenos días"}
