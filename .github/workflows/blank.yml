@@ -30,10 +30,7 @@ jobs:
           password: ${{ secrets.ACR_PASSWORD }}
 
       - name: Build and Push Docker Image
-        env: # Pass secrets as environment variables to the container
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
         run: |
-          docker build -t rebookcontainers.azurecr.io/backend:${{ github.sha }} -f backend/Dockerfile backend
+          docker build -t rebookcontainers.azurecr.io/backend:${{ github.sha }} -f backend/Dockerfile --build-arg SUPABASE_URL=${{ secrets.SUPABASE_URL }} --build_arg SUPABASE_KEY=${{ secrets.SUPABASE_KEY }} backend
           docker push rebookcontainers.azurecr.io/backend:${{ github.sha }}
         
