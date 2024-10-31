@@ -26,8 +26,8 @@ jobs:
         uses: azure/docker-login@v2
         with:
           login-server: "rebookcontainers.azurecr.io"
-          username: ${{ secrets.ACR_USERNAME   }}
-          password: ${{ secrets.ACR_PASSWORD  }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
 
       - name: Build and Push Docker Image
         run: |
@@ -37,7 +37,7 @@ jobs:
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
+          app-name: ${{ secrets.AZURE_BACKEND_NAME }}
           slot-name: production
           images: 'rebookcontainers.azurecr.io/backend:${{ github.sha }}'
         env:  # Pass secrets as environment variables to the container
