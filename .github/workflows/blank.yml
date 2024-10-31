@@ -23,11 +23,11 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       - name: Log in to Azure Container Registry (ACR)
-        env:
-          ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
-          ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
-        run: |
-          echo "${ACR_PASSWORD}" | docker login rebookcontainers.azurecr.io -u "${ACR_USERNAME}" --password-stdin
+        uses: azure/docker-login@v2
+        with:
+          login-server: "rebookcontainers.azurecr.io"
+          username: ${{ secrets.ACR_USERNAME   }}
+          password: ${{ secrets.ACR_PASSWORD  }}
 
       - name: Build and Push Docker Image
         run: |
