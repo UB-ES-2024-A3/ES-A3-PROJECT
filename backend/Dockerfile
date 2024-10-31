@@ -1,7 +1,6 @@
 # Use the official Python 3.12 image
 FROM python:3.12-slim
 
-WORKDIR backend
 
 # Copy requirements.txt into the container
 COPY requirements.txt .

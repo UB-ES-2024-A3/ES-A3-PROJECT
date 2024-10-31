@@ -31,7 +31,7 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t rebookcontainers.azurecr.io/backend:${{ github.sha }} -f backend/Dockerfile .
+          docker build -t rebookcontainers.azurecr.io/backend:${{ github.sha }} -f backend/Dockerfile backend
           docker push rebookcontainers.azurecr.io/backend:${{ github.sha }}
 
       - name: Deploy to Azure Web App
