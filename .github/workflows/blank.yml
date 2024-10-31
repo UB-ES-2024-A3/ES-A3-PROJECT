@@ -31,6 +31,6 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t rebookcontainers.azurecr.io/backend:${{ github.sha }} -f backend/Dockerfile --build-arg SUPABASE_URL=${{ secrets.SUPABASE_URL }} --build_arg SUPABASE_KEY=${{ secrets.SUPABASE_KEY }} backend
+          docker build -t rebookcontainers.azurecr.io/backend:${{ github.sha }} -f backend/Dockerfile --build-arg SUPABASE_URL=${{ secrets.SUPABASE_URL }} --build-arg SUPABASE_KEY=${{ secrets.SUPABASE_KEY }} backend
           docker push rebookcontainers.azurecr.io/backend:${{ github.sha }}
         
