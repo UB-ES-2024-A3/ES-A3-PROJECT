@@ -1,11 +1,10 @@
-name: Deploy to Azure Web App
+name: Deployment of backend
 
 on:
   workflow_dispatch:
   push:
     branches:
-      - main
-      - development
+      - 5_1_automatic_deployment
 
 jobs:
   build-and-deploy:
