@@ -24,4 +24,4 @@ app.add_middleware(
 
 @app.get("/")
 def main():
-    return {"message": "Hello World!"}
+    return {"message": "ReBookBackend:v1"}

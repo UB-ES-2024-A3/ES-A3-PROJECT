@@ -1,6 +1,11 @@
 # Use the official Python 3.12 image
 FROM python:3.12-slim
 
+ARG SUPABASE_URL="NULL"
+ARG SUPABASE_KEY="NULL"
+
+ENV SUPABASE_KEY=$SUPABASE_KEY
+ENV SUPABASE_URL=$SUPABASE_URL
 
 # Copy requirements.txt into the container
 COPY requirements.txt .
