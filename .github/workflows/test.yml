@@ -1,4 +1,4 @@
-name: Run Pytest on Pull Request
+name: Run tests on PR's
 
 on:
   pull_request:
@@ -17,7 +17,7 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
-    - name: Build and Push Docker Image
+    - name: Build backend Docker Image
       run: |
         docker build -t backend:${{ github.sha }} -f backend/Dockerfile --build-arg SUPABASE_URL=${{ secrets.SUPABASE_URL }} --build-arg SUPABASE_KEY=${{ secrets.SUPABASE_KEY }} backend
 
@@ -36,6 +36,9 @@ jobs:
         pip install -r backend/requirements.txt  
 
     - name: Run tests
+      env:
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
       run: |
         cd backend
         pytest
