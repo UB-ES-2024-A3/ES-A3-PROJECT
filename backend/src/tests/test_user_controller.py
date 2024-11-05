@@ -24,7 +24,7 @@ def test_create_user_command_valid():
     )
     created_user = userController.create_user_command(user)
     assert created_user is not None, "Failed to create user"
-    return created_user.id, created_user.username, created_user.email
+    userController.delete_user_command(created_user.id) # Delete created user after the test
 
 # Test create_user_command with invalid email format
 def test_create_user_command_invalid_email_format():
@@ -78,7 +78,14 @@ def test_create_user_command_duplicate_username():
 
 # Test delete_user_command with existing user
 def test_delete_user_command_existing():
-    result = userController.delete_user_command("008741a9-40b6-4cf7-9e83-7aa062fbdffa") # This is only going to work once
+    randomint = random.randint(1, 1000)
+    user = User(
+        email="test"+str(randomint)+"@example.com",
+        username="testuser"+str(randomint),
+        password="hashed_password",
+    )
+    created_user = userController.create_user_command(user)
+    result = userController.delete_user_command(created_user.id)
     assert result, "Failed to delete existing user"
 
 # Test delete_user_command with non-existing user
