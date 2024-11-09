@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from src.api.routes import users, login
+from src.api.routes import users, login, books
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -8,7 +8,7 @@ app = FastAPI()
 #app.include_router(user_controller.router)
 app.include_router(users.router)
 app.include_router(login.router)
-
+app.include_router(books.router)
 
 origins = ["*"
 ]
@@ -24,4 +24,4 @@ app.add_middleware(
 
 @app.get("/")
 def main():
-    return {"message": "ReBookBackend:v1"}
+    return {"message": "Hello World!"}
