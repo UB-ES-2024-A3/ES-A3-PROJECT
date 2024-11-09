@@ -41,16 +41,23 @@ def test_create_user():
         print("Test passed successfully")
     else:
         print("Test failed")  
-    return created_user.id
 
 
 # You have to create a new user and extract id to test this
 # @patch("your_module.get_db_client")
-def test_delete_user_success(userId):
+def test_delete_user_success():
     print("\n\n-----------------------------DELETE USER BY ID------------------------------")
     # Mocking the response from Supabase
-    print("UserId to delete:",userId)
-    result = delete_user(userId)#<-- put here id
+    randomint = random.randint(1, 1000)
+    user = User(
+        email="test"+str(randomint)+"@example.com",
+        username="testuser"+str(randomint),
+        password="hashed_password",
+    )
+    created_user = create_user(user)
+    print("UserId to delete:",created_user.id)
+    result = delete_user(created_user.id)#<-- put here id
+    assert result == True
     if(result):
         print("User deleted successfully\nTest passed successfully")
     else:
@@ -123,8 +130,8 @@ def test_authenticate_user_username():
 
 
 
-test_read_users()
+# test_read_users()
 
-userid = test_create_user()
+# userid = test_create_user()
 
-test_delete_user_success(userid)
+# test_delete_user_success(userid)
