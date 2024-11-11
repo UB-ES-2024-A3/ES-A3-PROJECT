@@ -3,11 +3,25 @@ import { useRouter } from 'next/router';
 import NavBar from '@/components/navbar';
 import SearchBar from '@/components/searchbar';
 
+interface Book {
+  id: string;
+  title: string;
+  author: string;
+}
+
 const MainPage: React.FC = () => {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Determines whether the user is logged in or not
   const [tabSelected, setTabSelected] = useState('profile'); // Stores the selected tab
   const router = useRouter();
+  const [searchResults, setSearchResults] = useState<Book[]>([]);
+
+  const books = [
+    { id: '1', title: 'JavaScript: The Good Parts', author: 'Douglas Crockford' },
+    { id: '2', title: 'Eloquent JavaScript', author: 'Marijn Haverbeke' },
+    { id: '3', title: 'JavaScript and JQuery', author: 'Jon Duckett' },
+    // Add more as needed
+  ];
 
   useEffect(() => {
     const authStatus = localStorage.getItem('isAuthenticated');
@@ -27,8 +41,15 @@ const MainPage: React.FC = () => {
   const handleNavBarSelection = (tab: string) => {
     setTabSelected(tab);
   };
-  
-  const handleSearch = () => {
+
+  const handleSearch = (query: string) => {
+    if (query.length > 0){
+      //I cannot assign searchResults with books, how do I do it?
+      setSearchResults(books);
+    }
+    else{
+      setSearchResults([]);
+    }
 
   };
 
@@ -42,7 +63,7 @@ const MainPage: React.FC = () => {
           {tabSelected === 'timeline' ? (
             <div style={{ display: 'flex', padding: '20px' , flexDirection: 'column'}}>
             <div style={{justifyContent: 'center'}}>
-              <SearchBar placeholder="Search..." buttonLabel="Search" onSearch={handleSearch}/>
+              <SearchBar placeholder="Search..." buttonLabel="Search" onSearch={handleSearch} searchResults={searchResults}/>
             </div>
             <div>Timeline Page</div>
           </div>
