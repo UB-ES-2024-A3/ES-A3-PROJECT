@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import NavBar from '@/components/navbar';
+import SearchBar from '@/components/searchbar';
 
 const MainPage: React.FC = () => {
 
@@ -26,6 +27,10 @@ const MainPage: React.FC = () => {
   const handleNavBarSelection = (tab: string) => {
     setTabSelected(tab);
   };
+  
+  const handleSearch = () => {
+
+  };
 
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
@@ -35,7 +40,12 @@ const MainPage: React.FC = () => {
             <NavBar handleNavBarSelection={handleNavBarSelection} tabSelected={tabSelected} />
           </div>
           {tabSelected === 'timeline' ? (
+            <div style={{ display: 'flex', padding: '20px' , flexDirection: 'column'}}>
+            <div style={{justifyContent: 'center'}}>
+              <SearchBar placeholder="Search..." buttonLabel="Search" onSearch={handleSearch}/>
+            </div>
             <div>Timeline Page</div>
+          </div>
           ) : (
             <div style={{ flex: 1, padding: '20px' }}>
               <button onClick={handleLogout}>Logout</button>
