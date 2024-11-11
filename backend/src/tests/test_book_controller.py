@@ -37,8 +37,13 @@ def test_add_book_command_missing_fields():
 
 # Test get_all_titles_query
 def test_retrieving_books_by_partial_titles():
-    titles = booksController.search_by_name_incomplete_query("north")
-    assert len(titles) > 0, "No titles found"
+    titles = booksController.get_book_matches_by_title_query("north")
+    assert len(titles) > 1, "No titles found"
+
+# Test get_all_titles_query
+def test_retrieving_books_by_partial_titles():
+    titles = booksController.get_book_matches_by_title_query("north", 1)
+    assert len(titles) == 1, "No titles found"
 
 # Test get_all_titles_query
 def test_get_all_titles_query():

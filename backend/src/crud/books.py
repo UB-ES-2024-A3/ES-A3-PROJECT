@@ -1,5 +1,5 @@
 import re
-from typing import List
+from typing import List, Optional
 import unicodedata
 from fastapi import HTTPException
 from supabase import create_client
@@ -63,38 +63,40 @@ def add_book(book: Book):
         raise HTTPException(status_code=500, detail=str(e))
 
 # Method to search books based on partial name
-def search_by_name_incomplete(partial_title: str):
+def get_book_matches_by_title(partial_title: str, max_num: Optional[int] = None):
     supabase = get_db_client()
-    def normalize_text(text: str) -> str:
-        text = re.sub(r"[^\w\s]", "", text)
-        replacements = {
-            'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u',
-            'Á': 'a', 'É': 'e', 'Í': 'i', 'Ó': 'o', 'Ú': 'u',
-            'ü': 'u', 'Ü': 'u', 'ñ': 'n', 'Ñ': 'n'
-        }
-        for accented_char, unaccented_char in replacements.items():
-            text = text.replace(accented_char, unaccented_char)
-        return text.lower()
     try:
+        def normalize_text(text: str) -> str:
+            text = re.sub(r"[^\w\s]", "", text)
+            # Commented for permformance reasons
+            # replacements = {
+            #     'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u',
+            #     'Á': 'a', 'É': 'e', 'Í': 'i', 'Ó': 'o', 'Ú': 'u',
+            #     'ü': 'u', 'Ü': 'u', 'ñ': 'n', 'Ñ': 'n'
+            # }
+            # for accented_char, unaccented_char in replacements.items():
+            #     text = text.replace(accented_char, unaccented_char)
+            return text.lower()
         normalized_partial_title = normalize_text(partial_title)
-        result = supabase.table("books").select("*").execute()
+        query = supabase.table("books").select("*").ilike("title", f"%{normalized_partial_title}%")
+        if max_num:
+            query = query.limit(max_num)
+        result = query.execute()
         books = []
         if result.data and isinstance(result.data, list):
             for book_data in result.data:
-                if normalized_partial_title in normalize_text(book_data["title"]):
-                    if book_data["genres"]:
-                        genres = [genre.strip() for genre in book_data["genres"].split(",")]
-                    else:
-                        genres = []
-                    book_data["genres"] = genres
-                    book = Book(**book_data)
-                    books.append(book)                    
+                if book_data["genres"]:
+                    genres = [genre.strip() for genre in book_data["genres"].split(",")]
+                else:
+                    genres = []
+                book_data["genres"] = genres
+                book = Book(**book_data)
+                books.append(book)
         return books
-
     except Exception as e:
         print(f"Error searching for book titles by partial name '{partial_title}': {e}")
         raise HTTPException(status_code=500, detail=str(e))
-    
+
 # Method to search all books title (in case search_by_name_incomplete is not efficient enought, it can be filtered in frontend)
 def get_all_titles():
     supabase = get_db_client()

@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from typing import List
+from typing import List, Optional
 from src.models.book_model import Book
 from src.controllers.book_controller import BooksController
 
@@ -29,12 +29,11 @@ async def add_new_book(book: Book):
 # REGION 5.4 search books by title
 # Endpoint to search books by partial title
 @router.get("/books/search/{partial_title}", response_model=List[Book])
-async def search_books_by_partial_title(partial_title: str):
+async def get_book_matches_by_title(partial_title: str, max_num: Optional[int] = None):
     try:
-        books = booksController.search_by_name_incomplete_query(partial_title)
-        print(books)
-        if books == -1:
-            raise HTTPException(status_code=404, detail="No books found with the given partial title")
+        books = booksController.get_book_matches_by_title_query(partial_title, max_num)
+        if not books:  # This will check if the list is empty
+            return []
         return books
     except HTTPException as e:
         raise e
