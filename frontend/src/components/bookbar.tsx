@@ -12,8 +12,9 @@ const BookBar: React.FC<BookBarProps> = ({id, title, author}) => {
     };
 
     return (
-        <button id={id} className="secondaryButton" onClick={handleSearchBook} style={{textAlign: 'left'}}>
-            {title} · {author}
+        <button id={id} className="secondaryButton" onClick={handleSearchBook} style={{textAlign: 'left', borderBottom: '1px solid #ccc',}}>
+            <div> {title} </div>
+            <div style={{color: 'grey'}}> · {author} </div>
         </button>
     );
 };
