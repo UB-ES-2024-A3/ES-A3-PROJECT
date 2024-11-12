@@ -49,7 +49,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ placeholder, buttonLabel, onSearc
       </div>
       <div style={{ marginTop: '0px', maxHeight: '200px', overflowY: 'auto', display: 'flex', flexDirection: 'column', position: 'absolute'}}>
         {searchResults.map((book) => (
-          <BookBar key={book.id} id={book.id} title={book.title} author={book.author} />
+          <BookBar key={book.id} id={book.id} title={book.title} author={book.author}/>
         ))}
       </div>
     </div>
