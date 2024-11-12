@@ -16,13 +16,7 @@ const MainPage: React.FC = () => {
   const [tabSelected, setTabSelected] = useState('profile'); // Stores the selected tab
   const router = useRouter();
   const [searchResults, setSearchResults] = useState<Book[]>([]);
-
-  const books = [
-    { id: '1', title: 'JavaScript: The Good Parts', author: 'Douglas Crockford' },
-    { id: '2', title: 'Eloquent JavaScript', author: 'Marijn Haverbeke' },
-    { id: '3', title: 'JavaScript and JQuery', author: 'Jon Duckett' },
-    // Add more as needed
-  ];
+  const num_results = 3;
 
   useEffect(() => {
     const authStatus = localStorage.getItem('isAuthenticated');
@@ -47,7 +41,7 @@ const MainPage: React.FC = () => {
     if (query.length > 0){
       return SearchService.searchRequest(
         query,
-        3
+        num_results
       )
       .then(results => {
         const books = []
