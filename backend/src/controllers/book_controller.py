@@ -1,3 +1,4 @@
+from typing import Optional
 from src.crud.books import *
 from fastapi import HTTPException
 from src.models.book_model import Book
@@ -7,6 +8,7 @@ class BooksController:
     def get_all_books_query(self):
         # Retrieve all books
         return get_all_books()
+
     # REGION 5.4 search books by title
     def add_book_command(self, book: Book):
         if not book.title or not book.author or not book.genres:
@@ -15,17 +17,14 @@ class BooksController:
             raise HTTPException(status_code=400, detail="Title cannot be longer than 100 characters")
         if len(book.author) > 50:
             raise HTTPException(status_code=400, detail="Author cannot be longer than 50 characters")
-
-        # Add the new book to the database
         return add_book(book)
-    def search_by_name_incomplete_query(self, partial_title: str):
+
+    def get_book_matches_by_title_query(self, partial_title: str, max_num: Optional[int] = None):
         if not partial_title:
             raise HTTPException(status_code=400, detail="Partial title is required for search")
-        # Search by partial title
-        books = search_by_name_incomplete(partial_title)
-        if books == -1:
-            raise HTTPException(status_code=404, detail="No books found with the given title")
+        books = get_book_matches_by_title(partial_title,max_num)
         return books
+    
     def get_all_titles_query(self):
         # Retrieve all book titles
         return get_all_titles()

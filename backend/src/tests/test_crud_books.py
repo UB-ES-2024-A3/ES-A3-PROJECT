@@ -5,7 +5,7 @@ from src.crud.books import (
     # get_book_by_title,
     # get_books_by_author,
     get_all_titles,
-    search_by_name_incomplete
+    get_book_matches_by_title
 )
 from src.models.book_model import Book
 import random
@@ -45,7 +45,7 @@ def test_add_book():
 # Test to retrieve all books by incomplete title
 def test_get_all_titles():
     print("\n\n--------------------GET ALL BOOKS BY INCOMPLETE TITLES---------------------")
-    books = search_by_name_incomplete("north")
+    books = get_book_matches_by_title("north")
     assert len(books) > 0, "Test failed: No titles found"
     print("Test passed successfully")
 
