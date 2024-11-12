@@ -12,7 +12,7 @@ const BookBar: React.FC<BookBarProps> = ({id, title, author}) => {
     };
 
     return (
-        <button id={id} className="secondaryButton" onClick={handleSearchBook}>
+        <button id={id} className="secondaryButton" onClick={handleSearchBook} style={{textAlign: 'left'}}>
             {title} · {author}
         </button>
     );
