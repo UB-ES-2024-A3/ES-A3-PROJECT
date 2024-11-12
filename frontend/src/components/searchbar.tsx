@@ -15,7 +15,7 @@ interface Book {
 
 const SearchBar: React.FC<SearchBarProps> = ({ placeholder, buttonLabel }) => {
   const [query, setQuery] = useState('');
-  const num_results = 3;
+  const num_results = 10;
   const [searchResults, setSearchResults] = useState<Book[]>([]);
 
   const handleSearch = () => {
@@ -51,8 +51,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ placeholder, buttonLabel }) => {
   };
 
   return (
-    <div>
-      <div style={{ display: 'flex'}}>
+    <div style={{ width: '50%', margin: '0 auto' }}>
+      <div style={{ display: 'flex' , width: "100%"}}>
         <input
           type="text"
           placeholder={placeholder}
@@ -63,20 +63,22 @@ const SearchBar: React.FC<SearchBarProps> = ({ placeholder, buttonLabel }) => {
             fontSize: '16px',
             border: '1px solid #ccc',
             borderRadius: '5px 0 0 5px',
-            width: '250px',
+            width: '90%',
             margin: '0px'
           }}
         />
         <button
           onClick={handleSearch}
           style={{
-            borderRadius: '0 5px 5px 0'
+            width: '10%', 
+            borderRadius: '0 5px 5px 0',
+            minWidth: '100px'
           }}
         >
           {buttonLabel}
         </button>
       </div>
-      <div style={{ marginTop: '0px', maxHeight: '250px', overflowY: 'auto', display: 'flex', flexDirection: 'column', position: 'absolute'}}>
+      <div style={{ width: '100%', marginTop: '0px', overflowY: 'auto', display: 'flex', flexDirection: 'column', }}>
         {searchResults.map((book) => (
           <BookBar key={book.id} id={book.id} title={book.title} author={book.author}/>
         ))}

@@ -36,10 +36,8 @@ const MainPage: React.FC = () => {
             <NavBar handleNavBarSelection={handleNavBarSelection} tabSelected={tabSelected} />
           </div>
           {tabSelected === 'timeline' ? (
-            <div style={{ display: 'flex', padding: '20px' , flexDirection: 'column', alignItems: 'center', height: '100vh', width: '100vw'}}>
-              <div>
-                <SearchBar placeholder="Search..." buttonLabel="Search"/>
-              </div>
+            <div style={{ display: 'flex', padding: '20px' , flexDirection: 'column', alignItems: 'center', height: '100vh', width: "100%"}}>
+              <SearchBar placeholder="Search..." buttonLabel="Search"/>
             </div>
           ) : (
             <div style={{ flex: 1, padding: '20px' }}>
