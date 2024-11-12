@@ -27,7 +27,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ placeholder, buttonLabel }) => {
       const debounceTimeout = setTimeout(() => {
         SearchService.searchRequest(query, num_results)
           .then(results => {
-            const books = results.map((book: any) => ({
+            const books = results.map((book: Book) => ({
               id: book.id,
               title: book.title,
               author: book.author,
