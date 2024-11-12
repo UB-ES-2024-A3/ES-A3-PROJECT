@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import NavBar from '@/components/navbar';
 import SearchBar from '@/components/searchbar';
+import SearchService from '@/services/searchService';
 
 interface Book {
   id: string;
@@ -44,8 +45,21 @@ const MainPage: React.FC = () => {
 
   const handleSearch = (query: string) => {
     if (query.length > 0){
-      //I cannot assign searchResults with books, how do I do it?
-      setSearchResults(books);
+      return SearchService.searchRequest(
+        query,
+        3
+      )
+      .then(results => {
+        const books = []
+        for (var book of results ){
+          books.push({id: book.id, title: book.title, author: book.author})
+        }
+        setSearchResults(books);
+      })
+      .catch(errorMsgs => {
+        console.log(errorMsgs);
+        setSearchResults([]);
+      });
     }
     else{
       setSearchResults([]);
@@ -57,7 +71,7 @@ const MainPage: React.FC = () => {
     <div style={{ display: 'flex', height: '100vh' }}>
       {isAuthenticated ? (
         <>
-          <div style={{ width: '250px' }}>
+          <div>
             <NavBar handleNavBarSelection={handleNavBarSelection} tabSelected={tabSelected} />
           </div>
           {tabSelected === 'timeline' ? (
