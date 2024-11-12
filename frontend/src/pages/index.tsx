@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import NavBar from '@/components/navbar';
+import SearchBar from '@/components/searchbar';
 
 const MainPage: React.FC = () => {
 
@@ -31,11 +32,13 @@ const MainPage: React.FC = () => {
     <div style={{ display: 'flex', height: '100vh' }}>
       {isAuthenticated ? (
         <>
-          <div style={{ width: '250px' }}>
+          <div>
             <NavBar handleNavBarSelection={handleNavBarSelection} tabSelected={tabSelected} />
           </div>
           {tabSelected === 'timeline' ? (
-            <div>Timeline Page</div>
+            <div style={{ display: 'flex', padding: '20px' , flexDirection: 'column', alignItems: 'center', height: '100vh', width: "100%"}}>
+              <SearchBar placeholder="Search..." buttonLabel="Search"/>
+            </div>
           ) : (
             <div style={{ flex: 1, padding: '20px' }}>
               <button onClick={handleLogout}>Logout</button>
