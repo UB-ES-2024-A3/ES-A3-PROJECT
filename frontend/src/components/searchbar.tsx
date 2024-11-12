@@ -1,24 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import BookBar from './bookbar';
+import SearchService from '@/services/searchService';
 
 interface SearchBarProps {
   placeholder?: string;
   buttonLabel?: string;
-  onSearch: (query: string) => void;
-  searchResults: {id: string; title: string; author: string}[];
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ placeholder, buttonLabel, onSearch, searchResults }) => {
+interface Book {
+  id: string;
+  title: string;
+  author: string;
+}
+
+const SearchBar: React.FC<SearchBarProps> = ({ placeholder, buttonLabel }) => {
   const [query, setQuery] = useState('');
+  const num_results = 3;
+  const [searchResults, setSearchResults] = useState<Book[]>([]);
 
   const handleSearch = () => {
-    onSearch(query); 
+    //Go to the page with all the coincidences.
   };
 
+  useEffect(() => {
+    if (query.trim()) {
+      const debounceTimeout = setTimeout(() => {
+        SearchService.searchRequest(query, num_results)
+          .then(results => {
+            const books = results.map((book: any) => ({
+              id: book.id,
+              title: book.title,
+              author: book.author,
+            }));
+            setSearchResults(books);
+          })
+          .catch(errorMsgs => {
+            console.log(errorMsgs);
+            setSearchResults([]);
+          });
+      }, 300); // 300 ms debounce
+
+      return () => clearTimeout(debounceTimeout);
+    } else {
+      setSearchResults([]);
+    }
+  }, [query]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newQuery = e.target.value;
-    setQuery(newQuery);
-    onSearch(newQuery); // Update search results while typing
+    setQuery(e.target.value);
   };
 
   return (
