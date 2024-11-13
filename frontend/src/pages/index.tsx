@@ -7,6 +7,7 @@ const MainPage: React.FC = () => {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Determines whether the user is logged in or not
   const [tabSelected, setTabSelected] = useState('profile'); // Stores the selected tab
+  const [showList, setShowList] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -26,6 +27,9 @@ const MainPage: React.FC = () => {
 
   const handleNavBarSelection = (tab: string) => {
     setTabSelected(tab);
+    if (tab === 'timeline') {
+      setShowList(false);
+    }
   };
 
   return (
@@ -37,7 +41,7 @@ const MainPage: React.FC = () => {
           </div>
           {tabSelected === 'timeline' ? (
             <div style = {{width: '100%'}}>
-              <Timeline/>
+              <Timeline showList={showList} setShowList={setShowList}/>
             </div>
           ) : (
             <div style={{ flex: 1, padding: '20px' }}>

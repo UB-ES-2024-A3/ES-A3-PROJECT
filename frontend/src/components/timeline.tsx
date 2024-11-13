@@ -2,15 +2,17 @@ import React, { useState } from 'react';
 import SearchBar from '@/components/searchbar';
 import ListBooks from '@/components//list_books';
 
-const Timeline: React.FC = () => {
+interface TimelineProps{
+    showList: boolean
+    setShowList: (show: boolean) => void;
+}
 
-    const [showList, setShowList] = useState(false);
+const Timeline: React.FC<TimelineProps> = ({showList, setShowList}) => {
     const [search, setSearch] = useState('');
     
-    const onSearch = (search: string, show: boolean) => {
+    const onSearch = (search: string) => {
         setShowList(true);
         setSearch(search);
-
     }
 
     return (

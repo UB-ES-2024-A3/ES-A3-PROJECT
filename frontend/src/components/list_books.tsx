@@ -33,7 +33,6 @@ const ListBooks: React.FC<ListBooksProps> = ({search}) => {
                 setSearchResults([]);
               });
           }, 300); // 300 ms debounce
-    
           return () => clearTimeout(debounceTimeout);
         } else {
           setSearchResults([]);
@@ -42,11 +41,20 @@ const ListBooks: React.FC<ListBooksProps> = ({search}) => {
 
     return(
         <div style={{ width: '100%', marginTop: '0px', display: 'flex', flexDirection: 'column', overflowY: 'auto'}}>
-            {searchResults.map((book) => (
-              <div style={{margin: '2px'}}>
-                <BookBar key={book.id} id={book.id} title={book.title} author={book.author}/>
+            {searchResults.length > 0 ? (
+              <div>
+                {searchResults.map((book) => (
+                  <div key={book.id} style={{margin: '2px'}}>
+                    <BookBar key={book.id} id={book.id} title={book.title} author={book.author}/>
+                  </div>
+                ))}
               </div>
-            ))}
+            ):(
+              <div style={{padding: '5px'}}> 
+                No matches found
+              </div>
+            )}
+            
         </div>
 
     );
