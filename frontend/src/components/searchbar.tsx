@@ -5,6 +5,7 @@ import SearchService from '@/services/searchService';
 interface SearchBarProps {
   placeholder?: string;
   buttonLabel?: string;
+  onSearchResults: (search: string) => void;
 }
 
 interface Book {
@@ -13,13 +14,16 @@ interface Book {
   author: string;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ placeholder, buttonLabel }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ placeholder, buttonLabel, onSearchResults }) => {
   const [query, setQuery] = useState('');
   const num_results = 10;
   const [searchResults, setSearchResults] = useState<Book[]>([]);
 
   const handleSearch = () => {
-    //Go to the page with all the coincidences.
+    if (query.trim()) {
+      setSearchResults([]);
+      onSearchResults(query);
+    }
   };
 
   useEffect(() => {
@@ -49,15 +53,22 @@ const SearchBar: React.FC<SearchBarProps> = ({ placeholder, buttonLabel }) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
   };
+  
+  const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter'){
+      handleSearch();
+    }
+  };
 
   return (
-    <div style={{ width: '50%', margin: '0 auto' }}>
+    <div style={{ width: '50%', margin: '0 auto'}}>
       <div style={{ display: 'flex' , width: "100%"}}>
         <input
           type="text"
           placeholder={placeholder}
           value={query}
           onChange={handleInputChange}
+          onKeyDown={handleEnter}
           style={{
             padding: '10px',
             fontSize: '16px',
@@ -78,10 +89,18 @@ const SearchBar: React.FC<SearchBarProps> = ({ placeholder, buttonLabel }) => {
           {buttonLabel}
         </button>
       </div>
-      <div style={{ width: '100%', marginTop: '0px', overflowY: 'auto', display: 'flex', flexDirection: 'column', }}>
-        {searchResults.map((book) => (
-          <BookBar key={book.id} id={book.id} title={book.title} author={book.author}/>
-        ))}
+      <div style={{ width: '45%', marginTop: '0px', overflowY: 'scroll', display: 'flex', flexDirection: 'column', position: 'absolute', maxHeight: '80vh'}}>
+        {searchResults.length > 0 ? 
+        (<div style={{border: '2px solid #ccc'}}> 
+          {searchResults.map((book) => (
+            <BookBar key={book.id} id={book.id} title={book.title} author={book.author}/>
+          ))}
+        </div>
+        ):(
+        <div> 
+        </div>
+        )}
+        
       </div>
     </div>
   );

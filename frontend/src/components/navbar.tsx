@@ -32,6 +32,7 @@ const NavBar: React.FC<NavBarProps> = ({ handleNavBarSelection, tabSelected }) =
       rootStyles={{
         height: '100vh',
         width: '8%',
+        position: 'fixed'
       }}
     >
       <Menu>
