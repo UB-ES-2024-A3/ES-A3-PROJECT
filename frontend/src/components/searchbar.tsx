@@ -53,6 +53,12 @@ const SearchBar: React.FC<SearchBarProps> = ({ placeholder, buttonLabel, onSearc
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
   };
+  
+  const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter'){
+      handleSearch();
+    }
+  };
 
   return (
     <div style={{ width: '50%', margin: '0 auto'}}>
@@ -62,6 +68,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ placeholder, buttonLabel, onSearc
           placeholder={placeholder}
           value={query}
           onChange={handleInputChange}
+          onKeyDown={handleEnter}
           style={{
             padding: '10px',
             fontSize: '16px',

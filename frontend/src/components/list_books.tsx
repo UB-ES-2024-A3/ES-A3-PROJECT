@@ -15,9 +15,11 @@ interface Book {
 
 const ListBooks: React.FC<ListBooksProps> = ({search}) => {
     const [searchResults, setSearchResults] = useState<Book[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         if (search.trim()) {
+          setIsLoading(true);
           const debounceTimeout = setTimeout(() => {
             SearchService.searchRequest(search, null)
               .then(results => {
@@ -27,14 +29,17 @@ const ListBooks: React.FC<ListBooksProps> = ({search}) => {
                   author: book.author,
                 }));
                 setSearchResults(books);
+                setIsLoading(false);
               })
               .catch(errorMsgs => {
                 console.log(errorMsgs);
                 setSearchResults([]);
+                setIsLoading(false);
               });
           }, 300); // 300 ms debounce
           return () => clearTimeout(debounceTimeout);
         } else {
+          setIsLoading(false);
           setSearchResults([]);
         }
       }, [search]);
@@ -51,7 +56,12 @@ const ListBooks: React.FC<ListBooksProps> = ({search}) => {
               </div>
             ):(
               <div style={{padding: '5px'}}> 
-                No matches found
+                {isLoading ? (
+                  <div> Loading... </div>
+                ):(
+                  <div> No matches found </div>
+                )}
+                
               </div>
             )}
             
