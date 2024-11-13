@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import BookBar from './bookbar';
 import SearchService from '@/services/searchService';
+import { useRouter } from 'next/router';
 
 interface SearchBarProps {
   placeholder?: string;
   buttonLabel?: string;
+  onSearchResults: (search: string, showList: boolean) => void;
 }
 
 interface Book {
@@ -13,13 +15,17 @@ interface Book {
   author: string;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ placeholder, buttonLabel }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ placeholder, buttonLabel, onSearchResults }) => {
+  const router = useRouter();
   const [query, setQuery] = useState('');
   const num_results = 10;
   const [searchResults, setSearchResults] = useState<Book[]>([]);
 
   const handleSearch = () => {
-    //Go to the page with all the coincidences.
+    if (query.trim()) {
+      setSearchResults([]);
+      onSearchResults(query, true);
+    }
   };
 
   useEffect(() => {
@@ -51,7 +57,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ placeholder, buttonLabel }) => {
   };
 
   return (
-    <div style={{ width: '50%', margin: '0 auto' }}>
+    <div style={{ width: '50%', margin: '0 auto'}}>
       <div style={{ display: 'flex' , width: "100%"}}>
         <input
           type="text"
@@ -78,7 +84,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ placeholder, buttonLabel }) => {
           {buttonLabel}
         </button>
       </div>
-      <div style={{ width: '100%', marginTop: '0px', overflowY: 'auto', display: 'flex', flexDirection: 'column', }}>
+      <div style={{ width: '100%', marginTop: '0px', overflowY: 'scroll', display: 'flex', flexDirection: 'column', position: 'relative', maxHeight: '80vh'}}>
         {searchResults.map((book) => (
           <BookBar key={book.id} id={book.id} title={book.title} author={book.author}/>
         ))}
