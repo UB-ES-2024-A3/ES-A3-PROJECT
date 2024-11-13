@@ -46,15 +46,15 @@ def test_create_user():
 
 # You have to create a new user and extract id to test this
 # @patch("your_module.get_db_client")
-def test_delete_user_success(userId):
-    print("\n\n-----------------------------DELETE USER BY ID------------------------------")
-    # Mocking the response from Supabase
-    print("UserId to delete:",userId)
-    result = delete_user(userId)#<-- put here id
-    if(result):
-        print("User deleted successfully\nTest passed successfully")
-    else:
-        print("User could not be deleted\nTest failed")
+# def test_delete_user_success(userId):
+#     print("\n\n-----------------------------DELETE USER BY ID------------------------------")
+#     # Mocking the response from Supabase
+#     print("UserId to delete:",userId)
+#     result = delete_user(userId)#<-- put here id
+#     if(result):
+#         print("User deleted successfully\nTest passed successfully")
+#     else:
+#         print("User could not be deleted\nTest failed")
 
 """
 def test_authenticate_user_email():
@@ -120,11 +120,3 @@ def test_authenticate_user_username():
     assert result2 == False
     assert result3 == False
     assert result4 == False
-
-
-
-test_read_users()
-
-userid = test_create_user()
-
-test_delete_user_success(userid)

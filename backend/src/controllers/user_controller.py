@@ -1,14 +1,7 @@
 import re
 import uuid
 
-from src.crud.user import (
-    read_users,
-    create_user,
-    delete_user,
-    search_by_username,
-    search_by_email,
-    search_by_id,
-)
+from src.crud.user import *
 from fastapi import HTTPException
 from src.models.user_model import User
 

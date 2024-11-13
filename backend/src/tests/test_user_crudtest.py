@@ -21,11 +21,18 @@ def test_create_user():
     )
     created_user = create_user(user)
     assert created_user is not None, "Failed to create user"
-    return created_user.id, created_user.username, created_user.email
+    delete_user(created_user.id)
 
 # Delete a user by ID
 def test_delete_user_success():
-    result = delete_user("008741a9-40b6-4cf7-9e83-7aa062fbdffa") # This is only going to work once
+    randomint = random.randint(1, 1000)
+    user = User(
+        email="test"+str(randomint)+"@example.com",
+        username="testuser"+str(randomint),
+        password="hashed_password",
+    )
+    created_user = create_user(user)
+    result = delete_user(created_user.id) # This is only going to work once
     assert result, "Failed to delete user"
 
 # Test search by username (existing user)

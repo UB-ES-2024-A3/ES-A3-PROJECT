@@ -1,5 +1,5 @@
-from backend.src.main import app
-from backend.src import crud
+from src.main import app
+from src import crud
 
 
 import pytest
