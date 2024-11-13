@@ -1,4 +1,5 @@
 import React from 'react';
+import genreColors from '../styles/genreColors'
 
 interface BookInformationFields {
     title: string;
@@ -6,6 +7,10 @@ interface BookInformationFields {
     description: string;
     genres: string[];
 }
+
+
+
+const defaultGenreColor = '#e5e7eb';
 
 const BookInformation: React.FC<BookInformationFields> = ({ title, author, description, genres }) => {  
     return (
@@ -61,7 +66,7 @@ const BookInformation: React.FC<BookInformationFields> = ({ title, author, descr
                         {genres && genres.length > 0 && genres.map((genre) => (
                             <span key={genre} style={{
                             padding: '0.25rem 0.75rem',
-                            backgroundColor:'#e5e7eb',
+                            backgroundColor: genreColors[genre] || defaultGenreColor,
                             color: '#1f2937',
                             fontSize: '1rem',
                             fontWeight: 500,
@@ -79,3 +84,4 @@ const BookInformation: React.FC<BookInformationFields> = ({ title, author, descr
 };
   
   export default BookInformation;
+  

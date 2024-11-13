@@ -26,7 +26,7 @@ const MainPage: React.FC = () => {
   const handleNavBarSelection = (tab: string) => {
     setTabSelected(tab);
   };
-
+  
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
       {isAuthenticated ? (
