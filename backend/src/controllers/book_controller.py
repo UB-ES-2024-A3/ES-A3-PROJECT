@@ -30,35 +30,37 @@ class BooksController:
         return get_all_titles()
     # ENDREGION
     
-    # # REGION 6.1 search by id
-    # def get_book_by_id_query(self, book_id: str):
-    #     # Validate that the book_id is not empty
-    #     if not book_id:
-    #         raise HTTPException(status_code=400, detail="Book ID is required")
-    #     # Get book by ID
-    #     book = get_book_by_id(book_id)
-    #     if book == -1:
-    #         raise HTTPException(status_code=404, detail="Book not found")
-    #     return book
+    # REGION 6.1 search by id 
+    def get_book_by_id_query(self, book_id: str):
+        # Validate that the book_id is not empty
+        if not book_id:
+            raise HTTPException(status_code=400, detail="Book ID is required")
+        # Get book by ID
+        book = get_book_by_id(book_id)
+        if book == -1:
+            raise HTTPException(status_code=404, detail="Book not found")
+        return book
+    
+    # OPTIONAL
+    def get_book_by_title_query(self, title: str):
+        # Validate that the title is not empty
+        if not title:
+            raise HTTPException(status_code=400, detail="Title is required")
+        # Get book by title
+        book = get_book_by_title(title)
+        if book == -1:
+            raise HTTPException(status_code=404, detail="Book not found")
+        return book
 
-    # def get_book_by_title_query(self, title: str):
-    #     # Validate that the title is not empty
-    #     if not title:
-    #         raise HTTPException(status_code=400, detail="Title is required")
-    #     # Get book by title
-    #     book = get_book_by_title(title)
-    #     if book == -1:
-    #         raise HTTPException(status_code=404, detail="Book not found")
-    #     return book
-
-    # def get_books_by_author_query(self, author: str):
-    #     # Validate that the author is not empty
-    #     if not author:
-    #         raise HTTPException(status_code=400, detail="Author name is required")
-    #     # Get books by author
-    #     books = get_books_by_author(author)
-    #     if books == -1:
-    #         raise HTTPException(status_code=404, detail="No books found for this author")
-    #     return books
-    # # ENDREGION
+    # OPTIONAL
+    def get_books_by_author_query(self, author: str):
+        # Validate that the author is not empty
+        if not author:
+            raise HTTPException(status_code=400, detail="Author name is required")
+        # Get books by author
+        books = get_books_by_author(author)
+        if books == -1:
+            raise HTTPException(status_code=404, detail="No books found for this author")
+        return books
+    # ENDREGION
     
