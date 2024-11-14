@@ -5,6 +5,7 @@ from datetime import date, time
 class Review(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     _comment: str
+    _rating: float
     _date: date
     _time: time
     _book_id: str
