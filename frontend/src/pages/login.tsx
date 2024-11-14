@@ -8,6 +8,7 @@ const LoginPage: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({ username: '', password: '', credentials: '' });
+  const [userId, setUserId] = useState('');
 
   // Checks if the username and password fields are empty
   const validateInputs = () => {
@@ -35,6 +36,7 @@ const LoginPage: React.FC = () => {
     .then(result => {
       // Login success
       console.log(result.result);
+      // setUserId(result);
       setErrors({username: '', password: '', credentials: ''});
       return true;
     })
@@ -62,6 +64,7 @@ const LoginPage: React.FC = () => {
 
     if (isAuthenticated){
       localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('userId', userId);
       router.push('/');
     }
   };
