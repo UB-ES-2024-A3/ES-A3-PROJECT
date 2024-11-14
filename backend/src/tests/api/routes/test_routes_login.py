@@ -13,14 +13,16 @@ def test_authenticate_correct_user_email(client: TestClient):
     users = crud.user.read_users()
     data = {"credentials" : users[0].email, "password": users[0].password}
     r = client.post(f"/login", json = data)
-    assert r.status_code == 204, f"Expected 204, got {r.status_code}. Details: {r.json()}"
-
+    #assert r.status_code == 204, f"Expected 204, got {r.status_code}. Details: {r.json()}"
+    assert r.status_code == 200, f"Expected 200, got {r.status_code}. Details: {r.json()}"
+    assert r.json() == users[0].id
 
 def test_authenticate_correct_user_username(client: TestClient):
     users = crud.user.read_users()
     data = {"credentials": users[0].username, "password": users[0].password}
     r = client.post(f"/login", json = data)
-    assert r.status_code == 204, f"Expected 204, got {r.status_code}. Details: {r.json()}"
+    assert r.status_code == 200, f"Expected 200, got {r.status_code}. Details: {r.json()}"
+    assert r.json() == users[0].id
 
 def test_authenticate_wrong_user(client: TestClient):
     data = {"credentials": "wrong@gmail.com", "password": "wrongPassword"}
