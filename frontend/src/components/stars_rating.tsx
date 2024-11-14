@@ -1,4 +1,4 @@
-import { Star } from 'lucide-react'
+import { Star } from 'lucide-react';
 
 export const getRatingStars = (rating: number) => {
     let validRating = true;
@@ -8,51 +8,62 @@ export const getRatingStars = (rating: number) => {
         rating = 0;
         validRating = false;
     }
-    const fullStars = Math.floor(rating)
-    const starDecimals = (Math.floor(rating * 10)/ 10) - fullStars
-    const hasHalfStar = 0.3 <= starDecimals && starDecimals < 0.7
+    let fullStars = Math.floor(rating);
+    const starDecimals = rating - fullStars;
 
-    return {fullStars, hasHalfStar, validRating}
-}
+    // Adjust logic for half stars
+    const hasHalfStar = 0.25 <= starDecimals && starDecimals < 0.75;
+    if (starDecimals >= 0.75) {
+        fullStars += 1;
+    }
+
+    return { fullStars, hasHalfStar, validRating };
+};
+
 export const renderStars = (rating: number) => {
-    const stars = []
-    const {fullStars, hasHalfStar, validRating} = getRatingStars(rating);
+    const stars = [];
+    const { fullStars, hasHalfStar, validRating } = getRatingStars(rating);
 
-    if (!validRating){
+    if (!validRating) {
         stars.push(
-            <div>
+            <div key="no-reviews">
                 {"No reviews"}
             </div>
-        )
-    }
-    else {
+        );
+    } else {
         // Full stars
         for (let i = 0; i < fullStars; i++) {
-        stars.push(
-            <Star key={`full-${i}`} style={{ width: "24px", height: "24px", color: 'var(--star-yellow)', fill: 'var(--star-yellow)' }} />
-        )
+            stars.push(
+                <Star 
+                    key={`full-${i}`} 
+                    style={{ width: "24px", height: "24px", color: 'var(--star-yellow)', fill: 'var(--star-yellow)' }} 
+                />
+            );
         }
 
         // Half star
         if (hasHalfStar) {
-        stars.push(
-            <div key="half" style={{ position: "relative", display: "inline-block" }}>
-                <Star style={{ width: "24px", height: "24px", color: 'var(--star-gray)' }} />
-                <div style={{ position: "absolute", inset: "0", overflow: "hidden", width: "50%" }}>
-                    <Star style={{ width: "24px", height: "24px", color:'var(--star-yellow)', fill: 'var(--star-yellow)' }} />
+            stars.push(
+                <div key="half" style={{ position: "relative", display: "inline-block" }}>
+                    <Star style={{ width: "24px", height: "24px", color: 'var(--star-gray)' }} />
+                    <div style={{ position: "absolute", inset: "0", overflow: "hidden", width: "50%" }}>
+                        <Star style={{ width: "24px", height: "24px", color: 'var(--star-yellow)', fill: 'var(--star-yellow)' }} />
+                    </div>
                 </div>
-            </div>
-        )
+            );
         }
 
         // Empty stars
-        const emptyStars = 5 - Math.ceil(rating)
+        const emptyStars = 5 - stars.length;
         for (let i = 0; i < emptyStars; i++) {
-        stars.push(
-            <Star key={`empty-${i}`} style={{ width: "24px", height: "24px", color: 'var(--star-gray)' }} />
-        )
+            stars.push(
+                <Star 
+                    key={`empty-${i}`} 
+                    style={{ width: "24px", height: "24px", color: 'var(--star-gray)' }} 
+                />
+            );
         }
     }
 
-    return stars
-  }
+    return stars;
+};
