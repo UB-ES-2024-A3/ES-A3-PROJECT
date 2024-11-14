@@ -37,3 +37,7 @@
     color: var(--hover-green);
     background-color: white;
   }
+
+  .profileNavigation{
+    background-color: var(--primary-beige)
+  }
