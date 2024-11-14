@@ -8,7 +8,6 @@ const LoginPage: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({ username: '', password: '', credentials: '' });
-  const [userId, setUserId] = useState('');
 
   // Checks if the username and password fields are empty
   const validateInputs = () => {
@@ -35,10 +34,9 @@ const LoginPage: React.FC = () => {
     )
     .then(result => {
       // Login success
-      console.log(result.result);
-      // setUserId(result);
+      console.log(result);
       setErrors({username: '', password: '', credentials: ''});
-      return true;
+      return {isAuthenticated: true, userId: result};
     })
     .catch(errorMsgs => {
       console.log(errorMsgs);
@@ -48,7 +46,7 @@ const LoginPage: React.FC = () => {
           [key]: errorMsgs[key]
         }));
       });
-      return false;
+      return {isAuthenticated: false, userId: ''};
     });
   }
 
@@ -60,11 +58,11 @@ const LoginPage: React.FC = () => {
       return;
     }
 
-    const isAuthenticated = await authenticate();
+    const authenticationResult = await authenticate();
 
-    if (isAuthenticated){
+    if (authenticationResult.isAuthenticated){
       localStorage.setItem('isAuthenticated', 'true');
-      localStorage.setItem('userId', userId);
+      localStorage.setItem('userId', authenticationResult.userId);
       router.push('/');
     }
   };
