@@ -16,7 +16,7 @@ const LoginService = {
             {headers: header}
         )
         .then(() => {
-            return {result: 'OK'};
+            return 'OK';
         })
         .catch((except) => {
             const detailRaw = except.response.data.detail;      // Returns "500: {'credentials': 'message'}"
