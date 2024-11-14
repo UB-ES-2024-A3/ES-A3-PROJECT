@@ -66,9 +66,13 @@ const Profile: React.FC<ProfileProps> = ({ handleLogout }) => {
                 paddingRight: '16px',
               }}
             >
-              {reviews.map((review, index) => (
+              {reviews.length? (reviews.map((review, index) => (
                 <ProfileReviewCard key={index} bookTitle={review.bookTitle} author={review.author} rating={review.rating} date={review.date} time={review.time} review={review.review}/>
-              ))}
+              ))):(
+                <div style={{margin: '5px', textAlign: 'center', justifyContent: 'center', height: '80vh', display: 'flex', flexDirection: 'column'}}> 
+                    <h2 style={{fontSize: '2em', color: 'grey'}}>You have no reviews yet.</h2>
+                </div>
+              )}
             </div>
           ) : (
             <p>Loading...</p>
