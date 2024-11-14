@@ -10,7 +10,7 @@ class Book(BaseModel):
     title: str
     genres: List[str]
     description : str
-    reviews: List[Review]
+    _reviews: List[Review]
 
     def __repr__(self):
         return (f"ID: {self.id}\nTítulo: {self.title}\nAuthor: {self.author}\n" f"Descripción: {self.description}\nGéneros: {', '.join(self.genres)}")
