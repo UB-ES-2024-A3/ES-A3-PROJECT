@@ -17,8 +17,8 @@ const RegisterService = {
             data,
             {headers: header}
         )
-        .then(() => {
-            return "Success!";
+        .then(userResult => {
+            return userResult.data.id;
         })
         .catch(except => {
             if (except.status == 400) {
