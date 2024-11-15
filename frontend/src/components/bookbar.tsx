@@ -4,11 +4,12 @@ interface BookBarProps{
     id: string;
     title: string;
     author: string;
+    handleOpenBook: (id:string) => void;
 }
 
-const BookBar: React.FC<BookBarProps> = ({id, title, author}) => {
+const BookBar: React.FC<BookBarProps> = ({id, title, author, handleOpenBook}) => {
     const handleSearchBook = () => {
-        //Go to book page
+        handleOpenBook(id);
     };
 
     return (
