@@ -4,6 +4,7 @@ import BookBar from '../components/bookbar';
 
 interface ListBooksProps{
     search: string;
+    searchBook: (id: string) => void;
 }
 
 interface Book {
@@ -13,10 +14,14 @@ interface Book {
 }
 
 
-const ListBooks: React.FC<ListBooksProps> = ({search}) => {
+const ListBooks: React.FC<ListBooksProps> = ({search, searchBook}) => {
     const [searchResults, setSearchResults] = useState<Book[]>([]);
     const [isLoading, setIsLoading] = useState(false);
-
+     
+    const handleOpenBook = (id: string) =>{
+      setSearchResults([]);
+      searchBook(id);
+    }
     useEffect(() => {
         if (search.trim()) {
           setIsLoading(true);
@@ -50,7 +55,7 @@ const ListBooks: React.FC<ListBooksProps> = ({search}) => {
               <div>
                 {searchResults.map((book) => (
                   <div key={book.id} style={{margin: '2px'}}>
-                    <BookBar key={book.id} id={book.id} title={book.title} author={book.author}/>
+                    <BookBar key={book.id} id={book.id} title={book.title} author={book.author} handleOpenBook={handleOpenBook}/>
                   </div>
                 ))}
               </div>

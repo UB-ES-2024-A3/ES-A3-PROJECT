@@ -6,6 +6,7 @@ interface SearchBarProps {
   placeholder?: string;
   buttonLabel?: string;
   onSearchResults: (search: string) => void;
+  searchBook: (id:string) => void;
 }
 
 interface Book {
@@ -14,7 +15,7 @@ interface Book {
   author: string;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ placeholder, buttonLabel, onSearchResults }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ placeholder, buttonLabel, onSearchResults, searchBook }) => {
   const [query, setQuery] = useState('');
   const num_results = 10;
   const [searchResults, setSearchResults] = useState<Book[]>([]);
@@ -25,6 +26,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ placeholder, buttonLabel, onSearc
       onSearchResults(query);
     }
   };
+
+  const handleOpenBook = (id: string) => {
+    setSearchResults([]);
+    searchBook(id);
+  }
 
   useEffect(() => {
     if (query.trim()) {
@@ -93,7 +99,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ placeholder, buttonLabel, onSearc
         {searchResults.length > 0 ? 
         (<div style={{border: '2px solid #ccc'}}> 
           {searchResults.map((book) => (
-            <BookBar key={book.id} id={book.id} title={book.title} author={book.author}/>
+            <BookBar key={book.id} id={book.id} title={book.title} author={book.author} handleOpenBook={handleOpenBook}/>
           ))}
         </div>
         ):(
