@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import NavBar from '@/components/navbar';
 import Timeline from '@/components/timeline';
+import Profile from '@/components/profile';
 
 const MainPage: React.FC = () => {
 
@@ -39,15 +40,13 @@ const MainPage: React.FC = () => {
           <div style={{width: '8%'}}>
             <NavBar handleNavBarSelection={handleNavBarSelection} tabSelected={tabSelected} />
           </div>
-          {tabSelected === 'timeline' ? (
-            <div style = {{width: '100%'}}>
+          <div style = {{width: '100%'}}>
+            {tabSelected === 'timeline' ? (
               <Timeline showList={showList} setShowList={setShowList}/>
-            </div>
-          ) : (
-            <div style={{ flex: 1, padding: '20px' }}>
-              <button onClick={handleLogout}>Logout</button>
-            </div>
-          )}
+            ) : (
+              <Profile handleLogout={handleLogout}/>
+            )}
+          </div>
         </>
       ) : (
         <>
