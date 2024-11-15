@@ -1,9 +1,4 @@
-from src.crud.user import (
-    read_users,
-    create_user,
-    delete_user,
-    authenticate
-)
+from src.crud.user import *
 from src.models.user_model import User
 import random
 import pytest
@@ -41,7 +36,7 @@ def test_create_user():
         print("Test passed successfully")
     else:
         print("Test failed")  
-    return created_user.id
+    assert created_user.id != None
 
 
 # You have to create a new user and extract id to test this

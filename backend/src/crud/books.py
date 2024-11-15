@@ -111,71 +111,21 @@ def get_all_titles():
 
 # REGION 6.1 search by id
 # Method to get a book by ID
-# def get_book_by_id(book_id: str):
-#     supabase = get_db_client()
-#     try:
-#         result = supabase.table("books").select("*").eq("id", book_id).execute()        
-#         if result.data:
-#             book_data = result.data[0]
-#             if book_data["genres"]:
-#                 genres = [genre.strip() for genre in book_data["genres"].split(",")]
-#             else:
-#                 genres = [] 
-#             book_data["genres"] = genres  
-#             return Book(**book_data)
-#         else:
-#             return -1
-#     except Exception as e:
-#         print(f"Error retrieving book by id {book_id}: {e}")
-#         raise HTTPException(status_code=500, detail=str(e))
-
-# # Method to find books by title
-# def get_book_by_title(title: str):
-#     supabase = get_db_client()
-#     try:
-#         normalized_title = ''.join(
-#             c for c in unicodedata.normalize('NFD', title)
-#             if unicodedata.category(c) != 'Mn' and c != ','
-#         ).lower().strip()
-#         result = supabase.table("books").select("*").execute()
-#         book_data = next(
-#             (book for book in result.data if ''.join(
-#                 c for c in unicodedata.normalize('NFD', book["title"])
-#                 if unicodedata.category(c) != 'Mn' and c != ','
-#             ).lower().strip() == normalized_title),
-#             None
-#         )
-#         if book_data:
-#             genres = [genre.strip() for genre in book_data.get("genres", "").split(",") if genre.strip()]
-#             book_data["genres"] = genres  
-#             return Book(**book_data)
-#         else:
-#             return -1
-#     except Exception as e:
-#         print(f"Error retrieving book by title {title}: {e}")
-#         raise HTTPException(status_code=500, detail=str(e))
-
-# # Method to find books by author
-# def get_books_by_author(author: str):
-#     supabase = get_db_client()
-#     try:
-#         normalized_author = ''.join(
-#             c for c in unicodedata.normalize('NFD', author)
-#             if unicodedata.category(c) != 'Mn' and c != ','
-#         ).lower().strip()
-#         data = supabase.table("books").select("*").execute()        
-#         books = []
-#         for book_data in data.data:
-#             if ''.join(
-#                 c for c in unicodedata.normalize('NFD', book_data["author"])
-#                 if unicodedata.category(c) != 'Mn' and c != ','
-#             ).lower().strip() == normalized_author:
-#                 genres = [genre.strip() for genre in book_data.get("genres", "").split(",") if genre.strip()]
-#                 book_data["genres"] = genres
-#                 book = Book(**book_data)
-#                 books.append(book)
-#         return books
-#     except Exception as e:
-#         print(f"Error retrieving books by author {author}: {e}")
-#         raise HTTPException(status_code=500, detail=str(e))
-#     #ENDREGION
+def get_book_by_id(book_id: str):
+    supabase = get_db_client()
+    try:
+        result = supabase.table("books").select("*").eq("id", book_id).execute()        
+        if result.data:
+            book_data = result.data[0]
+            if book_data["genres"]:
+                genres = [genre.strip() for genre in book_data["genres"].split(",")]
+            else:
+                genres = [] 
+            book_data["genres"] = genres  
+            return Book(**book_data)
+        else:
+            return -1
+    except Exception as e:
+        print(f"Error retrieving book by id {book_id}: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+    #ENDREGION

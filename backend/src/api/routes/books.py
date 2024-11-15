@@ -50,43 +50,17 @@ async def get_all_titles():
         raise HTTPException(status_code=500, detail="Error fetching book titles")
 # ENDREGION
 
-# # REGION 6.1 search by id
-# # Endpoint to get a book by ID
-# @router.get("/books/{book_id}", response_model=Book)
-# async def get_book_by_id(book_id: str):
-#     try:
-#         book = booksController.get_book_by_id_query(book_id)
-#         if book == -1:
-#             raise HTTPException(status_code=404, detail="Book not found")
-#         return book
-#     except HTTPException as e:
-#         raise e
-#     except Exception as e:
-#         raise HTTPException(status_code=500, detail="Error fetching book by ID")
-
-# # Endpoint to get a book by title
-# @router.get("/books/title/{title}", response_model=Book)
-# async def get_book_by_title(title: str):
-#     try:
-#         book = booksController.get_book_by_title_query(title)
-#         if book == -1:
-#             raise HTTPException(status_code=404, detail="Book not found")
-#         return book
-#     except HTTPException as e:
-#         raise e
-#     except Exception as e:
-#         raise HTTPException(status_code=500, detail="Error fetching book by title")
-
-# # Endpoint to get books by author
-# @router.get("/books/author/{author}", response_model=List[Book])
-# async def get_books_by_author(author: str):
-#     try:
-#         books = booksController.get_books_by_author_query(author)
-#         if books == -1:
-#             raise HTTPException(status_code=404, detail="No books found for this author")
-#         return books
-#     except HTTPException as e:
-#         raise e
-#     except Exception as e:
-#         raise HTTPException(status_code=500, detail="Error fetching books by author")
-# # ENDREGION
+# REGION 6.1 search by id
+# Endpoint to get a book by ID
+@router.get("/books/{book_id}", response_model=Book)
+async def get_book_by_id(book_id: str):
+    try:
+        book = booksController.get_book_by_id_query(book_id)
+        if book == -1:
+            raise HTTPException(status_code=404, detail="Book not found")
+        return book
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error fetching book by ID")
+    # ENDREGION

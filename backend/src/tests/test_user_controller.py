@@ -24,7 +24,6 @@ def test_create_user_command_valid():
     )
     created_user = userController.create_user_command(user)
     assert created_user is not None, "Failed to create user"
-    return created_user.id, created_user.username, created_user.email
 
 # Test create_user_command with invalid email format
 def test_create_user_command_invalid_email_format():
