@@ -25,8 +25,7 @@ const LoginPage: React.FC = () => {
     return validInputs; 
   };
 
-  // Here's where the request will be done
-  // Returns true if the user is correctly authenticated and false otherwise
+  // Sends the loguin request.
   const authenticate = async () =>{
     return LoginService.loginRequest(
       username,
