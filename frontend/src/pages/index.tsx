@@ -21,6 +21,7 @@ const MainPage: React.FC = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('userId');
     setIsAuthenticated(false);
     router.push('/login');
   };
