@@ -85,7 +85,7 @@ async def get_username_by_id(user_id: str) -> str:
         user = userController.search_by_id(user_id)
         if user == -1:
             raise HTTPException(status_code=404, detail="User not found")
-        return user.id
+        return user.username
     except HTTPException as e:
         raise e
     except Exception as e:
