@@ -63,30 +63,4 @@ async def get_book_by_id(book_id: str):
         raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error fetching book by ID")
-
-# Endpoint to get a book by title OPTIONAL
-@router.get("/books/title/{title}", response_model=Book)
-async def get_book_by_title(title: str):
-    try:
-        book = booksController.get_book_by_title_query(title)
-        if book == -1:
-            raise HTTPException(status_code=404, detail="Book not found")
-        return book
-    except HTTPException as e:
-        raise e
-    except Exception as e:
-        raise HTTPException(status_code=500, detail="Error fetching book by title")
-
-# Endpoint to get books by author OPTIONAL
-@router.get("/books/author/{author}", response_model=List[Book])
-async def get_books_by_author(author: str):
-    try:
-        books = booksController.get_books_by_author_query(author)
-        if books == -1:
-            raise HTTPException(status_code=404, detail="No books found for this author")
-        return books
-    except HTTPException as e:
-        raise e
-    except Exception as e:
-        raise HTTPException(status_code=500, detail="Error fetching books by author")
-# ENDREGION
+    # ENDREGION

@@ -66,26 +66,4 @@ def test_get_book_by_id():
     print("Retrieved book:", book)
     assert book != -1, "Test failed: Book not found"
     print("Test passed successfully")
-
-# Test to retrieve a book by its title OPTIONAL
-def test_get_book_by_title():
-    print("\n\n-----------------------------GET BOOK BY TITLE-----------------------------")
-    test_title = "North Carolina Ghosts and Legends"
-    book = get_book_by_title(test_title)
-    if book != -1:
-        print("Retrieved book:", book)
-        print("Test passed successfully")
-    else:
-        print("Book not found\nTest failed")
-    assert book != -1, "Test failed: Book not found by title"
-
-# Test to retrieve books by author OPTIONAL
-def test_get_books_by_author():
-    print("\n\n-----------------------------GET BOOKS BY AUTHOR-----------------------------")
-    test_author = "Roberts, Nancy"
-    books = get_books_by_author(test_author)
-    print(f"Books found by {test_author}: {len(books)}")
-    print("Example book by author:", books[0] if books else "No books found")
-    assert len(books) > 0, "Test failed: No books found by author"
-    print("Test passed successfully")
 # ENREGION

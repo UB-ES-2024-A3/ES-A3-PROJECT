@@ -72,44 +72,4 @@ def test_get_book_by_id_query_empty():
         booksController.get_book_by_id_query("")
     assert excinfo.value.status_code == 400
     assert excinfo.value.detail == "Book ID is required"
-
-# Test get_book_by_title_query with valid title OPTIONAL
-def test_get_book_by_title_query_valid():
-    title = "North Carolina Ghosts and Legends"  
-    book = booksController.get_book_by_title_query(title)
-    assert book is not None, "Failed to retrieve book by valid title"
-
-# Test get_book_by_title_query with non-existing title OPTIONAL
-def test_get_book_by_title_query_non_existing():
-    with pytest.raises(HTTPException) as excinfo:
-        booksController.get_book_by_title_query("Non-Existing Title")
-    assert excinfo.value.status_code == 404
-    assert excinfo.value.detail == "Book not found"
-
-# Test get_book_by_title_query with empty title OPTIONAL
-def test_get_book_by_title_query_empty():
-    with pytest.raises(HTTPException) as excinfo:
-        booksController.get_book_by_title_query("")
-    assert excinfo.value.status_code == 400
-    assert excinfo.value.detail == "Title is required"
-
-# Test get_books_by_author_query with valid author OPTIONAL
-def test_get_books_by_author_query_valid():
-    author = "Roberts, Nancy"
-    books = booksController.get_books_by_author_query(author)
-    assert len(books) > 0, "Failed to retrieve books by valid author"
-
-# Test get_books_by_author_query with non-existing author OPTIONAL
-def test_get_books_by_author_query_non_existing():
-    author = "Amncy"
-    books = booksController.get_books_by_author_query(author)
-    assert len(books) == 0, "Failed to retrieve books by valid author"
-
-# Test get_books_by_author_query with empty author name OPTIONAL
-def test_get_books_by_author_query_empty():
-    with pytest.raises(HTTPException) as excinfo:
-        booksController.get_books_by_author_query("")
-    assert excinfo.value.status_code == 400
-    assert excinfo.value.detail == "Author name is required"
-
 # ENDREGION
