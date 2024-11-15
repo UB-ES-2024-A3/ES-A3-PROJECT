@@ -1,18 +1,38 @@
 import React from 'react';
 import genreColors from '../styles/genreColors'
+import { useEffect, useState } from 'react';
+import ShowBookService from '@/services/showBookService';
 
 interface BookInformationFields {
-    title: string;
-    author: string;
-    description: string;
-    genres: string[];
+    id: string
 }
 
-
+interface Book{
+    id: string,
+    title: string,
+    author: string,
+    description: string
+    genres: string[]
+}
 
 const defaultGenreColor = '#e5e7eb';
 
-const BookInformation: React.FC<BookInformationFields> = ({ title, author, description, genres }) => {  
+const BookInformation: React.FC<BookInformationFields> = ({ id }) => { 
+    const [book, setBook] = useState<Book>({author: "", title: "", description: "", genres: [], id:""})
+ 
+    useEffect(() => {
+        ShowBookService.getBookRequest(id)
+            .then(result => {
+                console.log(result);
+                setBook(result);
+            })
+            .catch(errorMsgs => {
+                console.error(errorMsgs);
+                setBook({ author: "", title: "", description: "", genres: [], id: "" });
+            });
+    }, [id]);
+    
+
     return (
         <div style={{
         display: 'flex',
@@ -35,14 +55,14 @@ const BookInformation: React.FC<BookInformationFields> = ({ title, author, descr
                         fontWeight: 'bold',
                         marginBottom: '0.5rem'
                     }}>
-                        {title}
+                        {book.title}
                     </h2>
                     <p style={{
                         fontSize: '1.5rem',
                         color: '#4b5563',
                         marginBottom: '1rem'
                     }}>
-                        {author}
+                        {book.author}
                     </p>
                     <div>
                         <div style={{
@@ -54,7 +74,7 @@ const BookInformation: React.FC<BookInformationFields> = ({ title, author, descr
                                 fontSize: '1rem',
                                 lineHeight: '1.5'
                             }}>
-                                {description}
+                                {book.description}
                             </p>
                         </div>
                         <div style={{
@@ -63,7 +83,7 @@ const BookInformation: React.FC<BookInformationFields> = ({ title, author, descr
                         gap: '0.5rem',
                         marginTop: '1rem'
                         }}>
-                        {genres && genres.length > 0 && genres.map((genre) => (
+                        {book.genres && book.genres.length > 0 && book.genres.map((genre) => (
                             <span key={genre} style={{
                             padding: '0.25rem 0.75rem',
                             backgroundColor: genreColors[genre] || defaultGenreColor,
