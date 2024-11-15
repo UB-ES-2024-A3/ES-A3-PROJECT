@@ -77,3 +77,16 @@ async def get_user_by_id(user_id: str):
         raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error searching user by id")
+
+# Endpoint to get the username given an id   
+@router.get("/users/username/id/{user_id}")
+async def get_username_by_id(user_id: str) -> str:
+    try:
+        user = userController.search_by_id(user_id)
+        if user == -1:
+            raise HTTPException(status_code=404, detail="User not found")
+        return user.username
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error searching user by id")
