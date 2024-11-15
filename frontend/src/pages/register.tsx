@@ -77,8 +77,10 @@ const RegisterPage: React.FC = () => {
   // Fakes a register
   const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); // Prevents the page from rerendering when the form is submitted
+    if (!validateInputs())
+      return;
     const registerResult = await sendRequest();
-    if (validateInputs() && registerResult.isRegistered) {
+    if (registerResult.isRegistered) {
       localStorage.setItem('isAuthenticated', 'true');
       localStorage.setItem('userId', registerResult.userId);
       router.push('/');
@@ -97,7 +99,7 @@ const RegisterPage: React.FC = () => {
     })
     .catch(errorMsg => {
       const errorType = errorMsg.toLowerCase().includes('username') ? "username": "email";
-      console.log(errorMsg);
+      console.log(errorType, errorMsg);
       setErrors(prevErrors => ({
         ...prevErrors,
         [errorType]: errorMsg
