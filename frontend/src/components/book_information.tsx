@@ -2,6 +2,7 @@ import React from 'react';
 import genreColors from '../styles/genreColors'
 import { useEffect, useState } from 'react';
 import ShowBookService from '@/services/showBookService';
+import { renderStars } from './stars_rating';
 
 interface BookInformationFields {
     id: string
@@ -11,24 +12,50 @@ interface Book{
     id: string,
     title: string,
     author: string,
-    description: string
-    genres: string[]
+    description: string,
+    genres: string[],
+    stars: number
 }
 
 const defaultGenreColor = '#e5e7eb';
 
 const BookInformation: React.FC<BookInformationFields> = ({ id }) => { 
-    const [book, setBook] = useState<Book>({author: "", title: "", description: "", genres: [], id:""})
+    const [book, setBook] = useState<Book>({author: "", title: "", description: "", genres: [], id:"", stars: 0});
+    const reviews = [
+        {
+            username: "avid.reader",
+            rating: 4,
+            date: '11/02/22',
+            time: '13:30:28',
+            review: ''
+        },
+        {
+            username: "tomatoface",
+            rating: 5,
+            date: '11/02/22',
+            time: '14:00:03',
+        },
+        {
+            username: "hater",
+            rating: 1,
+            date: '11/2/22',
+            time: '13:30:28',
+            review: 'Didn\'t like it one bit.'
+        },
+    ];
+    const avgStars = 3.3;
  
     useEffect(() => {
         ShowBookService.getBookRequest(id)
             .then(result => {
                 console.log(result);
+                // TODO: Provisional
+                result['stars'] = avgStars;
                 setBook(result);
             })
             .catch(errorMsgs => {
                 console.error(errorMsgs);
-                setBook({ author: "", title: "", description: "", genres: [], id: "" });
+                setBook({ author: "", title: "", description: "", genres: [], id: "", stars: 0 });
             });
     }, [id]);
     
@@ -36,7 +63,7 @@ const BookInformation: React.FC<BookInformationFields> = ({ id }) => {
     return (
         <div style={{
         display: 'flex',
-        height:"fit-content",
+        height:'fit-content',
         justifyContent: 'center',
         width: '100%',
         padding: '1.5rem',
@@ -50,20 +77,27 @@ const BookInformation: React.FC<BookInformationFields> = ({ id }) => {
                 overflow: 'hidden'
             }}>
                 <div style={{ padding: '3rem' }}>
-                    <h2 style={{
-                        fontSize: '2rem',
-                        fontWeight: 'bold',
-                        marginBottom: '0.5rem'
-                    }}>
-                        {book.title}
-                    </h2>
-                    <p style={{
-                        fontSize: '1.5rem',
-                        color: '#4b5563',
-                        marginBottom: '1rem'
-                    }}>
-                        {book.author}
-                    </p>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                        <div>
+                            <h2 style={{
+                                fontSize: '2rem',
+                                fontWeight: 'bold',
+                                marginBottom: '0.5rem'
+                            }}>
+                                {book.title}
+                            </h2>
+                            <p style={{
+                                fontSize: '1.5rem',
+                                color: '#4b5563',
+                                marginBottom: '1rem'
+                            }}>
+                                {book.author}
+                            </p>
+                        </div>
+                        <div style={{ display: 'flex', marginRight: '32px' }}>
+                            { renderStars(book.stars) }
+                        </div>
+                    </div>
                     <div>
                         <div style={{
                         height: 'auto',
