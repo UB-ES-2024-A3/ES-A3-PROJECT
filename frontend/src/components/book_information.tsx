@@ -3,6 +3,7 @@ import genreColors from '../styles/genreColors'
 import { useEffect, useState } from 'react';
 import ShowBookService from '@/services/showBookService';
 import { renderStars } from './stars_rating';
+import BookReviewCard from './book_review_card';
 
 interface BookInformationFields {
     id: string
@@ -25,20 +26,20 @@ const BookInformation: React.FC<BookInformationFields> = ({ id }) => {
         {
             username: "avid.reader",
             rating: 4,
-            date: '11/02/22',
+            date: '11/02/2022',
             time: '13:30:28',
-            review: ''
+            review: 'With all due respect: Raughh... Grrrr...'
         },
         {
             username: "tomatoface",
             rating: 5,
-            date: '11/02/22',
+            date: '11/02/2022',
             time: '14:00:03',
         },
         {
             username: "hater",
             rating: 1,
-            date: '11/2/22',
+            date: '15/2/2022',
             time: '13:30:28',
             review: 'Didn\'t like it one bit.'
         },
@@ -152,6 +153,13 @@ const BookInformation: React.FC<BookInformationFields> = ({ id }) => {
                                 { reviews.length } reviews
                             </span>
                         </h3>
+                        <BookReviewCard
+                            username={reviews[0].username}
+                            rating={reviews[0].rating}
+                            review={reviews[0].review}
+                            date={reviews[0].date}
+                            time={reviews[0].time}
+                        />
                     </div>
                 </div>
             </div>
