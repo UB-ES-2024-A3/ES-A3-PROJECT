@@ -1,6 +1,7 @@
 import React from 'react';
 import genreColors from '../styles/genreColors'
 import { Book } from './timeline';
+import { renderStars } from './stars_rating';
 
 interface BookInformationFields {
     book: Book
@@ -13,7 +14,7 @@ const BookInformation: React.FC<BookInformationFields> = ({ book }) => {
     return (
         <div style={{
         display: 'flex',
-        height:"fit-content",
+        height:'fit-content',
         justifyContent: 'center',
         width: '100%',
         padding: '1.5rem',
@@ -27,20 +28,27 @@ const BookInformation: React.FC<BookInformationFields> = ({ book }) => {
                 overflow: 'hidden'
             }}>
                 <div style={{ padding: '3rem' }}>
-                    <h2 style={{
-                        fontSize: '2rem',
-                        fontWeight: 'bold',
-                        marginBottom: '0.5rem'
-                    }}>
-                        {book.title}
-                    </h2>
-                    <p style={{
-                        fontSize: '1.5rem',
-                        color: '#4b5563',
-                        marginBottom: '1rem'
-                    }}>
-                        {book.author}
-                    </p>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                        <div>
+                            <h2 style={{
+                                fontSize: '2rem',
+                                fontWeight: 'bold',
+                                marginBottom: '0.5rem'
+                            }}>
+                                {book.title}
+                            </h2>
+                            <p style={{
+                                fontSize: '1.5rem',
+                                color: '#4b5563',
+                                marginBottom: '1rem'
+                            }}>
+                                {book.author}
+                            </p>
+                        </div>
+                        <div style={{ display: 'flex', marginRight: '32px' }}>
+                            { renderStars(book.avgstars) }
+                        </div>
+                    </div>
                     <div>
                         <div style={{
                         height: 'auto',
