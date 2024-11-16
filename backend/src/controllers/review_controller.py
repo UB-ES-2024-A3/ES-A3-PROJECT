@@ -7,7 +7,7 @@ from fastapi import HTTPException
 class ReviewController:
     def add_review_command(self, review: Review):
         # Valid stars
-        if(review.stars > 5 or review.stars < 0):
+        if(review.stars > 5 or review.stars < 1):
             raise HTTPException(status_code=422,detail="Invalid stars")
 
         # Validate that the user exists
