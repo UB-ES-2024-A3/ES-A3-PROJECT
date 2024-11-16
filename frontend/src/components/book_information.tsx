@@ -2,6 +2,7 @@ import React from 'react';
 import genreColors from '../styles/genreColors'
 import { Book } from './timeline';
 import { renderStars } from './stars_rating';
+import BookReviewCard from './book_review_card';
 
 interface BookInformationFields {
     book: Book
@@ -100,6 +101,13 @@ const BookInformation: React.FC<BookInformationFields> = ({ book }) => {
                                 { reviews.length } reviews
                             </span>
                         </h3>
+                        <BookReviewCard
+                            username={reviews[0].username}
+                            rating={reviews[0].rating}
+                            review={reviews[0].review}
+                            date={reviews[0].date}
+                            time={reviews[0].time}
+                        />
                     </div>
                 </div>
             </div>
