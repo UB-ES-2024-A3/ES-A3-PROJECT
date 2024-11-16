@@ -78,7 +78,7 @@ const BookInformation: React.FC<BookInformationFields> = ({ id }) => {
             }}>
                 <div style={{ padding: '3rem' }}>
                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                        <div>
+                        <div style={{ flexGrow: '1' }}>
                             <h2 style={{
                                 fontSize: '2rem',
                                 fontWeight: 'bold',
