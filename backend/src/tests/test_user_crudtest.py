@@ -13,7 +13,7 @@ def test_read_users():
 
 # Create a user
 def test_create_user():
-    randomint = random.randint(1, 1000)
+    randomint = random.randint(1000, 100000)
     user = User(
         email="test" + str(randomint) + "@example.com",
         username="testuser" + str(randomint),
