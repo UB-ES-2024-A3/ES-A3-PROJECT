@@ -99,7 +99,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ placeholder, buttonLabel, onSearc
         {searchResults.length > 0 ? 
         (<div style={{border: '2px solid #ccc'}}> 
           {searchResults.map((book) => (
-            <BookBar key={book.id} id={book.id} title={book.title} author={book.author} handleOpenBook={handleOpenBook}/>
+            <BookBar key={book.id} id={book.id} title={book.title} author={book.author} showReviews={false} rating={5} handleOpenBook={handleOpenBook}/>
           ))}
         </div>
         ):(
