@@ -77,7 +77,11 @@ const BookInformation: React.FC<BookInformationFields> = ({ id }) => {
                 overflow: 'hidden'
             }}>
                 <div style={{ padding: '3rem' }}>
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center'
+                    }}>
                         <div style={{ flexGrow: '1' }}>
                             <h2 style={{
                                 fontSize: '2rem',
@@ -94,7 +98,10 @@ const BookInformation: React.FC<BookInformationFields> = ({ id }) => {
                                 {book.author}
                             </p>
                         </div>
-                        <div style={{ display: 'flex', marginRight: '32px' }}>
+                        <div style={{
+                            display: 'flex',
+                            marginRight: '32px'
+                            }}>
                             { renderStars(book.stars) }
                         </div>
                     </div>
@@ -130,6 +137,21 @@ const BookInformation: React.FC<BookInformationFields> = ({ id }) => {
                             </span>
                         ))}
                         </div>
+                    </div>
+                    <div style={{
+                        marginTop: '16px',
+                        borderTop: 'solid black 2px'
+                    }}>
+                        <h3 style={{
+                            fontSize: '2rem',
+                            color: '#4b5563',
+                            marginBottom: '1rem',
+                        }}>
+                            Reviews&ensp;-&ensp;
+                            <span style={{ fontSize: '1.5rem' }}>
+                                { reviews.length } reviews
+                            </span>
+                        </h3>
                     </div>
                 </div>
             </div>
