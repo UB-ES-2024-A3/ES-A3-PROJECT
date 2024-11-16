@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 import uuid
 from pydantic import BaseModel, Field
 from typing import List
@@ -11,8 +11,8 @@ class Book(BaseModel):
     genres: List[str]
     description : str
     _reviews: List[Review]
-    numreviews : int
-    avgstars : float
+    numreviews: Optional[int] = 0  # Default value
+    avgstars: Optional[float] = 0.0  # Default value
 
     def __repr__(self):
         return (f"ID: {self.id}\nTítulo: {self.title}\nAuthor: {self.author}\n" f"Descripción: {self.description}\nGéneros: {', '.join(self.genres)}")
