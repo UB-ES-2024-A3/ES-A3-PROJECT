@@ -29,7 +29,7 @@ def test_read_users():
 def test_create_user():
     # Generar un número entero aleatorio entre 1 y 1000
     print("\n\n------------------------------CREATE NEW USER-------------------------------")
-    randomint = random.randint(1, 1000)
+    randomint = random.randint(1000, 100000)
     user = User(
         email="test"+str(randomint)+"@example.com",
         username="testuser"+str(randomint),
