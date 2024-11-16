@@ -101,13 +101,27 @@ const BookInformation: React.FC<BookInformationFields> = ({ book }) => {
                                 { reviews.length } reviews
                             </span>
                         </h3>
-                        <BookReviewCard
-                            username={reviews[0].username}
-                            rating={reviews[0].rating}
-                            review={reviews[0].review}
-                            date={reviews[0].date}
-                            time={reviews[0].time}
-                        />
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            rowGap: '16px',
+                            overflowY: 'visible'
+                        }}>
+                            {reviews.length? (reviews.map((review, index) => (
+                                    <BookReviewCard
+                                        key={index}
+                                        username={review.username}
+                                        rating={review.rating}
+                                        review={review.review}
+                                        date={review.date}
+                                        time={review.time}
+                                    />
+                                ))) : (
+                                    <div style={{ textAlign: 'center' }}>
+                                        <h2 style={{fontSize: '2em', color: 'grey'}}>There are no reviews yet.</h2>
+                                    </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
