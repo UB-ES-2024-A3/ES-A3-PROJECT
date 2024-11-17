@@ -1,33 +1,33 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import BookReviewCard from "./book_review_card";
+import ShowBookService from "@/services/showBookService";
 
 interface BookReviewSectionFields {
     id: string
 }
 
+interface ReviewData {
+    username: string,
+    rating: number,
+    review?: string,
+    date?: string,
+    time?: string
+}
+
 const BookReviewSection: React.FC<BookReviewSectionFields> = ({ id }) => {
-    const reviews = [
-        {
-            username: "avid.reader",
-            rating: 5,
-            date: '11/02/2022',
-            time: '13:30:28',
-            review: 'With all due respect: Raughh... Grrrr...'
-        },
-        {
-            username: "tomatoface",
-            rating: 4,
-            date: '11/02/2022',
-            time: '14:00:03',
-        },
-        {
-            username: "hater",
-            rating: 1,
-            date: '15/2/2022',
-            time: '13:30:28',
-            review: 'Didn\'t like it one bit.'
-        },
-    ];
+    const [reviews, setReviews] = useState<ReviewData[]>([]);
+
+    useEffect(() => {
+        ShowBookService.getBookReviews(id)
+            .then(reviewList => {
+                setReviews(reviewList);
+            })
+            .catch(except => {
+                console.log(except);
+                setReviews([]);
+            });
+    }, [id]);
 
     return (
         <div style={{
