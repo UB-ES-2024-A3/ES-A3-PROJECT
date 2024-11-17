@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import SearchBar from '@/components/searchbar';
 import ListBooks from '@/components//list_books';
 import BookInformation from './book_information';
+import BookReviewSection from './book_review_section';
 
 interface TimelineProps{
     showList: boolean
@@ -31,7 +32,10 @@ const Timeline: React.FC<TimelineProps> = ({showList, setShowList}) => {
                 <SearchBar placeholder="Search..." buttonLabel="Search" onSearchResults={onSearch} searchBook={searchBook}/>
             </div>
             {showBook? (
-                <BookInformation id={bookId}/>
+                <div>
+                    <BookInformation id={bookId}/>
+                    <BookReviewSection id={bookId}/>
+                </div>
             ):
             (
                 <>

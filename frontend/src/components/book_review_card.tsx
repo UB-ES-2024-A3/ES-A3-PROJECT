@@ -16,7 +16,7 @@ export default function BookReviewCard({ username, rating, review, date, time }:
       minWidth: "100%",
       margin: "0 auto",
       padding: "24px",
-      border: 'solid black 1px',
+      border: 'outset gray 2px',
       borderRadius: "16px",
       backgroundColor: "white"
     }}>
