@@ -3,6 +3,7 @@ import SearchBar from '@/components/searchbar';
 import ListBooks from '@/components//list_books';
 import BookInformation from './book_information';
 import AddReviewButton from './add_review';
+import BookReviewSection from './book_review_section';
 import ShowBookService from '@/services/showBookService';
 
 interface TimelineProps{
@@ -57,6 +58,7 @@ const Timeline: React.FC<TimelineProps> = ({showList, setShowList}) => {
                 <>
                     <BookInformation book={book} />
                     <AddReviewButton author={book.author} title={book.title} bookId={bookId}/>
+                    <BookReviewSection id={bookId}/>
                 </>
             ):
             (
