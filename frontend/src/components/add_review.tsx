@@ -62,7 +62,7 @@ const AddReviewButton: React.FC<AddReviewButtonFields> = ({title, author, bookId
           <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', width: '100%', height: 'fit-content', maxWidth: '50%'}}>
             <div style={{ padding: '1.5rem' }}>
               <h2 style={{ fontSize: '1.5rem', fontWeight: '600', marginBottom: '1rem' }}>
-                Review for "{title}" by "{author}"
+                Review for &quot;{title}&quot; by &quot;{author}&quot;
               </h2>
               <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
                 {[1, 2, 3, 4, 5].map((star) => (
