@@ -3,7 +3,6 @@ import genreColors from '../styles/genreColors'
 import { useEffect, useState } from 'react';
 import ShowBookService from '@/services/showBookService';
 import { renderStars } from './stars_rating';
-import BookReviewCard from './book_review_card';
 
 interface BookInformationFields {
     id: string
@@ -15,26 +14,25 @@ interface Book{
     author: string,
     description: string,
     genres: string[],
-    stars: number
+    avgstars: number
 }
 
 const defaultGenreColor = '#e5e7eb';
 
 const BookInformation: React.FC<BookInformationFields> = ({ id }) => { 
-    const [book, setBook] = useState<Book>({author: "", title: "", description: "", genres: [], id:"", stars: 0});
-    const avgStars = 3.3;
+    const [book, setBook] = useState<Book>({author: "", title: "", description: "", genres: [], id:"", avgstars: 0});
  
     useEffect(() => {
         ShowBookService.getBookRequest(id)
             .then(result => {
                 console.log(result);
-                // TODO: Provisional
-                result['stars'] = avgStars;
+                // TODO: Delete this line when US7 is merged
+                result['avgstars'] = 3.3;
                 setBook(result);
             })
             .catch(errorMsgs => {
                 console.error(errorMsgs);
-                setBook({ author: "", title: "", description: "", genres: [], id: "", stars: 0 });
+                setBook({ author: "", title: "", description: "", genres: [], id: "", avgstars: 0 });
             });
     }, [id]);
     
@@ -81,7 +79,7 @@ const BookInformation: React.FC<BookInformationFields> = ({ id }) => {
                             display: 'flex',
                             marginRight: '32px'
                             }}>
-                            { renderStars(book.stars) }
+                            { renderStars(book.avgstars) }
                         </div>
                     </div>
                     <div>

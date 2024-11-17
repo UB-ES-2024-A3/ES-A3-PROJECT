@@ -34,7 +34,7 @@ const ShowBookService = {
                 rating: 5,
                 date: '11/02/2022',
                 time: '13:30:28',
-                review: 'With all due respect: Raughh... Grrrr...'
+                review: 'This book is enticing. Raggh... woof... grrr... I like so very much'
             },
             {
                 username: "tomatoface",

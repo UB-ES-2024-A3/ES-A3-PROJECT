@@ -1,6 +1,6 @@
 import { renderStars } from "./stars_rating";
 
-interface BookReviewCardProps {
+export interface BookReviewCardProps {
   username: string,
   rating: number,
   review?: string,
