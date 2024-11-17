@@ -2,7 +2,6 @@ import React from 'react';
 import genreColors from '../styles/genreColors'
 import { Book } from './timeline';
 import { renderStars } from './stars_rating';
-import BookReviewCard from './book_review_card';
 
 interface BookInformationFields {
     book: Book
@@ -50,7 +49,10 @@ const BookInformation: React.FC<BookInformationFields> = ({ book }) => {
                                 {book.author}
                             </p>
                         </div>
-                        <div style={{ display: 'flex', marginRight: '32px' }}>
+                        <div style={{
+                            display: 'flex',
+                            marginRight: '32px'
+                            }}>
                             { renderStars(book.avgstars) }
                         </div>
                     </div>

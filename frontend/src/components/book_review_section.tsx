@@ -1,33 +1,31 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import BookReviewCard from "./book_review_card";
+import { BookReviewCardProps } from "./book_review_card";
 import ShowBookService from "@/services/showBookService";
 
 interface BookReviewSectionFields {
     id: string
 }
 
-interface ReviewData {
-    username: string,
-    rating: number,
-    review?: string,
-    date?: string,
-    time?: string
-}
-
+// TODO: change id to book when US7 is merged
 const BookReviewSection: React.FC<BookReviewSectionFields> = ({ id }) => {
-    const [reviews, setReviews] = useState<ReviewData[]>([]);
+    const [reviews, setReviews] = useState<BookReviewCardProps[]>([]);
+    const [numReviews, setNumReviews] = useState<number>(0);
 
     useEffect(() => {
         ShowBookService.getBookReviews(id)
             .then(reviewList => {
                 setReviews(reviewList);
+                setNumReviews(reviewList.length);
             })
             .catch(except => {
                 console.log(except);
                 setReviews([]);
             });
     }, [id]);
+
+    // TODO: extract number of reviews from book
 
     return (
         <div style={{
@@ -49,7 +47,7 @@ const BookReviewSection: React.FC<BookReviewSectionFields> = ({ id }) => {
                 }}>
                     Reviews&ensp;-&ensp;
                     <span style={{ fontSize: '1.5rem' }}>
-                        { reviews.length } reviews
+                        { numReviews } reviews
                     </span>
                 </h3>
                 <div style={{
