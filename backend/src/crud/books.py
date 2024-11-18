@@ -115,7 +115,6 @@ def get_book_by_id(book_id: str):
     supabase = get_db_client()
     try:
         result = supabase.table("books").select("*").eq("id", book_id).execute()        
-        print(result.data)
         if result.data:
             book_data = result.data[0]
             if book_data["genres"]:

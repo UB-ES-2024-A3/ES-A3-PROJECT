@@ -10,7 +10,6 @@ class User(BaseModel):
     email: str
     username: str
     password: str
-    _reviews: List[Review]
 
     def __repr__(self):
         return f"User(id='{self.id}', email='{self.email}', username='{self.username}', password='{self.password}')"
@@ -31,7 +30,3 @@ class User(BaseModel):
     @property
     def password(self) -> str:
         return self._password
-    
-    @property
-    def reviews(self)-> List[Review]:
-        return self._reviews

@@ -10,7 +10,6 @@ class Book(BaseModel):
     title: str
     genres: List[str]
     description : str
-    _reviews: List[Review]
     numreviews: Optional[int] = 0  # Default value
     avgstars: Optional[float] = 0.0  # Default value
 
@@ -37,10 +36,6 @@ class Book(BaseModel):
     @property
     def description(self) -> str:
         return self.description
-    
-    @property
-    def reviews(self)-> List[Review]:
-        return self._reviews
     
     @property
     def new_numreviews(self) -> int:
