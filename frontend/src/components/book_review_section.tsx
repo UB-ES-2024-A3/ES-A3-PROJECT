@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Book } from "./timeline";
 import BookReviewCard from "./book_review_card";
 import { BookReviewCardProps } from "./book_review_card";
-import AddReviewButton from "./add_review";
+import AddReviewButton, { ReviewResponseData } from "./add_review";
 import ReviewService from "@/services/reviewService";
 
 interface BookReviewSectionFields {
@@ -13,6 +13,17 @@ interface BookReviewSectionFields {
 const BookReviewSection: React.FC<BookReviewSectionFields> = ({ book }) => {
     const [reviews, setReviews] = useState<BookReviewCardProps[]>([]);
     const [numReviews, setNumReviews] = useState<number>(0);
+    const [newReview, setNewReview] = useState<BookReviewCardProps>({username: '', rating: 0, date: '', time: '', review: ''});
+
+    function addReviewCallback(newReview: ReviewResponseData) {
+        setNewReview({
+            username: 'me',
+            rating: newReview.stars,
+            date: newReview.date,
+            time: newReview.time,
+            review: newReview.comment
+        });
+    }
 
     useEffect(() => {
         ReviewService.getBookReviews(book.id)
@@ -26,7 +37,11 @@ const BookReviewSection: React.FC<BookReviewSectionFields> = ({ book }) => {
         setNumReviews(book.numreviews);
     }, [book]);
 
-    // TODO: actualize reviews after submitting a review
+    // Actualize reviews after submitting a review
+    useEffect(() => {
+        reviews.splice(0, 0, newReview);
+        setNumReviews(numReviews + 1);
+    }, [newReview]);
 
     return (
         <div style={{
@@ -57,7 +72,7 @@ const BookReviewSection: React.FC<BookReviewSectionFields> = ({ book }) => {
                             { numReviews } reviews
                         </span>
                     </h3>
-                    <AddReviewButton author={book.author} title={book.title} bookId={book.id}/>
+                    <AddReviewButton author={book.author} title={book.title} bookId={book.id} callback={addReviewCallback}/>
                 </div>
                 <div style={{
                     display: 'flex',
