@@ -12,7 +12,7 @@ client = TestClient(app)
 user_controller = UserController()
 review_controller = ReviewController()
 book_controller = BooksController()
-"""
+
 # Test to ensure valid review creation via the endpoint
 def test_make_review_success():
     payload = {
@@ -55,7 +55,7 @@ def test_make_review_no_comment():
     assert data["book_id"] == "55b4e870-fd29-4419-b871-ec9dd7205e1b", "Book ID mismatch"
     assert data["user_id"] == "6c679679-6a17-44fc-9a4b-99046444d5e1", "User ID mismatch"
 
-"""
+
 def test_delete_review():
     # Create a review for a given book
     book_id = "f57cfc4b-5736-4351-a73b-a1f3032eaabb"
