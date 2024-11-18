@@ -28,7 +28,7 @@ const ReviewService = {
             {headers: header}
         )
         .then(userResult => {
-            return userResult.data.id;
+            return userResult.data;
         })
         .catch(except => {
             if (except.status == 400) {
