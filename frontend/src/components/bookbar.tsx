@@ -23,7 +23,7 @@ const BookBar: React.FC<BookBarProps> = ({id, title, author, rating, showReviews
                 <div style={{color: 'grey'}}> · {author} </div>
             </div>
             {showReviews? (
-                <div style={{display: 'flex', flexDirection: 'row', right: '0px', padding: '5px'}}>
+                <div style={{display: 'flex', flexDirection: 'row', right: '0px', padding: '7px'}}>
                     {renderStars(rating)}
                 </div>
             ): (

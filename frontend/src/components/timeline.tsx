@@ -60,7 +60,7 @@ const Timeline: React.FC<TimelineProps> = ({showList, setShowList}) => {
             (
                 <>
                 {showList ? (
-                    <div style={{margin: '5px'}}> 
+                    <div style={{margin: '5px', width: '100%'}}> 
                         <ListBooks search={search} searchBook={searchBook}/>
                     </div>
                 ) : (
