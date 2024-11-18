@@ -7,11 +7,11 @@ interface BookBarProps{
     title: string;
     author: string;
     rating: number;
-    showReviews: boolean;
+    showRating: boolean;
     handleOpenBook: (id:string) => void;
 }
 
-const BookBar: React.FC<BookBarProps> = ({id, title, author, rating, showReviews, handleOpenBook}) => {
+const BookBar: React.FC<BookBarProps> = ({id, title, author, rating, showRating, handleOpenBook}) => {
     const handleSearchBook = () => {
         handleOpenBook(id);
     };
@@ -22,7 +22,7 @@ const BookBar: React.FC<BookBarProps> = ({id, title, author, rating, showReviews
                 <div> {title} </div>
                 <div style={{color: 'grey'}}> · {author} </div>
             </div>
-            {showReviews? (
+            {showRating? (
                 <div style={{display: 'flex', flexDirection: 'row', right: '0px', padding: '7px'}}>
                     {renderStars(rating)}
                 </div>

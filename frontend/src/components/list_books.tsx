@@ -57,7 +57,7 @@ const ListBooks: React.FC<ListBooksProps> = ({search, searchBook}) => {
               <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
                 {searchResults.map((book) => (
                   <div key={book.id} style={{margin: '3px'}}>
-                    <BookBar key={book.id} id={book.id} title={book.title} author={book.author} showReviews={true} rating={book.avgstars} handleOpenBook={handleOpenBook}/>
+                    <BookBar key={book.id} id={book.id} title={book.title} author={book.author} showRating={true} rating={book.avgstars} handleOpenBook={handleOpenBook}/>
                   </div>
                 ))}
               </div>
