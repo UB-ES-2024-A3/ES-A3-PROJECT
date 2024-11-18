@@ -1,31 +1,32 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { Book } from "./timeline";
 import BookReviewCard from "./book_review_card";
 import { BookReviewCardProps } from "./book_review_card";
-import ShowBookService from "@/services/showBookService";
+import AddReviewButton from "./add_review";
+import ReviewService from "@/services/reviewService";
 
 interface BookReviewSectionFields {
-    id: string
+    book: Book
 }
 
-// TODO: change id to book when US7 is merged
-const BookReviewSection: React.FC<BookReviewSectionFields> = ({ id }) => {
+const BookReviewSection: React.FC<BookReviewSectionFields> = ({ book }) => {
     const [reviews, setReviews] = useState<BookReviewCardProps[]>([]);
     const [numReviews, setNumReviews] = useState<number>(0);
 
     useEffect(() => {
-        ShowBookService.getBookReviews(id)
+        ReviewService.getBookReviews(book.id)
             .then(reviewList => {
                 setReviews(reviewList);
-                setNumReviews(reviewList.length);
             })
             .catch(except => {
                 console.log(except);
                 setReviews([]);
             });
-    }, [id]);
+        setNumReviews(book.numreviews);
+    }, [book]);
 
-    // TODO: extract number of reviews from book
+    // TODO: actualize reviews after submitting a review
 
     return (
         <div style={{
@@ -40,16 +41,24 @@ const BookReviewSection: React.FC<BookReviewSectionFields> = ({ id }) => {
                 width: '100%',
                 maxWidth: '70%'
             }}>
-                <h3 style={{
-                    fontSize: '2rem',
-                    color: '#4b5563',
-                    marginBottom: '1rem',
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center'
                 }}>
-                    Reviews&ensp;-&ensp;
-                    <span style={{ fontSize: '1.5rem' }}>
-                        { numReviews } reviews
-                    </span>
-                </h3>
+                    <h3 style={{
+                        fontSize: '2rem',
+                        color: '#4b5563',
+                        marginBottom: '1rem',
+                        flexGrow: 1
+                    }}>
+                        Reviews&ensp;-&ensp;
+                        <span style={{ fontSize: '1.5rem' }}>
+                            { numReviews } reviews
+                        </span>
+                    </h3>
+                    <AddReviewButton author={book.author} title={book.title} bookId={book.id}/>
+                </div>
                 <div style={{
                     display: 'flex',
                     flexDirection: 'column',

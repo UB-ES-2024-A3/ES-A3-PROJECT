@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import SearchBar from '@/components/searchbar';
 import ListBooks from '@/components//list_books';
 import BookInformation from './book_information';
-import AddReviewButton from './add_review';
 import ShowBookService from '@/services/showBookService';
 import BookReviewSection from './book_review_section';
 
@@ -57,8 +56,7 @@ const Timeline: React.FC<TimelineProps> = ({showList, setShowList}) => {
             {showBook? (
                 <>
                     <BookInformation book={book} />
-                    <AddReviewButton author={book.author} title={book.title} bookId={bookId}/>
-                    <BookReviewSection id={bookId}/>
+                    <BookReviewSection book={book}/>
                 </>
             ):
             (
