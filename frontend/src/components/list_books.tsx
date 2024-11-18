@@ -11,6 +11,7 @@ interface Book {
     id: string;
     title: string;
     author: string;
+    avgstars: number;
 }
 
 
@@ -32,6 +33,7 @@ const ListBooks: React.FC<ListBooksProps> = ({search, searchBook}) => {
                   id: book.id,
                   title: book.title,
                   author: book.author,
+                  avgstars: book.avgstars
                 }));
                 setSearchResults(books);
                 setIsLoading(false);
@@ -52,10 +54,10 @@ const ListBooks: React.FC<ListBooksProps> = ({search, searchBook}) => {
     return(
         <div style={{ width: '100%', marginTop: '0px', display: 'flex', flexDirection: 'column', overflowY: 'auto'}}>
             {searchResults.length > 0 ? (
-              <div>
+              <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
                 {searchResults.map((book) => (
-                  <div key={book.id} style={{margin: '2px'}}>
-                    <BookBar key={book.id} id={book.id} title={book.title} author={book.author} handleOpenBook={handleOpenBook}/>
+                  <div key={book.id} style={{margin: '3px'}}>
+                    <BookBar key={book.id} id={book.id} title={book.title} author={book.author} showRating={true} rating={book.avgstars} handleOpenBook={handleOpenBook}/>
                   </div>
                 ))}
               </div>
