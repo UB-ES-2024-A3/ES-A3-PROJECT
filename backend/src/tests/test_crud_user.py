@@ -24,7 +24,7 @@ def test_read_users():
 def test_create_user():
     # Generar un número entero aleatorio entre 1 y 1000
     print("\n\n------------------------------CREATE NEW USER-------------------------------")
-    randomint = random.randint(1, 1000)
+    randomint = random.randint(1000, 100000)
     user = User(
         email="test"+str(randomint)+"@example.com",
         username="testuser"+str(randomint),
@@ -77,7 +77,7 @@ def test_authenticate_user_email():
     result3 = authenticate(users[0].email, "wrongPassword")
     result4 = authenticate("wrongEmail@gmail.com", users[0].password)
 
-    assert result1 == True
+    assert result1 == users[0].id
     assert result2 == False
     assert result3 == False
     assert result4 == False
@@ -111,7 +111,7 @@ def test_authenticate_user_username():
 
     result4 = authenticate("wrongUsername", users[0].password)
 
-    assert result1 == True
+    assert result1 == users[0].id
     assert result2 == False
     assert result3 == False
     assert result4 == False

@@ -1,19 +1,21 @@
 import endpoint from "@/endpoints.config";
 import axios from 'axios';
 
-const RegisterService = {
-    registerRequest: async (username: string, email: string, password: string) => {
+const ReviewService = {
+    createReviewRequest: async (rating: number, review: string, bookId: string) => {
+        const userId = localStorage.getItem('userId');
+
         const data = {
-            username: username,
-            password: password,
-            email: email
+            comment: review,
+            stars: rating,
+            book_id: bookId,
+            user_id: userId,
         };
 
         const header = {'Content-Type': 'application/json'};
 
-        // Send post request to backend
         return axios.post(
-            endpoint.dbURL + '/users',
+            endpoint.dbURL + '/make_review',
             data,
             {headers: header}
         )
@@ -22,7 +24,6 @@ const RegisterService = {
         })
         .catch(except => {
             if (except.status == 400) {
-                // Error in entered data.
                 throw except.response.data.detail;
             } else {
                 console.log(except);
@@ -32,4 +33,4 @@ const RegisterService = {
     }
 };
 
-export default RegisterService;
+export default ReviewService;

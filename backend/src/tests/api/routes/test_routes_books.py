@@ -11,7 +11,13 @@ def client():
     return TestClient(app)
 
 # Mock data for tests
-mock_book = Book(id="1", title="Test Book", author="Test Author", genre="Fiction", published_year=2021)
+mock_book = Book(
+    id="1",
+    title="Test Book",
+    author="Test Author",
+    genre="Fiction",
+    published_year=2021
+)
 
 # Test for getting all books
 def test_get_all_books(client: TestClient):

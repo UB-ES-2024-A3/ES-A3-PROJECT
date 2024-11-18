@@ -34,8 +34,7 @@ def search_by_username(username: str):
     except Exception as e:
         print(f"Error searching for user by username {username}: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
-
+       
 # Method to search for a user by email
 def search_by_email(email: str):
     supabase = get_db_client()
@@ -119,5 +118,5 @@ def authenticate(identifier: str, password: str):
     # If result data is empty the user with the specified identifier doesn't exist.
     # If the user exists in the db we check if the password is correct.
     if(result.data != [] and result.data[0]['password'] == password):
-        return True
+        return result.data[0]['id']
     return False

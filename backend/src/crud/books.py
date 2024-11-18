@@ -115,6 +115,7 @@ def get_book_by_id(book_id: str):
     supabase = get_db_client()
     try:
         result = supabase.table("books").select("*").eq("id", book_id).execute()        
+        print(result.data)
         if result.data:
             book_data = result.data[0]
             if book_data["genres"]:
@@ -128,4 +129,14 @@ def get_book_by_id(book_id: str):
     except Exception as e:
         print(f"Error retrieving book by id {book_id}: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-    #ENDREGION
+    #
+    
+    # Method to update book attributes
+def update_book_attributes(book_id: str, attributes: dict):
+    supabase = get_db_client()
+    try:
+        result = supabase.table("books").update(attributes).eq("id", book_id).execute()
+        if not result.data:
+            raise HTTPException(status_code=500, detail="Failed to update book attributes")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error updating book attributes: {str(e)}")
