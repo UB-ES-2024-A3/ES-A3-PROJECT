@@ -16,3 +16,26 @@ async def make_review(review: Review):
         raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error creating review")
+
+# Endpoint to get all reviews for a given book
+@router.get("/reviews/book/{book_id}")
+async def get_book_reviews(book_id: str):
+    try:
+        reviews = reviewController.get_book_reviews(book_id)
+        return reviews
+    except HTTPException as e:
+        raise e
+    
+# Endpoint to delete a review
+@router.delete("/reviews/{review_id}")
+async def delete_review(review_id: str):
+    try:
+        success = reviewController.delete_review(review_id)
+        if success:
+            return {"message": f"Review with id {review_id} has been deleted"}
+        else:
+            raise HTTPException(status_code=500, detail=f"Error deleting review")
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error deleting review: {e}")
