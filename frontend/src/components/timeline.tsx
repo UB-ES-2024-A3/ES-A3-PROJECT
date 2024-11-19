@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import SearchBar from '@/components/searchbar';
 import ListBooks from '@/components//list_books';
 import BookInformation from './book_information';
-import AddReviewButton from './add_review';
+import BookReviewSection from './book_review_section';
 import ShowBookService from '@/services/showBookService';
 
 interface TimelineProps{
@@ -13,15 +13,17 @@ export interface Book{
     id: string,
     title: string,
     author: string,
-    description: string
-    genres: string[]
+    description: string,
+    genres: string[],
+    avgstars: number,
+    numreviews: number
 }
 
 const Timeline: React.FC<TimelineProps> = ({showList, setShowList}) => {
     const [search, setSearch] = useState('');
     const [showBook, setShowBook] = useState(false);
     const [bookId, setBookId] = useState('');
-    const [book, setBook] = useState<Book>({author: "", title: "", description: "", genres: [], id:""})
+    const [book, setBook] = useState<Book>({author: "", title: "", description: "", genres: [], id:"", avgstars: 0, numreviews: 0})
  
     useEffect(() => {
         ShowBookService.getBookRequest(bookId)
@@ -30,7 +32,7 @@ const Timeline: React.FC<TimelineProps> = ({showList, setShowList}) => {
             })
             .catch(errorMsgs => {
                 console.error(errorMsgs);
-                setBook({ author: "", title: "", description: "", genres: [], id: "" });
+                setBook({ author: "", title: "", description: "", genres: [], id: "", avgstars: 0, numreviews: 0 });
             });
     }, [bookId]);
     
@@ -54,7 +56,7 @@ const Timeline: React.FC<TimelineProps> = ({showList, setShowList}) => {
             {showBook? (
                 <>
                     <BookInformation book={book} />
-                    <AddReviewButton author={book.author} title={book.title} bookId={bookId}/>
+                    <BookReviewSection book={book}/>
                 </>
             ):
             (

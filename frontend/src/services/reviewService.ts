@@ -20,7 +20,7 @@ const ReviewService = {
             {headers: header}
         )
         .then(userResult => {
-            return userResult.data.id;
+            return userResult.data;
         })
         .catch(except => {
             if (except.status == 400) {
@@ -29,6 +29,17 @@ const ReviewService = {
                 console.log(except);
                 throw "Unknown error. Please, try again.";
             }
+        });
+    },
+    getBookReviews : async (bookId: string) => {
+        return axios.get(
+            endpoint.dbURL + '/reviews/book/' + bookId,
+        )
+        .then(response => {
+            return response.data;
+        })
+        .catch(except => {
+            throw except.detail;
         });
     }
 };

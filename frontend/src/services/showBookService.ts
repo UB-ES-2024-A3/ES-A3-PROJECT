@@ -18,7 +18,6 @@ const ShowBookService = {
             throw detailRaw;
         });
     }
-
 }
 
 export default ShowBookService;

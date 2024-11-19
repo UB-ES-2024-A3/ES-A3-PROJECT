@@ -6,10 +6,19 @@ import ReviewService from '@/services/reviewService'
 interface AddReviewButtonFields {
   author: string,
   title: string,
-  bookId: string
+  bookId: string,
+  callback: (review: ReviewResponseData) => void
 }
 
-const AddReviewButton: React.FC<AddReviewButtonFields> = ({title, author, bookId}) =>{
+export interface ReviewResponseData {
+  username?: string,
+  stars: number,
+  comment?: string,
+  date?: string,
+  time?: string
+}
+
+const AddReviewButton: React.FC<AddReviewButtonFields> = ({title, author, bookId, callback}) =>{
   const [isOpen, setIsOpen] = useState(false)
   const [review, setReview] = useState('')
   const [rating, setRating] = useState(0)
@@ -24,6 +33,7 @@ const AddReviewButton: React.FC<AddReviewButtonFields> = ({title, author, bookId
       bookId
     )
     .then(result => {
+      callback(result);
       return true;
     })
     .catch(errorMsg => {
