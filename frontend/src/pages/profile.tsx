@@ -5,6 +5,7 @@ import NavBar from '@/components/navbar';
 import { useRouter } from 'next/router';
 import ReviewService from '@/services/reviewService';
 import UserService from '@/services/userService';
+import { Book } from 'lucide-react';
 
 export interface UserReviewCardProps {
     title: string,
@@ -12,7 +13,8 @@ export interface UserReviewCardProps {
     stars: number,
     comment?: string,
     date?: string,
-    time?: string
+    time?: string,
+    book_id: string
   }
 
 const Profile = () => {
@@ -77,7 +79,7 @@ const Profile = () => {
                     }}
                     >
                     {reviews.length? (reviews.map((review, index) => (
-                        <ProfileReviewCard key={index} bookTitle={review.title} author={review.author} rating={review.stars} date={review.date} time={review.time} review={review.comment}/>
+                        <ProfileReviewCard key={index} bookTitle={review.title} author={review.author} rating={review.stars} date={review.date} time={review.time} review={review.comment} book_id={review.book_id}/>
                     ))):(
                         <div style={{margin: '5px', textAlign: 'center', justifyContent: 'center', height: '80vh', display: 'flex', flexDirection: 'column'}}> 
                             <h2 style={{fontSize: '2em', color: 'grey'}}>You have no reviews yet.</h2>
