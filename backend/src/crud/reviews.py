@@ -57,7 +57,7 @@ def get_review_by_id(review_id: str):
 def get_book_reviews(book_id: str):
     supabase = get_db_client()
     try:
-        reviews = supabase.table("reviews").select().eq("book_id", book_id).execute()
+        reviews = supabase.table("reviews").select('id,comment,stars,date, time, user_id, book_id, users(id, username)').eq("book_id", book_id).execute()
         if reviews.data:
             return reviews.data
         else:
@@ -70,7 +70,6 @@ def get_book_with_review(review_id: str):
     supabase = get_db_client()
     try:
         book_id = supabase.table("reviews").select("book_id").eq("id", review_id).execute()
-        print(book_id)
         if book_id.data:
             return book_id.data[0]['book_id']
         else:
