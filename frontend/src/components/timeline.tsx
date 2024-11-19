@@ -2,16 +2,37 @@ import React, { useState, useEffect } from 'react';
 import SearchBar from '@/components/searchbar';
 import ListBooks from '@/components//list_books';
 import BookInformation from './book_information';
+import AddReviewButton from './add_review';
+import ShowBookService from '@/services/showBookService';
 
 interface TimelineProps{
     showList: boolean
     setShowList: (show: boolean) => void;
+}
+export interface Book{
+    id: string,
+    title: string,
+    author: string,
+    description: string
+    genres: string[]
 }
 
 const Timeline: React.FC<TimelineProps> = ({showList, setShowList}) => {
     const [search, setSearch] = useState('');
     const [showBook, setShowBook] = useState(false);
     const [bookId, setBookId] = useState('');
+    const [book, setBook] = useState<Book>({author: "", title: "", description: "", genres: [], id:""})
+ 
+    useEffect(() => {
+        ShowBookService.getBookRequest(bookId)
+            .then(result => {
+                setBook(result);
+            })
+            .catch(errorMsgs => {
+                console.error(errorMsgs);
+                setBook({ author: "", title: "", description: "", genres: [], id: "" });
+            });
+    }, [bookId]);
     
     const searchBook = (bookId: string) => {
         setBookId(bookId);
@@ -31,12 +52,15 @@ const Timeline: React.FC<TimelineProps> = ({showList, setShowList}) => {
                 <SearchBar placeholder="Search..." buttonLabel="Search" onSearchResults={onSearch} searchBook={searchBook}/>
             </div>
             {showBook? (
-                <BookInformation id={bookId}/>
+                <>
+                    <BookInformation book={book} />
+                    <AddReviewButton author={book.author} title={book.title} bookId={bookId}/>
+                </>
             ):
             (
                 <>
                 {showList ? (
-                    <div style={{margin: '5px'}}> 
+                    <div style={{margin: '5px', width: '100%'}}> 
                         <ListBooks search={search} searchBook={searchBook}/>
                     </div>
                 ) : (

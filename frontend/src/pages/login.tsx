@@ -25,8 +25,7 @@ const LoginPage: React.FC = () => {
     return validInputs; 
   };
 
-  // Here's where the request will be done
-  // Returns true if the user is correctly authenticated and false otherwise
+  // Sends the loguin request.
   const authenticate = async () =>{
     return LoginService.loginRequest(
       username,
@@ -34,9 +33,9 @@ const LoginPage: React.FC = () => {
     )
     .then(result => {
       // Login success
-      console.log(result.result);
+      console.log(result);
       setErrors({username: '', password: '', credentials: ''});
-      return true;
+      return {isAuthenticated: true, userId: result};
     })
     .catch(errorMsgs => {
       console.log(errorMsgs);
@@ -46,7 +45,7 @@ const LoginPage: React.FC = () => {
           [key]: errorMsgs[key]
         }));
       });
-      return false;
+      return {isAuthenticated: false, userId: ''};
     });
   }
 
@@ -58,10 +57,11 @@ const LoginPage: React.FC = () => {
       return;
     }
 
-    const isAuthenticated = await authenticate();
+    const authenticationResult = await authenticate();
 
-    if (isAuthenticated){
+    if (authenticationResult.isAuthenticated){
       localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('userId', authenticationResult.userId);
       router.push('/');
     }
   };
