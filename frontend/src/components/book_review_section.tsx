@@ -13,15 +13,15 @@ interface BookReviewSectionFields {
 const BookReviewSection: React.FC<BookReviewSectionFields> = ({ book }) => {
     const [reviews, setReviews] = useState<BookReviewCardProps[]>([]);
     const [numReviews, setNumReviews] = useState<number>(0);
-    const [newReview, setNewReview] = useState<BookReviewCardProps>({username: '', rating: 0, date: '', time: '', review: ''});
+    const [newReview, setNewReview] = useState<BookReviewCardProps>({username: '', stars: 0, date: '', time: '', comment: ''});
 
     function addReviewCallback(newReview: ReviewResponseData) {
         setNewReview({
             username: 'me',
-            rating: newReview.stars,
+            stars: newReview.stars,
             date: newReview.date,
             time: newReview.time,
-            review: newReview.comment
+            comment: newReview.comment
         });
     }
 
@@ -83,9 +83,9 @@ const BookReviewSection: React.FC<BookReviewSectionFields> = ({ book }) => {
                     {reviews.length? (reviews.map((review, index) => (
                             <BookReviewCard
                                 key={index}
-                                username={review.username}
-                                rating={review.rating}
-                                review={review.review}
+                                username={review.username || 'username'}
+                                stars={review.stars}
+                                comment={review.comment}
                                 date={review.date}
                                 time={review.time}
                             />

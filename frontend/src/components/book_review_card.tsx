@@ -2,13 +2,13 @@ import { renderStars } from "./stars_rating";
 
 export interface BookReviewCardProps {
   username: string,
-  rating: number,
-  review?: string,
+  stars: number,
+  comment?: string,
   date?: string,
   time?: string
 }
 
-export default function BookReviewCard({ username, rating, review, date, time }: BookReviewCardProps) {
+export default function BookReviewCard({ username, stars, comment, date, time }: BookReviewCardProps) {
 
   return (
     <div style={{
@@ -26,7 +26,7 @@ export default function BookReviewCard({ username, rating, review, date, time }:
             {username}
           </h2>
           <div style={{ display: "flex", marginTop: "8px" }}>
-            {renderStars(rating)} 
+            {renderStars(stars)} 
           </div>
         </div>
         <div style={{ fontSize: "0.875rem", display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
@@ -39,9 +39,9 @@ export default function BookReviewCard({ username, rating, review, date, time }:
         </div>
 
       </div>
-      {review && (
+      {comment && (
         <p style={{ lineHeight: "1.625", marginTop: "16px" }}>
-          {review}
+          {comment}
         </p>
       )}
       
