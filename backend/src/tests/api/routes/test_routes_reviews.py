@@ -129,13 +129,12 @@ def test_get_book_reviews_correct_id():
     # Call the get endpoint
     result = client.get(f"/reviews/book/{book_id}")
     r = result.json()
-    
+    print(r)
     # Sort the lists in order to check if the contents are the same
     r.sort(key=lambda x: x['id'])
     reviews.sort(key=lambda x: x.id)
     assert result.status_code == 200, f"Expected 200, got {result.status_code}. Details: {result.json()}"
     assert len(reviews) == len(r)
-    
     # Check if all information is returned correctly
     for i in range(0,len(reviews)):
         assert reviews[i].id == r[i]['id']
@@ -145,6 +144,7 @@ def test_get_book_reviews_correct_id():
         assert reviews[i].comment == r[i]['comment']
         assert str(reviews[i].date) == r[i]['date']
         assert str(reviews[i].time)[:14] == r[i]['time'][:14]
+        assert user_controller.search_by_id(reviews[i].user_id).username == r[i]['users']['username']
         review_controller.delete_review(reviews[i].id)
     
     # Delete created users from the database
