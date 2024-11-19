@@ -13,7 +13,6 @@ user_controller = UserController()
 review_controller = ReviewController()
 book_controller = BooksController()
 
-"""
 # Test to ensure valid review creation via the endpoint
 def test_make_review_success():
     payload = {
@@ -164,7 +163,7 @@ def test_get_book_reviews_without_reviews():
 
     assert result.status_code == 200, f"Expected 200, got {result.status_code}. Details: {result.json()}"
     assert result.json() == []
-"""
+
 def test_get_book_reviews_correct_id():
     # Create a user
     userData = {
