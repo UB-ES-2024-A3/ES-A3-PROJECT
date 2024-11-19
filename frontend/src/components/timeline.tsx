@@ -23,7 +23,7 @@ const Timeline: React.FC<TimelineProps> = ({showList, setShowList}) => {
     const [search, setSearch] = useState('');
     const [showBook, setShowBook] = useState(false);
     const [bookId, setBookId] = useState('');
-    const [book, setBook] = useState<Book>({author: "", title: "", description: "", genres: [], id:"", numreviews: 0, avgstars: 0})
+    const [book, setBook] = useState<Book>({author: "", title: "", description: "", genres: [], id:"", avgstars: 0, numreviews: 0})
  
     useEffect(() => {
         ShowBookService.getBookRequest(bookId)
@@ -32,7 +32,7 @@ const Timeline: React.FC<TimelineProps> = ({showList, setShowList}) => {
             })
             .catch(errorMsgs => {
                 console.error(errorMsgs);
-                setBook({ author: "", title: "", description: "", genres: [], id: "", numreviews: 0, avgstars: 0 });
+                setBook({ author: "", title: "", description: "", genres: [], id: "", avgstars: 0, numreviews: 0 });
             });
     }, [bookId]);
     
