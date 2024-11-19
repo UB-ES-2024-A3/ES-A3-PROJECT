@@ -11,7 +11,7 @@ interface AddReviewButtonFields {
 }
 
 export interface ReviewResponseData {
-  username?: string,
+  username: string,
   stars: number,
   comment?: string,
   date?: string,

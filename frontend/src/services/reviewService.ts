@@ -36,7 +36,11 @@ const ReviewService = {
             endpoint.dbURL + '/reviews/book/' + bookId,
         )
         .then(response => {
-            return response.data;
+            // Fetch username from received data.
+            const reviews = response.data.map((review: { users: { username: string; }; }) => {
+                return {...review, username: review.users.username};
+            })
+            return reviews;
         })
         .catch(except => {
             throw except.detail;
