@@ -1,16 +1,26 @@
-// Profile.tsx
 import React, { useState, useEffect } from 'react';
 import ProfileReviewCard from '@/components/profile_review_card';
 import ProfileNavBar from '@/components/profile_navbar';
 import NavBar from '@/components/navbar';
 import { useRouter } from 'next/router';
 import ReviewService from '@/services/reviewService';
+import UserService from '@/services/userService';
+
+export interface UserReviewCardProps {
+    title: string,
+    author: string,
+    stars: number,
+    comment?: string,
+    date?: string,
+    time?: string
+  }
 
 const Profile = () => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('reviews');
-  const [reviews, setReviews] = useState([])
+  const [reviews, setReviews] = useState<UserReviewCardProps[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
+  const [username, setUsername] = useState('');
 
   useEffect(() => {
     const storedUserId = localStorage.getItem('userId');
@@ -24,16 +34,26 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    ReviewService.getUserReviews(String(userId))
+    if (userId){
+        ReviewService.getUserReviews(userId)
         .then(reviewList => {
-            console.log("reviews", reviewList)
             setReviews(reviewList);
         })
         .catch(except => {
             console.log(except);
             setReviews([]);
         });
-}, []);
+        UserService.getUsername(userId)
+        .then(userName => {
+            console.log(userName)
+            setUsername(userName);
+        })
+        .catch(except => {
+            console.log(except);
+            setUsername('');
+        });
+    }
+}, [userId]);
   return (
     <NavBar>
         <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Book } from "@/pages/timeline";
 import BookReviewCard from "./book_review_card";
 import { BookReviewCardProps } from "./book_review_card";
-import AddReviewButton, { ReviewResponseData } from "./add_review";
+import AddReviewButton from "./add_review";
 import ReviewService from "@/services/reviewService";
 
 interface BookReviewSectionFields {
@@ -13,22 +13,15 @@ interface BookReviewSectionFields {
 const BookReviewSection: React.FC<BookReviewSectionFields> = ({ book }) => {
     const [reviews, setReviews] = useState<BookReviewCardProps[]>([]);
     const [numReviews, setNumReviews] = useState<number>(0);
-    const [newReview, setNewReview] = useState<BookReviewCardProps>({username: '', stars: 0, date: '', time: '', comment: ''});
+    const [newReview, setNewReview] = useState(false)
 
-    function addReviewCallback(newReview: ReviewResponseData) {
-        setNewReview({
-            username: 'me',
-            stars: newReview.stars,
-            date: newReview.date,
-            time: newReview.time,
-            comment: newReview.comment
-        });
+    function addReviewCallback() {
+        setNewReview(!newReview)
     }
 
     useEffect(() => {
         ReviewService.getBookReviews(book.id)
             .then(reviewList => {
-                console.log(reviewList)
                 setReviews(reviewList);
             })
             .catch(except => {
@@ -36,13 +29,7 @@ const BookReviewSection: React.FC<BookReviewSectionFields> = ({ book }) => {
                 setReviews([]);
             });
         setNumReviews(book.numreviews);
-    }, [book]);
-
-    // Actualize reviews after submitting a review
-    useEffect(() => {
-        reviews.splice(0, 0, newReview);
-        setNumReviews(numReviews + 1);
-    }, [newReview]);
+    }, [book, newReview]);
 
     return (
         <div style={{
