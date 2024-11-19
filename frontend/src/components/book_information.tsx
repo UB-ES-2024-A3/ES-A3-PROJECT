@@ -1,6 +1,6 @@
 import React from 'react';
 import genreColors from '../styles/genreColors'
-import { Book } from './timeline';
+import { Book } from '@/pages/timeline';
 import { renderStars } from './stars_rating';
 
 interface BookInformationFields {

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import SearchService from '@/services/searchService';
 import BookBar from '../components/bookbar';
+import { useTimelineContext } from '@/contexts/TimelineContext';
+import { useRouter } from 'next/router';
 
 interface ListBooksProps{
     search: string;
-    searchBook: (id: string) => void;
 }
 
 interface Book {
@@ -15,13 +16,17 @@ interface Book {
 }
 
 
-const ListBooks: React.FC<ListBooksProps> = ({search, searchBook}) => {
+const ListBooks: React.FC<ListBooksProps> = ({search}) => {
     const [searchResults, setSearchResults] = useState<Book[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    const {setTimelineState} = useTimelineContext();
+    const router = useRouter();
+
      
     const handleOpenBook = (id: string) =>{
       setSearchResults([]);
-      searchBook(id);
+      setTimelineState({page: "book", data: id});
+      router.push("/timeline/book/"+ id)
     }
     useEffect(() => {
         if (search.trim()) {

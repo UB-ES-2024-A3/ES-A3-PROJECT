@@ -45,6 +45,22 @@ const ReviewService = {
         .catch(except => {
             throw except.detail;
         });
+    },
+    getUserReviews : async (userId: string) => {
+        return axios.get(
+            endpoint.dbURL + '/reviews/user/' + userId,
+        )
+        .then(response => {
+            // Fetch author and title from received data.
+            console.log(response)
+            const reviews = response.data.map((review: { books: { author: string, title: string}; }) => {
+                return {...review, author: review.books.author, title: review.books.title};
+            })
+            return reviews;
+        })
+        .catch(except => {
+            throw except.detail;
+        });
     }
 };
 

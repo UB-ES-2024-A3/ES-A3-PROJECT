@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Book } from "./timeline";
+import { Book } from "@/pages/timeline";
 import BookReviewCard from "./book_review_card";
 import { BookReviewCardProps } from "./book_review_card";
 import AddReviewButton, { ReviewResponseData } from "./add_review";
@@ -28,6 +28,7 @@ const BookReviewSection: React.FC<BookReviewSectionFields> = ({ book }) => {
     useEffect(() => {
         ReviewService.getBookReviews(book.id)
             .then(reviewList => {
+                console.log(reviewList)
                 setReviews(reviewList);
             })
             .catch(except => {

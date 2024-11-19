@@ -1,17 +1,21 @@
 import React from 'react';
 import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import { FaUser, FaHome } from 'react-icons/fa';
+import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
 
 // Component parameters definition
 interface NavBarProps {
-  handleNavBarSelection: (tab: string) => void;
-  tabSelected: string;
+  children: React.ReactNode
 }
 
-const NavBar: React.FC<NavBarProps> = ({ handleNavBarSelection, tabSelected }) => {
+const NavBar: React.FC<NavBarProps> = ({ children }) => {
+  const router = useRouter();
+  const [tabSelected, setTabSelected] = useState("profile");
+
   // Updates the tab selected when the user clicks on a new tab
   const handleNavigation = (tab: string) => {
-    handleNavBarSelection(tab);
+    router.push("/" + tab);
   };
 
   // Tabs definition
@@ -26,33 +30,47 @@ const NavBar: React.FC<NavBarProps> = ({ handleNavBarSelection, tabSelected }) =
     },
   ];
 
+  useEffect(() => {
+    const currentPath = router.pathname;
+    if (currentPath.startsWith("/timeline")) {
+      setTabSelected('timeline');
+    } else if (currentPath.startsWith("/profile")) {
+      setTabSelected('profile');
+    }
+  }, [router.pathname]);
+
   return (
-    <Sidebar
-      collapsed={true}
-      rootStyles={{
-        height: '100vh',
-        width: '8%',
-        position: 'fixed'
-      }}
-    >
-      <Menu>
-        {buttons.map((button) => (
-          <MenuItem
-            key={button.name}
-            icon={button.icon}
-            active={tabSelected === button.name}
-            onClick={() => handleNavigation(button.name)}
-            rootStyles={{
-              color: tabSelected === button.name ? 'var(--icon-selected)' : 'var(--icon-normal)',
-              justifyContent: 'center',
-              padding: '20px 0',
-            }}
-          >
-          </MenuItem>
-        ))}
-      </Menu>
-    </Sidebar>
-  );
+    <div style={{ display: 'flex', height: '100vh' }}>
+      <div style={{width: '8%'}}>
+        <Sidebar
+          collapsed={true}
+          rootStyles={{
+            height: '100vh',
+            width: '8%',
+            position: 'fixed'
+          }}
+        >
+          <Menu>
+            {buttons.map((button) => (
+              <MenuItem
+                key={button.name}
+                icon={button.icon}
+                active={tabSelected === button.name}
+                onClick={() => handleNavigation(button.name)}
+                rootStyles={{
+                  color: tabSelected === button.name ? 'var(--icon-selected)' : 'var(--icon-normal)',
+                  justifyContent: 'center',
+                  padding: '20px 0',
+                }}
+              >
+              </MenuItem>
+            ))}
+          </Menu>
+        </Sidebar>
+    </div>
+    <div style = {{width: '100%'}}>{children}</div>
+    </div>
+  )
 };
 
 export default NavBar;
