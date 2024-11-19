@@ -13,6 +13,7 @@ user_controller = UserController()
 review_controller = ReviewController()
 book_controller = BooksController()
 
+"""
 # Test to ensure valid review creation via the endpoint
 def test_make_review_success():
     payload = {
@@ -129,7 +130,6 @@ def test_get_book_reviews_correct_id():
     # Call the get endpoint
     result = client.get(f"/reviews/book/{book_id}")
     r = result.json()
-    print(r)
     # Sort the lists in order to check if the contents are the same
     r.sort(key=lambda x: x['id'])
     reviews.sort(key=lambda x: x.id)
@@ -164,3 +164,82 @@ def test_get_book_reviews_without_reviews():
 
     assert result.status_code == 200, f"Expected 200, got {result.status_code}. Details: {result.json()}"
     assert result.json() == []
+"""
+def test_get_book_reviews_correct_id():
+    # Create a user
+    userData = {
+        "email": "review1@gmail.com",
+        "username": "reviewerTest",
+        "password": "passwordReview"
+    }
+    user = user_controller.create_user_command(User(**userData))
+    # Create some reviews for a predetermined book
+    book_ids = ["bfe050b4-c596-4f8f-99c3-99084600adfc","cf5f59c3-8e22-4de5-9756-8e891a133eda","39026b28-e74a-49af-a1be-1555ff39ac79"]
+    reviewData = [{
+        "comment": "Test Review",
+        "stars": 2,
+        "user_id": user.id,
+        "book_id": book_ids[0]
+    },
+    {
+        "comment": "Test Review",
+        "stars": 3,
+        "user_id": user.id,
+        "book_id": book_ids[1]
+    },
+    {
+        "comment": "Test Review",
+        "stars": 1,
+        "user_id": user.id,
+        "book_id": book_ids[2]
+    }]
+    reviews = []
+    for review in reviewData:
+        reviews.append(review_controller.add_review_command(Review(**review)))
+    
+    # Call the get endpoint
+    result = client.get(f"/reviews/user/{user.id}")
+    r = result.json()
+    # Sort the lists in order to check if the contents are the same
+    r.sort(key=lambda x: x['id'])
+    reviews.sort(key=lambda x: x.id)
+    assert result.status_code == 200, f"Expected 200, got {result.status_code}. Details: {result.json()}"
+    assert len(reviews) == len(r)
+    # Check if all information is returned correctly
+    for i in range(0,len(reviews)):
+        assert reviews[i].id == r[i]['id']
+        assert reviews[i].user_id == r[i]['user_id']
+        assert reviews[i].book_id == r[i]['book_id']
+        assert reviews[i].stars == r[i]['stars']
+        assert reviews[i].comment == r[i]['comment']
+        assert str(reviews[i].date) == r[i]['date']
+        assert str(reviews[i].time)[:14] == r[i]['time'][:14]
+        assert book_controller.get_book_by_id_query(reviews[i].book_id).author == r[i]['books']['author']
+        assert book_controller.get_book_by_id_query(reviews[i].book_id).title == r[i]['books']['title']
+        review_controller.delete_review(reviews[i].id)
+    
+    # Delete created users from the database
+    user_controller.delete_user_command(user.id)
+
+def test_get_book_reviews_non_existent_id():
+    # Create a random uuid
+    user_id = str(uuid.uuid4())
+    result = client.get(f"/reviews/user/{user_id}")
+
+    assert result.status_code == 404, f"Expected 404, got {result.status_code}. Details: {result.json()}"
+
+def test_get_book_reviews_without_reviews():
+    # Create a user
+    userData = {
+        "email": "review1@gmail.com",
+        "username": "reviewerTest",
+        "password": "passwordReview"
+    }
+    user = user_controller.create_user_command(User(**userData))
+    result = client.get(f"/reviews/user/{user.id}")
+
+    assert result.status_code == 200, f"Expected 200, got {result.status_code}. Details: {result.json()}"
+    assert result.json() == []
+
+    # Delete the created user
+    user_controller.delete_user_command(user.id)

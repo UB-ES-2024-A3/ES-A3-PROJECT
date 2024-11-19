@@ -1,6 +1,6 @@
 from src.crud.books import get_book_by_id, update_book_attributes
 from src.crud.user import search_by_id
-from src.crud.reviews import add_review_to_db, delete_review_by_id, get_book_reviews, get_book_with_review, get_review_by_id
+from src.crud.reviews import add_review_to_db, delete_review_by_id, get_book_reviews, get_book_with_review, get_review_by_id, get_user_reviews
 from src.models.review_model import Review
 from fastapi import HTTPException
 import uuid
@@ -89,3 +89,12 @@ class ReviewController:
 
 
  
+      
+    def get_user_reviews(self, user_id: str):
+        user = search_by_id(user_id)
+
+        if user == -1:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        reviews = get_user_reviews(user_id)
+        return reviews

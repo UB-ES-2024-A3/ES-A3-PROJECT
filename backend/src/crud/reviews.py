@@ -86,3 +86,16 @@ def delete_review_by_id(review_id: str):
     except Exception as e:
         print(f"Error deleting review with id {review_id}: {e}")
         return False
+
+def get_user_reviews(user_id: str):
+    try:
+        supabase = get_db_client()
+        reviews = supabase.table("reviews").select('id,comment,stars,date, time, user_id, book_id, books(id, author, title)').eq("user_id", user_id).execute()
+        # If reviews are found for that user return a list of the reviews
+        if reviews.data:
+            return reviews.data
+        # If no reviews are found return an empty list
+        else:
+            return []
+    except Exception as e:
+        print(f"Error finding reviews for user with id {user_id}: {e}")
