@@ -13,6 +13,7 @@ user_controller = UserController()
 review_controller = ReviewController()
 book_controller = BooksController()
 
+
 # Test to ensure valid review creation via the endpoint
 def test_make_review_success():
     payload = {
@@ -123,15 +124,12 @@ def test_get_book_reviews_correct_id():
         "book_id": book_id
     }]
     reviews = []
+    # We sort the reviews from most recent to less recent
     for review in reviewData:
-        reviews.append(review_controller.add_review_command(Review(**review)))
-    
+        reviews.insert(0,review_controller.add_review_command(Review(**review)))
     # Call the get endpoint
     result = client.get(f"/reviews/book/{book_id}")
     r = result.json()
-    # Sort the lists in order to check if the contents are the same
-    r.sort(key=lambda x: x['id'])
-    reviews.sort(key=lambda x: x.id)
     assert result.status_code == 200, f"Expected 200, got {result.status_code}. Details: {result.json()}"
     assert len(reviews) == len(r)
     # Check if all information is returned correctly
@@ -142,7 +140,7 @@ def test_get_book_reviews_correct_id():
         assert reviews[i].stars == r[i]['stars']
         assert reviews[i].comment == r[i]['comment']
         assert str(reviews[i].date) == r[i]['date']
-        assert str(reviews[i].time)[:14] == r[i]['time'][:14]
+        assert str(reviews[i].time)[:13] == r[i]['time'][:13]
         assert user_controller.search_by_id(reviews[i].user_id).username == r[i]['users']['username']
         review_controller.delete_review(reviews[i].id)
     
@@ -164,7 +162,7 @@ def test_get_book_reviews_without_reviews():
     assert result.status_code == 200, f"Expected 200, got {result.status_code}. Details: {result.json()}"
     assert result.json() == []
 
-def test_get_book_reviews_correct_id():
+def test_get_user_reviews_correct_id():
     # Create a user
     userData = {
         "email": "review1@gmail.com",
@@ -193,15 +191,13 @@ def test_get_book_reviews_correct_id():
         "book_id": book_ids[2]
     }]
     reviews = []
+    # We sort the reviews from most recent to less recent
     for review in reviewData:
-        reviews.append(review_controller.add_review_command(Review(**review)))
+        reviews.insert(0, review_controller.add_review_command(Review(**review)))
     
     # Call the get endpoint
     result = client.get(f"/reviews/user/{user.id}")
     r = result.json()
-    # Sort the lists in order to check if the contents are the same
-    r.sort(key=lambda x: x['id'])
-    reviews.sort(key=lambda x: x.id)
     assert result.status_code == 200, f"Expected 200, got {result.status_code}. Details: {result.json()}"
     assert len(reviews) == len(r)
     # Check if all information is returned correctly
@@ -212,7 +208,7 @@ def test_get_book_reviews_correct_id():
         assert reviews[i].stars == r[i]['stars']
         assert reviews[i].comment == r[i]['comment']
         assert str(reviews[i].date) == r[i]['date']
-        assert str(reviews[i].time)[:14] == r[i]['time'][:14]
+        assert str(reviews[i].time)[:13] == r[i]['time'][:13]
         assert book_controller.get_book_by_id_query(reviews[i].book_id).author == r[i]['books']['author']
         assert book_controller.get_book_by_id_query(reviews[i].book_id).title == r[i]['books']['title']
         review_controller.delete_review(reviews[i].id)
@@ -220,14 +216,14 @@ def test_get_book_reviews_correct_id():
     # Delete created users from the database
     user_controller.delete_user_command(user.id)
 
-def test_get_book_reviews_non_existent_id():
+def test_get_user_reviews_non_existent_id():
     # Create a random uuid
     user_id = str(uuid.uuid4())
     result = client.get(f"/reviews/user/{user_id}")
 
     assert result.status_code == 404, f"Expected 404, got {result.status_code}. Details: {result.json()}"
 
-def test_get_book_reviews_without_reviews():
+def test_get_user_reviews_without_reviews():
     # Create a user
     userData = {
         "email": "review1@gmail.com",
