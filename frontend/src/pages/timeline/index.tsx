@@ -27,7 +27,7 @@ const Timeline = () => {
     <NavBar>
         <SearchBar placeholder="Search..." buttonLabel="Search">
             {search ? (
-            <div style={{margin: '5px'}}> 
+            <div style={{margin: '5px', width: '100%'}}> 
                 <ListBooks search={search} />
             </div>
         ) : (
