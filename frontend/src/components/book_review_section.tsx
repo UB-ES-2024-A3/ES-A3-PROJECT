@@ -7,16 +7,16 @@ import AddReviewButton from "./add_review";
 import ReviewService from "@/services/reviewService";
 
 interface BookReviewSectionFields {
-    book: Book
+    book: Book;
+    callback: () => void;
 }
 
-const BookReviewSection: React.FC<BookReviewSectionFields> = ({ book }) => {
+const BookReviewSection: React.FC<BookReviewSectionFields> = ({ book, callback }) => {
     const [reviews, setReviews] = useState<BookReviewCardProps[]>([]);
     const [numReviews, setNumReviews] = useState<number>(0);
-    const [newReview, setNewReview] = useState(false)
 
     function addReviewCallback() {
-        setNewReview(!newReview)
+        callback();
     }
 
     useEffect(() => {
@@ -29,7 +29,7 @@ const BookReviewSection: React.FC<BookReviewSectionFields> = ({ book }) => {
                 setReviews([]);
             });
         setNumReviews(book.numreviews);
-    }, [book, newReview]);
+    }, [book]);
 
     return (
         <div style={{
