@@ -1,0 +1,43 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+  :root { 
+    --icon-selected: #417154; 
+    --icon-normal: #000000; 
+    --primary-green: #417154; 
+    --hover-green: #417154d5;
+    --primary-beige: #f5f5dc;
+    --star-yellow: #FBBF24;
+    --star-gray: #D1D5DB;
+  }
+
+  html {
+    background-color: var(--primary-beige);
+  }
+
+  button {
+    padding: 10px 20px;
+    border: none;
+    background-color: var(--primary-green);
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  button:hover {
+    background-color: var(--hover-green);
+  }
+
+  .secondaryButton {
+    color: var(--primary-green);
+    background-color: white;
+  }
+
+  .secondaryButton:hover{
+    color: var(--hover-green);
+    background-color: white;
+  }
+
+  .profileNavigation{
+    background-color: var(--primary-beige)
+  }
