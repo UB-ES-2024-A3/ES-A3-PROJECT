@@ -83,7 +83,7 @@ const RegisterPage: React.FC = () => {
     if (registerResult.isRegistered) {
       localStorage.setItem('isAuthenticated', 'true');
       localStorage.setItem('userId', registerResult.userId);
-      router.push('/');
+      router.push('/profile');
     }
   };
 

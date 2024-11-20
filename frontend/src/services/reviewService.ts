@@ -37,8 +37,23 @@ const ReviewService = {
         )
         .then(response => {
             // Fetch username from received data.
-            const reviews = response.data.map((review: { users: { username: string; }; }) => {
-                return {...review, username: review.users.username};
+            const reviews = response.data.map((review: { users: { username: string }, time: string}) => {
+                return {...review, username: review.users.username, time: review.time.slice(0, 8)};
+            })
+            return reviews;
+        })
+        .catch(except => {
+            throw except.detail;
+        });
+    },
+    getUserReviews : async (userId: string) => {
+        return axios.get(
+            endpoint.dbURL + '/reviews/user/' + userId,
+        )
+        .then(response => {
+            // Fetch author and title from received data.
+            const reviews = response.data.map((review: { books: { author: string, title: string}, time: string }) => {
+                return {...review, author: review.books.author, title: review.books.title,  time: review.time.slice(0, 8)};
             })
             return reviews;
         })
