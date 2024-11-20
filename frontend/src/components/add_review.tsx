@@ -4,10 +4,10 @@ import { Star } from 'lucide-react'
 import ReviewService from '@/services/reviewService'
 
 interface AddReviewButtonFields {
-  author: string,
-  title: string,
-  bookId: string,
-  callback: (review: ReviewResponseData) => void
+  author: string;
+  title: string;
+  bookId: string;
+  callback: () => void;
 }
 
 export interface ReviewResponseData {
@@ -33,7 +33,7 @@ const AddReviewButton: React.FC<AddReviewButtonFields> = ({title, author, bookId
       bookId
     )
     .then(result => {
-      callback(result);
+      callback();
       return true;
     })
     .catch(errorMsg => {

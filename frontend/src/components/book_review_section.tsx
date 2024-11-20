@@ -1,28 +1,22 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Book } from "./timeline";
+import { Book } from "@/pages/timeline";
 import BookReviewCard from "./book_review_card";
 import { BookReviewCardProps } from "./book_review_card";
-import AddReviewButton, { ReviewResponseData } from "./add_review";
+import AddReviewButton from "./add_review";
 import ReviewService from "@/services/reviewService";
 
 interface BookReviewSectionFields {
-    book: Book
+    book: Book;
+    callback: () => void;
 }
 
-const BookReviewSection: React.FC<BookReviewSectionFields> = ({ book }) => {
+const BookReviewSection: React.FC<BookReviewSectionFields> = ({ book, callback }) => {
     const [reviews, setReviews] = useState<BookReviewCardProps[]>([]);
     const [numReviews, setNumReviews] = useState<number>(0);
-    const [newReview, setNewReview] = useState<BookReviewCardProps>({username: '', stars: 0, date: '', time: '', comment: ''});
 
-    function addReviewCallback(newReview: ReviewResponseData) {
-        setNewReview({
-            username: 'me',
-            stars: newReview.stars,
-            date: newReview.date,
-            time: newReview.time,
-            comment: newReview.comment
-        });
+    function addReviewCallback() {
+        callback();
     }
 
     useEffect(() => {
@@ -36,12 +30,6 @@ const BookReviewSection: React.FC<BookReviewSectionFields> = ({ book }) => {
             });
         setNumReviews(book.numreviews);
     }, [book]);
-
-    // Actualize reviews after submitting a review
-    useEffect(() => {
-        reviews.splice(0, 0, newReview);
-        setNumReviews(numReviews + 1);
-    }, [newReview]);
 
     return (
         <div style={{

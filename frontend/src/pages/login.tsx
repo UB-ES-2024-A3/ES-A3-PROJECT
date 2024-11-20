@@ -62,7 +62,7 @@ const LoginPage: React.FC = () => {
     if (authenticationResult.isAuthenticated){
       localStorage.setItem('isAuthenticated', 'true');
       localStorage.setItem('userId', authenticationResult.userId);
-      router.push('/');
+      router.push('/profile');
     }
   };
 

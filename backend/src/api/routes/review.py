@@ -39,3 +39,11 @@ async def delete_review(review_id: str):
         raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error deleting review: {e}")
+#Endpoint to get the reviews made by a given user
+@router.get("/reviews/user/{user_id}")
+async def get_user_reviews(user_id: str):
+    try:
+        result = reviewController.get_user_reviews(user_id)
+        return result
+    except HTTPException as e:
+        raise e
