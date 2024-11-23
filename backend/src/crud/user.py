@@ -71,7 +71,7 @@ def create_user(user: User):
             "id": user.id,
             "email": user.email,
             "username": user.username,
-            "password": user.password,  # FIXME: Should we hash the pwd?
+            "password": user.password,
         }
         result = supabase.table("users").insert(data).execute()
         if not result.data:
