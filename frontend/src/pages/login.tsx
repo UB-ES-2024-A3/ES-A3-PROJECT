@@ -96,7 +96,7 @@ const LoginPage: React.FC = () => {
         )}
         <div style={{ margin: 5}}>
           <button style={{ padding: 0, width: '100%' }} className="secondaryButton" onClick={handleRegister}>
-            <u>Don&apos;t have an account yet? Register!</u>
+            <u>Don&apos;t have an account yet? Register.</u>
           </button>
         </div>
       </div>
