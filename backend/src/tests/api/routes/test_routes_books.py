@@ -10,21 +10,11 @@ from src.models.book_model import Book
 def client():
     return TestClient(app)
 
-# Mock data for tests
-mock_book = Book(
-    id="1",
-    title="Test Book",
-    author="Test Author",
-    genre="Fiction",
-    published_year=2021
-)
-
 # Test for getting all books
 def test_get_all_books(client: TestClient):
     response = client.get("/books")
     assert response.status_code == 200, f"Expected 200, got {response.status_code}. Details: {response.text}"
     assert isinstance(response.json(), list), "Response should be a list of books"
-
 
 # Test for retrieving all book titles
 def test_get_all_titles(client: TestClient):
@@ -39,9 +29,6 @@ def test_retrieving_books_by_partial_titles(client: TestClient):
     assert response.status_code == 200, f"Expected 200, got {response.status_code}. Details: {response.text}"
     assert isinstance(response.json(), list), "Response should be a list of titles"
 
-
-# REGION 6.1 search by id
-
 # Test for getting a book by valid ID
 def test_get_book_by_id(client: TestClient):
     book_id = "9f3e79b5-221a-4931-952a-4b3952ba7c5c" 
@@ -55,4 +42,3 @@ def test_get_book_by_invalid_id(client: TestClient):
     response = client.get(f"/books/{invalid_book_id}")
     assert response.status_code == 404, f"Expected 404, got {response.status_code}. Details: {response.text}"
     assert response.json()["detail"] == "Book not found", "Error message should be 'Book not found'"
-# ENDREGION
