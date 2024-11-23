@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import SearchBar from '@/components/searchbar';
-import ListBooks from '@/components//list_books';
+import ListSearch from '@/components/list_search';
 import { useTimelineContext } from '@/contexts/TimelineContext';
 import NavBar from '@/components/navbar';
 
@@ -28,7 +28,7 @@ const Timeline = () => {
         <SearchBar placeholder="Search..." buttonLabel="Search">
             {search ? (
             <div style={{margin: '5px', width: '100%'}}> 
-                <ListBooks search={search} />
+                <ListSearch search={search} />
             </div>
         ) : (
             <div style={{margin: '5px', textAlign: 'center', justifyContent: 'center', height: '80vh', display: 'flex', flexDirection: 'column'}}> 
