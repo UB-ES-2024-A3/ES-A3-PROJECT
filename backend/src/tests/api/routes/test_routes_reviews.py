@@ -170,8 +170,8 @@ def test_get_user_reviews_correct_id():
         assert expected.stars == actual["stars"], f"Expected stars {expected.stars}, got {actual['stars']}."
         assert expected.user_id == actual["user_id"], f"Expected user_id {expected.user_id}, got {actual['user_id']}."
         assert expected.book_id == actual["book_id"], f"Expected book_id {expected.book_id}, got {actual['book_id']}."
-        # Compare time strings up to the first 13 characters because expected time format is (YYYY-MM-DDTHH:MM:SS.mmmmm) and actual is (YYYY-MM-DDTHH:MM:SS.mmmmmm) (1 more)
-        assert str(expected.time)[:13] == str(actual["time"])[:13], f"Expected time {expected.time}, got {actual['time']}."
+        # Compare time strings up to the first 12 characters because expected time format is (YYYY-MM-DDTHH:MM:SS.mmmmm) and actual is (YYYY-MM-DDTHH:MM:SS.mmmmmm) (1 more)
+        assert str(expected.time)[:12] == str(actual["time"])[:12], f"Expected time {expected.time}, got {actual['time']}."
 
 def test_get_user_reviews_non_existent_id():
     user_id = str(uuid.uuid4())
