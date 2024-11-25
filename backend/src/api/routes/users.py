@@ -127,4 +127,3 @@ async def follow_user(user_id: str, user_to_follow_id: str):
         raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error searching user by id")
-    
