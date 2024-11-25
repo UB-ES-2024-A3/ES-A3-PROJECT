@@ -120,3 +120,27 @@ def authenticate(identifier: str, password: str):
     if(result.data != [] and result.data[0]['password'] == password):
         return result.data[0]['id']
     return False
+
+def search_users_by_partial_username_crud(username: str, max_num: int):
+    try:
+        supabase = get_db_client()
+        result = supabase.table("users").select("*").ilike("username", f"%{username}%").execute()
+        users = result.data
+
+        if not users:  # If no users are found
+            return []
+        sorted_users = sorted(
+            users,
+            key=lambda user: user["username"].startswith(username),
+            reverse=True,
+        )
+        limited_users = sorted_users[:max_num]
+        return [
+            {
+                "username": user["username"],
+                "user_id": user["id"]
+            } for user in limited_users
+        ]
+    except Exception as e:
+        print(f"Error fetching users from the database: {e}")
+        raise HTTPException(status_code=500, detail="Error fetching users from the database")
