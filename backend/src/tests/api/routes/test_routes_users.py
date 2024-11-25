@@ -63,14 +63,14 @@ def test_get_user_by_id(client: TestClient):
     assert response.status_code == 200, f"Expected 200, got {response.status_code}. Details: {response.json()}"
     assert response.json()["id"] == created_user.id, f"Expected {created_user.id}, got {response.json()['id']}"
 
-# def test_get_username_by_id(client: TestClient):
-#     user_data = {"email": "user2024@hotmail.com", "username": "user2024", "password": "dumbPassword"}
-#     user = User(**user_data)
-#     created_user = crud.user.create_user(user)
-#     response = client.get(f"/users/username/id/{created_user.id}")
-#     crud.user.delete_user(created_user.id)
-#     assert response.status_code == 200, f"Expected 200, got {response.status_code}. Details: {response.json()}"
-#     assert response.json() == created_user.username, f"Expected {created_user.username}, got {response.json()}"
+def test_get_username_by_id(client: TestClient):
+    user_data = {"email": "user2024@hotmail.com", "username": "user2024", "password": "dumbPassword"}
+    user = User(**user_data)
+    created_user = crud.user.create_user(user)
+    response = client.get(f"/users/username/id/{created_user.id}")
+    crud.user.delete_user(created_user.id)
+    assert response.status_code == 200, f"Expected 200, got {response.status_code}. Details: {response.json()}"
+    assert response.json() == created_user.username, f"Expected {created_user.username}, got {response.json()}"
 
 def test_get_username_with_invalid_id(client: TestClient):
     invalid_id = str(uuid.uuid4())
@@ -123,7 +123,10 @@ def test_search_users(client: TestClient):
     # Check for nonexistent username
     response = client.get(f"/users/search?username=nonexistent&max_num=2")
     assert response.status_code == 200, f"Expected 200, got {response.status_code}. Details: {response.json()}"
-    assert response.json() == created_user.username, f"Expected {created_user.username}, got {response.json()}"
+    assert response_data["username"] == created_user.username, f"Expected {created_user.username}, got {response_data()["username"]}"
+    assert response_data["followers"] == created_user.followers, f"Expected {created_user.followers}, got {response_data()["followers"]}"
+    assert response_data["following"] == created_user.following, f"Expected {created_user.following}, got {response_data()["following"]}"
+
 
 def test_get_username_with_invalid_id(client: TestClient):
     invalid_id = str(uuid.uuid4())
