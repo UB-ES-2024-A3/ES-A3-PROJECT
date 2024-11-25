@@ -1,3 +1,4 @@
+from src.controllers.user_controller import UserController 
 from src.main import app
 from src import crud
 from src.models.user_model import User
@@ -8,6 +9,8 @@ from fastapi.testclient import TestClient
 @pytest.fixture
 def client():
     return TestClient(app)
+
+user_controller = UserController()
 
 def test_get_all_users(client: TestClient):
     response = client.get("/users")
@@ -86,3 +89,38 @@ def test_get_user_by_nonexistent_id(client: TestClient):
     response = client.get(f"/users/id/{invalid_id}")
     assert response.status_code == 404, f"Expected 404, got {response.status_code}. Details: {response.json()}"
     assert "User not found" in response.json().get("detail"), f"Expected error message 'User not found', got {response.json()}"
+
+def test_search_users(client: TestClient):
+    userData = [
+        {"email": "tsu@hotmail.com", "username": "tsu", "password": "test123"},
+        {"email": "1tsu@hotmail.com", "username": "tsu1", "password": "test123"},
+        {"email": "2tsu@hotmail.com", "username": "tsu2", "password": "test123"},
+    ]
+
+    # Create users
+    users = [user_controller.create_user_command(User(**data)) for data in userData]
+
+    search_username = "tsu"
+    max_num = 3
+    response = client.get(f"/users/search?username={search_username}&max_num={max_num}")
+    results = response.json()
+
+    # Delete users
+    for user in users:
+        user_controller.delete_user_command(user.id)
+
+    # Assertions
+    assert response.status_code == 200, f"Expected 200, got {response.status_code}. Details: {response.json()}"
+    assert len(results) == max_num, f"Expected {max_num} results, got {len(results)}"
+
+    # Check the first result's username
+    assert results[0]["username"] == "tsu", f"Expected first username to be 'tsu', got {results[0]['username']}"
+    
+    for result in results:
+        assert search_username in result["username"], f"Expected '{search_username}' in username, got {result['username']}"
+        assert "username" in result and "user_id" in result, f"Missing fields in result: {result}"
+
+    # Check for nonexistent username
+    response = client.get(f"/users/search?username=nonexistent&max_num=2")
+    assert response.status_code == 200, f"Expected 200, got {response.status_code}. Details: {response.json()}"
+    assert response.json() == [], "Expected an empty list for nonexistent username"
