@@ -11,7 +11,7 @@ reviewController = ReviewController()
 # Test adding a valid review
 def test_add_valid_review():
     review = Review(
-        user_id= "6c679679-6a17-44fc-9a4b-99046444d5e1",
+        user_id= "db079be4-b49e-423e-bb96-ba26897d700a",
         book_id= "55b4e870-fd29-4419-b871-ec9dd7205e1b",
         stars= 4,
         comment = "Great book")
@@ -24,7 +24,7 @@ def test_add_review_invalid_stars():
         comment="Terrible book.",
         stars=6,  # Invalid
         book_id="55b4e870-fd29-4419-b871-ec9dd7205e1b",
-        user_id="6c679679-6a17-44fc-9a4b-99046444d5e1",
+        user_id="db079be4-b49e-423e-bb96-ba26897d700a",
     )
     with pytest.raises(HTTPException) as excinfo:
         reviewController.add_review_command(review)
@@ -50,7 +50,7 @@ def test_add_review_book_not_found():
         comment="Average book.",
         stars=3,
         book_id="non_existent_book",
-        user_id="6c679679-6a17-44fc-9a4b-99046444d5e1",
+        user_id="db079be4-b49e-423e-bb96-ba26897d700a",
     )
     with pytest.raises(HTTPException) as excinfo:
         reviewController.add_review_command(review)
@@ -63,7 +63,7 @@ def test_update_book_stats():
     initial_numreviews = book_before.numreviews
     initial_avgstars = book_before.avgstars
     review = Review(
-        user_id="6c679679-6a17-44fc-9a4b-99046444d5e1",
+        user_id="db079be4-b49e-423e-bb96-ba26897d700a",
         book_id=book_id,
         stars=4,
         comment="Great book!"
