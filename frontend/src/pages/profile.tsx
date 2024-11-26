@@ -35,7 +35,6 @@ const Profile = () => {
         });
         UserService.getUsername(userId)
         .then(userName => {
-            console.log(userName)
             setUsername(userName);
         })
         .catch(except => {
@@ -49,8 +48,22 @@ const Profile = () => {
         <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div style={{ width: '65%', display: 'flex', flexDirection: 'column', minHeight: '100%' }}>
                 <header style={{ padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #ccc' }}>
-                    <h1 style={{ fontSize: '1.2rem', fontWeight: '500' }}>{username}</h1>
-                    <button id="logout_button" onClick={handleLogout}>Logout</button>
+                    <div>
+                        <h1 style={{ fontSize: '1.2rem', fontWeight: '500' }}>{username}</h1>
+                        <div
+                            style={{
+                            display: 'flex',
+                            marginTop: '8px',
+                            gap: '10px'
+                            }}
+                        >
+                            <span style={{ fontWeight: 'bold', fontSize: '0.85rem' }}>100</span>
+                            <span style={{ fontSize: '0.85rem', color: '#6b7280' }}>Followers</span>
+                            <span style={{ fontWeight: 'bold', fontSize: '0.85rem', marginLeft: '10px' }}>100</span>
+                            <span style={{ fontSize: '0.85rem', color: '#6b7280' }}>Following</span>
+                        </div>
+                    </div>                    
+                    <button onClick={handleLogout}>Logout</button>
                 </header>
                 <div style={{ width: '100%', borderTop: '1px solid #bbb' }}>
                     <ProfileNavBar activeTab={activeTab} setActiveTab={setActiveTab} />
