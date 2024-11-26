@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import SearchService from '@/services/searchService';
-import BookBar from './bookbar';
-import ListSearchNavBar from './list_search_navbar';
+import BookBar from '@/components/bookbar';
+import ListSearchNavBar from '@/components/list_search_navbar';
 import { useTimelineContext } from '@/contexts/TimelineContext';
 import { useRouter } from 'next/router';
+import NavBar from '@/components/navbar';
+import SearchBar from '@/components/searchbar';
 
 interface ListSearchProps{
     search: string;
@@ -22,11 +24,12 @@ interface User {
 }
 
 
-const ListSearch: React.FC<ListSearchProps> = ({search}) => {
+const ListSearch: React.FC<ListSearchProps> = () => {
     const [bookResults, setBookResults] = useState<Book[]>([]);
     const [userResults, setUserResults] = useState<User[]>([]);
     const [isLoading, setIsLoading] = useState(false);
-    const {setTimelineState} = useTimelineContext();
+    const {timelineState,setTimelineState} = useTimelineContext();
+    const search = timelineState.data;
     const router = useRouter();
     const [activeTab, setActiveTab] = useState('books');
 
@@ -65,48 +68,50 @@ const ListSearch: React.FC<ListSearchProps> = ({search}) => {
       }, [search]);
 
     return(
-      <>
-        <div>
-          <ListSearchNavBar activeTab={activeTab} setActiveTab={setActiveTab} />
-        </div>
-        <div style={{ width: '100%', marginTop: '0px', display: 'flex', flexDirection: 'column', overflowY: 'auto'}}>
-          {activeTab == 'books'? 
-          (<>
-            <div style={{ width: '100%', marginTop: '0px', display: 'flex', flexDirection: 'column', overflowY: 'auto'}}>
-              {bookResults.length > 0 ? (
-                <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
-                  {bookResults.map((book) => (
-                    <div key={book.id} style={{margin: '3px'}}>
-                      <BookBar key={book.id} id={book.id} title={book.title} author={book.author} showRating={true} rating={book.avgstars} handleOpenBook={handleOpenBook}/>
-                    </div>
-                  ))}
-                </div>
-              ):(
-                <div style={{padding: '5px'}}> 
-                  {isLoading ? (
-                    <div> Loading... </div>
-                  ):(
-                    <div> No matches found </div>
-                  )}
-                  
-                </div>
-              )}
-              
+    <NavBar>
+        <SearchBar placeholder="Search..." buttonLabel="Search">
+            <div style={{margin: '5px 0px 5px 0px'}}>
+                <ListSearchNavBar activeTab={activeTab} setActiveTab={setActiveTab} />
             </div>
-          </>):(
-          <> 
-            {userResults.length > 0? 
-            (
-              <> </>
-            ):(
-              <div> No matches found </div>
-            )
-            }
-          </>
-          )}
+            <div style={{ width: '100%', marginTop: '0px', display: 'flex', flexDirection: 'column', overflowY: 'auto'}}>
+            {activeTab == 'books'? 
+            (<>
+                <div style={{ width: '100%', marginTop: '0px', display: 'flex', flexDirection: 'column', overflowY: 'auto'}}>
+                {bookResults.length > 0 ? (
+                    <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
+                    {bookResults.map((book) => (
+                        <div key={book.id} style={{margin: '3px'}}>
+                        <BookBar key={book.id} id={book.id} title={book.title} author={book.author} showRating={true} rating={book.avgstars} handleOpenBook={handleOpenBook}/>
+                        </div>
+                    ))}
+                    </div>
+                ):(
+                    <div style={{padding: '5px'}}> 
+                    {isLoading ? (
+                        <div> Loading... </div>
+                    ):(
+                        <div> No matches found </div>
+                    )}
+                    
+                    </div>
+                )}
+                
+                </div>
+            </>):(
+            <> 
+                {userResults.length > 0? 
+                (
+                <> </>
+                ):(
+                <div> No matches found </div>
+                )
+                }
+            </>
+            )}
 
-        </div>
-      </>
+            </div>
+        </SearchBar>
+    </NavBar>
 
     );
 }
