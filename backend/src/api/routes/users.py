@@ -80,12 +80,12 @@ async def get_user_by_id(user_id: str):
 
 # Endpoint to get the username given an id   
 @router.get("/users/username/id/{user_id}")
-async def get_username_by_id(user_id: str) -> str:
+async def get_user_data_by_id(user_id: str) -> dict:
     try:
         user = userController.search_by_id(user_id)
         if user == -1:
             raise HTTPException(status_code=404, detail="User not found")
-        return user.username
+        return {"username": user.username, "followers": user.followers, "following": user.following}
     except HTTPException as e:
         raise e
     except Exception as e:
