@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from typing import List, Optional
 from src.models.user_model import User
+from src.models.follower_model import Follower
 from src.controllers.user_controller import UserController
 
 userController = UserController()
@@ -91,6 +92,7 @@ async def get_user_data_by_id(user_id: str) -> dict:
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error searching user by id")
 
+
 @router.get("/users/search")
 async def search_users(username: str, max_num: Optional[int] = None):
     try:
@@ -103,3 +105,15 @@ async def search_users(username: str, max_num: Optional[int] = None):
         raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error fetching users")
+
+
+# Endpoint to follow a user 
+@router.get("/users/follow/{user_id}/{user_to_follow_id}", response_model = Follower)
+async def follow_user(user_id: str, user_to_follow_id: str):
+    try:
+        follower = userController.follow_user(user_id, user_to_follow_id)
+        return follower
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error searching user by id")
