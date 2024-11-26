@@ -3,6 +3,7 @@ import type { AppProps } from 'next/app';
 import { TimelineProvider } from '../contexts/TimelineContext';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -17,9 +18,14 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, []);
   
   return (
-    <TimelineProvider>
-      <Component {...pageProps} />
-    </TimelineProvider>
+    <>
+      <Head>
+        <title>Rebook</title>
+      </Head>
+      <TimelineProvider>
+        <Component {...pageProps} />
+      </TimelineProvider>
+    </>
   );
 }
 
