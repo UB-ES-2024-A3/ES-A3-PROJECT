@@ -80,7 +80,7 @@ async def get_user_by_id(user_id: str):
 
 # Endpoint to get the username given an id   
 @router.get("/users/username/id/{user_id}")
-async def get_username_by_id(user_id: str) -> dict:
+async def get_user_data_by_id(user_id: str) -> dict:
     try:
         user = userController.search_by_id(user_id)
         if user == -1:
