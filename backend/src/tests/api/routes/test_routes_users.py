@@ -90,3 +90,31 @@ def test_get_user_by_nonexistent_id(client: TestClient):
     response = client.get(f"/users/id/{invalid_id}")
     assert response.status_code == 404, f"Expected 404, got {response.status_code}. Details: {response.json()}"
     assert "User not found" in response.json().get("detail"), f"Expected error message 'User not found', got {response.json()}"
+
+def test_follow_user_valid_id(client: TestClient):
+    user_data_1 = {"email": "user2024@hotmail.com", "username": "user2024", "password": "dumbPassword"}
+    user_data_2 = {"email": "user22024@hotmail.com", "username": "user22024", "password": "dumbPassword2"}
+    user1 = User(**user_data_1)
+    user2 = User(**user_data_2)
+    created_user_1 = crud.user.create_user(user1)
+    created_user_2 = crud.user.create_user(user2)
+
+    response = client.get(f"/users/follow/{created_user_1.id}/{created_user_2.id}")
+    response_data = response.json()
+
+    updated_user_1 = crud.user.search_by_id(user1.id)
+    updated_user_2 = crud.user.search_by_id(user2.id)
+
+    crud.user.delete_user(created_user_1.id)
+    crud.user.delete_user(created_user_2.id)
+
+    print(response_data)
+    assert response_data["follower_id"] == created_user_1.id
+    assert response_data["followed_id"] == created_user_2.id
+    assert updated_user_1.following == (created_user_1.following + 1)
+    assert updated_user_1.followers == created_user_1.followers
+    assert updated_user_2.following == created_user_2.following
+    assert updated_user_2.followers == (created_user_2.followers +1)
+
+
+
