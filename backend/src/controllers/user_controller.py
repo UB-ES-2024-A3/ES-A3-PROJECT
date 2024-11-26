@@ -4,6 +4,7 @@ import uuid
 from src.crud.user import *
 from fastapi import HTTPException
 from src.models.user_model import User
+from src.crud import followers
 
 
 class UserController:
@@ -50,6 +51,32 @@ class UserController:
             raise HTTPException(status_code=500, detail="Failed to delete user")
 
         return {"detail": "User deleted successfully"}
+    
+    def follow_user(self, user_id: str, user_to_follow_id: str):
+        # We get both users to compute the new 'followers' and 'following' fields
+        user = search_by_id(user_id)
+        user_to_follow = search_by_id(user_to_follow_id)
+
+        # Check if user_id is a valid UUID
+        if not self.is_valid_uuid(user_id) or not self.is_valid_uuid(user_to_follow_id):
+            raise HTTPException(status_code=400, detail="Invalid user ID format")
+        
+        if user == -1 or user_to_follow == -1:
+            raise HTTPException(status_code=404, detail="User not found")
+        try:
+            # We create a new row in the follower table
+            created_follower = followers.create_follower(user_id, user_to_follow_id)
+        except Exception as e:
+            print(f"An error occurred while inserting the follower: {e}")
+            raise HTTPException(status_code=500, detail=str(e))
+        
+        # We update the 'followers' and 'following' fields
+        new_user_following = user.following + 1
+        new_user_followers = user_to_follow.followers + 1
+        update_follower_fields(user.id, {"following": new_user_following})
+        update_follower_fields(user_to_follow.id, {"followers": new_user_followers})
+
+        return created_follower
 
     def search_by_username(self, username: str):
         # Validate username length
