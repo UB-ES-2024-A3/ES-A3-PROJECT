@@ -3,8 +3,17 @@ import NavBar from '@/components/navbar';
 import { useRouter } from 'next/router';
 import ReviewService from '@/services/reviewService';
 import UserService from '@/services/userService';
-import { UserReviewCardProps } from './timeline/user/[userId]';
 import ProfileContents from '@/components/profile_content';
+
+export interface UserReviewCardProps {
+    title: string,
+    author: string,
+    stars: number,
+    comment?: string,
+    date?: string,
+    time?: string,
+    book_id: string
+  }
 
 const Profile = () => {
   const router = useRouter();
@@ -50,34 +59,9 @@ const Profile = () => {
             <div style={{ width: '65%', display: 'flex', flexDirection: 'column', minHeight: '100%' }}>
                 <header style={{ padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #ccc' }}>
                     <h1 style={{ fontSize: '1.2rem', fontWeight: '500' }}>{username}</h1>
-                    <button id="logout_button" onClick={handleLogout}>Logout</button>
+                    <button onClick={handleLogout}>Logout</button>
                 </header>
-                <div style={{ width: '100%', borderTop: '1px solid #bbb' }}>
-                    <ProfileNavBar activeTab={activeTab} setActiveTab={setActiveTab} />
-                </div>
-                <main style={{ flex: 1, padding: '16px' }}>
-                {activeTab === 'reviews' ? (
-                    <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '16px',
-                        overflowY: 'visible',
-                        paddingRight: '16px',
-                    }}
-                    >
-                    {reviews.length? (reviews.map((review, index) => (
-                        <ProfileReviewCard key={index} bookTitle={review.title} author={review.author} rating={review.stars} date={review.date} time={review.time} review={review.comment} book_id={review.book_id}/>
-                    ))):(
-                        <div style={{margin: '5px', textAlign: 'center', justifyContent: 'center', height: '80vh', display: 'flex', flexDirection: 'column'}}> 
-                            <h2 style={{fontSize: '2em', color: 'grey'}}>You have no reviews yet.</h2>
-                        </div>
-                    )}
-                    </div>
-                ) : (
-                    <p>Loading...</p>
-                )}
-                </main>
+                <ProfileContents reviews={reviews}/>
             </div>
         </div>
     </NavBar>
