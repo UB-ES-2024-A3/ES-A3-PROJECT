@@ -28,7 +28,7 @@ def create_follower(follower_id: str, followed_id: str):
                 status_code=500,
                 detail="Error inserting follower: No data returned from Supabase",
             )
-        created_follower = Follower(follower_id = result.data[0]["follower_id"], followed_id = result.data[0]["followed_id"])
+        created_follower = Follower(**result.data[0])
         return created_follower
     except Exception as e:
         print(f"An error occurred while inserting the follower: {e}")
