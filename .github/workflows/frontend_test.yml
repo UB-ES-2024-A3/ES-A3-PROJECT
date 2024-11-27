@@ -51,7 +51,7 @@ jobs:
 
       # Start the application in the background
       - name: Build application
-        run: npm --prefix frontend build
+        run: npm --prefix frontend run build
 
       - name: Start application
         run: npm --prefix frontend start &
