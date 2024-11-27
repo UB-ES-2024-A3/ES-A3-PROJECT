@@ -1,4 +1,5 @@
 import { Builder, By, until, WebDriver } from "selenium-webdriver";
+import chrome from "selenium-webdriver/chrome"; // Import Chrome options
 
 // Increase Jest's default timeout to handle Selenium operations
 jest.setTimeout(30000);
@@ -7,6 +8,14 @@ describe("Button Text Test", () => {
   let driver: WebDriver;
 
   beforeAll(async () => {
+
+    // Create Chrome options
+    const chromeOptions = new chrome.Options().addArguments(
+      "--disable-gpu",
+      "--headless",
+      "--no-sandbox",
+      "--disable-dev-shm-usage"
+    );
     // Create a new WebDriver instance for Chrome
     driver = await new Builder().forBrowser("chrome").build();
   });
