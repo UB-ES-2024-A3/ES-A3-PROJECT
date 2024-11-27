@@ -28,8 +28,16 @@ jobs:
       - name: Install dependencies
         run: npm --prefix frontend install
 
-      - name: Set up ChromeDriver
-        uses: nanasess/setup-chromedriver@v1
+      - name: Set up ChromeDriver (part 1)
+        uses: nanasess/setup-chromedriver@v2
+        with:
+          # Optional: do not specify to match Chrome's version
+          chromedriver-version: '88.0.4324.96'
+
+      - name: Set up ChromeDriver (part 2)
+        run: |
+          export DISPLAY=:99
+          chromedriver --url-base=/wd/hub &
 
         #- name: Install jest dependencies
         #run: npm --prefix frontend install --save-dev jest-environment-jsdom
