@@ -32,11 +32,6 @@ jobs:
       - name: Start application
         run: npm --prefix frontend start &
 
-      # Wait for the application to be ready (adjust port and timeout as needed)
-      - name: Wait for application
-        run: |
-          timeout 30 sh -c 'until nc -z localhost 3000; do sleep 1; done'
-
       # Run Selenium tests
       - name: Run tests
         run: npm --prefix frontend test
