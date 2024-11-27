@@ -26,11 +26,11 @@ jobs:
 
       # Install dependencies
       - name: Install dependencies
-        run: npm install
+        run: npm --prefix frontend install
 
       # Start the application in the background
       - name: Start application
-        run: npm start &
+        run: npm --prefix frontend start &
 
       # Wait for the application to be ready (adjust port and timeout as needed)
       - name: Wait for application
@@ -39,4 +39,4 @@ jobs:
 
       # Run Selenium tests
       - name: Run tests
-        run: npm test
+        run: npm --prefix frontend test
