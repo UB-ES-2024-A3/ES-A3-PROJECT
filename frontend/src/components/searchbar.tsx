@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import BookBar from './bookbar';
+import UserBar from './userbar';
 import SearchService from '@/services/searchService';
 import { useTimelineContext } from '@/contexts/TimelineContext';
 import { useRouter } from 'next/router';
@@ -47,7 +48,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ children, placeholder, buttonLabe
   useEffect(() => {
     if (query.trim()) {
       const debounceTimeout = setTimeout(() => {
-        SearchService.searchRequest(query, num_results)
+        SearchService.bookRequest(query, num_results)
           .then(results => {
             const books = results.map((book: Book) => ({
               id: book.id,
@@ -60,11 +61,24 @@ const SearchBar: React.FC<SearchBarProps> = ({ children, placeholder, buttonLabe
             console.log(errorMsgs);
             setBookResults([]);
           });
+        SearchService.userRequest(query, num_results)
+          .then(results => {
+            const users = results.map((user: User) => ({
+              id: user.id,
+              username: user.username
+            }));
+            setUserResults(users);
+          })
+          .catch(errorMsgs => {
+            console.log(errorMsgs);
+            setUserResults([]);
+          });
       }, 300); // 300 ms debounce
 
       return () => clearTimeout(debounceTimeout);
     } else {
       setBookResults([]);
+      setUserResults([]);
     }
   }, [query]);
 
@@ -127,6 +141,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ children, placeholder, buttonLabe
               {userResults.length > 0? 
               (<>
                 <div style={{textAlign: 'left', backgroundColor: '#ccc', color: 'black', paddingLeft: '7px'}}> Users </div>
+                <div style={{}}> 
+                {userResults.map((user) => (
+                  <UserBar key={user.id} id={user.id} username={user.username}/>
+                ))}
+                </div>
               </>
               ):(<></>)
               }
