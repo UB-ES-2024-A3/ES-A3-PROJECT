@@ -28,8 +28,11 @@ jobs:
       - name: Install dependencies
         run: npm --prefix frontend install
 
-      - name: Set up ChromeDriver (part 1)
-        uses: nanasess/setup-chromedriver@v2
+
+      - name: Setup firefox
+        uses: browser-actions/setup-firefox@v1
+      - name: Set firefox
+        run: firefox --version
 
       #- name: Set up ChromeDriver (part 2)
         #run: |
