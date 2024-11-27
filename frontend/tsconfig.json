@@ -12,10 +12,13 @@
     "esModuleInterop": true,
     "module": "commonjs",
     "moduleResolution": "node",
+    "module": "commonjs",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
+    "target": "es6",
     "target": "es6",
     "plugins": [
       {
@@ -39,3 +42,4 @@
     "node_modules"
   ]
 }
+
