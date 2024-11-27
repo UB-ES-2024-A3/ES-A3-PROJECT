@@ -16,8 +16,9 @@ describe("Button Text Test", () => {
       "--no-sandbox",
       "--disable-dev-shm-usage"
     );
+    const service = new chrome.ServiceBuilder("/path/to/chromedriver");
     // Create a new WebDriver instance for Chrome
-    driver = await new Builder().forBrowser("chrome").build();
+    driver = await new Builder().forBrowser("chrome").build().setChromeOptions(chromeOptions);
   });
 
   afterAll(async () => {
