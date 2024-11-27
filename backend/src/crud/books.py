@@ -63,29 +63,24 @@ def add_book(book: Book):
         raise HTTPException(status_code=500, detail=str(e))
 
 # Method to search books based on partial name
-def get_book_matches_by_title(partial_title: str, max_num: Optional[int] = None):
+def get_book_matches_by_title(partial_title: str, max_num: Optional[int] = None) -> List[Book]:
     supabase = get_db_client()
     try:
         def normalize_text(text: str) -> str:
             text = re.sub(r"[^\w\s]", "", text)
-            # Commented for permformance reasons
-            # replacements = {
-            #     'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u',
-            #     'Á': 'a', 'É': 'e', 'Í': 'i', 'Ó': 'o', 'Ú': 'u',
-            #     'ü': 'u', 'Ü': 'u', 'ñ': 'n', 'Ñ': 'n'
-            # }
-            # for accented_char, unaccented_char in replacements.items():
-            #     text = text.replace(accented_char, unaccented_char)
-            return text.lower()
-        normalized_partial_title = normalize_text(partial_title)
-        query = supabase.table("books").select("*").ilike("title", f"%{normalized_partial_title}%")
-        if max_num:
-            query = query.limit(max_num)
-        result = query.execute()
+            return text.lower().strip()
+        
+        normalized_partial_title = normalize_text(partial_title)  
+        rpc_params = {
+            "search_term": normalized_partial_title,
+            "limit_num": max_num or 10
+        }
+        result = supabase.rpc("search_books_by_title", rpc_params).execute()
+        print(result)
         books = []
         if result.data and isinstance(result.data, list):
             for book_data in result.data:
-                if book_data["genres"]:
+                if "genres" in book_data and book_data["genres"]:
                     genres = [genre.strip() for genre in book_data["genres"].split(",")]
                 else:
                     genres = []
@@ -107,9 +102,7 @@ def get_all_titles():
     except Exception as e:
         print(f"Error al obtener los títulos de los libros: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-# ENDREGION
 
-# REGION 6.1 search by id
 # Method to get a book by ID
 def get_book_by_id(book_id: str):
     supabase = get_db_client()
@@ -128,7 +121,6 @@ def get_book_by_id(book_id: str):
     except Exception as e:
         print(f"Error retrieving book by id {book_id}: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-    #
     
     # Method to update book attributes
 def update_book_attributes(book_id: str, attributes: dict):
