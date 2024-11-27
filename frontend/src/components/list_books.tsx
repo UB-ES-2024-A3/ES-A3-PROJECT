@@ -32,7 +32,7 @@ const ListBooks: React.FC<ListBooksProps> = ({search}) => {
         if (search.trim()) {
           setIsLoading(true);
           const debounceTimeout = setTimeout(() => {
-            SearchService.searchRequest(search, null)
+            SearchService.bookRequest(search, null)
               .then(results => {
                 const books = results.map((book: Book) => ({
                   id: book.id,
