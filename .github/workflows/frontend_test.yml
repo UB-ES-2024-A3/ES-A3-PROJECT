@@ -29,10 +29,17 @@ jobs:
         run: npm --prefix frontend install
 
 
-      - name: Setup firefox
-        uses: browser-actions/setup-firefox@v1
-      - name: Set firefox
-        run: firefox --version
+      - name: Setup Chromedriver
+        uses: nanasess/setup-chromedriver@v2
+        with:
+          # Optional: do not specify to match Chrome's version
+          chromedriver-version: '88.0.4324.96'
+
+      - name: Run Chromedriver
+        run: |
+          export DISPLAY=:99
+          chromedriver --url-base=/wd/hub &
+          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
 
       #- name: Set up ChromeDriver (part 2)
         #run: |
@@ -43,6 +50,9 @@ jobs:
         #run: npm --prefix frontend install --save-dev jest-environment-jsdom
 
       # Start the application in the background
+      - name: Build application
+        run: npm --prefix frontend build
+
       - name: Start application
         run: npm --prefix frontend start &
 
