@@ -1,0 +1,42 @@
+name: Frontend Tests
+
+on:
+  push:
+    branches:
+      - 15_3_frontend_tests
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # Specify your Node.js version
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Start the application in the background
+      - name: Start application
+        run: npm start &
+
+      # Wait for the application to be ready (adjust port and timeout as needed)
+      - name: Wait for application
+        run: |
+          timeout 30 sh -c 'until nc -z localhost 3000; do sleep 1; done'
+
+      # Run Selenium tests
+      - name: Run tests
+        run: npm test
