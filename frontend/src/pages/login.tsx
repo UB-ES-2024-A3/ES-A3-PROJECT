@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import LoginService from '@/services/loginService';
 import InputField from '@/components/input_field';
+import Image from 'next/image';
 
 const LoginPage: React.FC = () => {
   const router = useRouter();
@@ -83,6 +84,7 @@ const LoginPage: React.FC = () => {
         width: '33%',  
         borderRadius: "5%"
       }}>
+        <Image src='/rebook_logo.png' alt='Rebook Logo' width={200} height={200} />
         <h1 style={{ margin: '10px 0px', width: '100%', textAlign: 'center' }}>Login</h1>
         <form onSubmit={handleLogin} style={{ width: '100%' }}>
           <InputField label={"Username or email:"} type={"text"} id={"username"} value={username} onChange={setUsername} error={errors.username}/>
