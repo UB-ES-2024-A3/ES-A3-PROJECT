@@ -28,6 +28,12 @@ jobs:
       - name: Install dependencies
         run: npm --prefix frontend install
 
+      - name: Set up ChromeDriver
+        uses: nanasess/setup-chromedriver@v1
+
+        #- name: Install jest dependencies
+        #run: npm --prefix frontend install --save-dev jest-environment-jsdom
+
       # Start the application in the background
       - name: Start application
         run: npm --prefix frontend start &
