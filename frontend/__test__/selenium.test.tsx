@@ -18,7 +18,7 @@ describe("Button Text Test", () => {
 
   test("checks if the button contains the correct text", async () => {
     // Navigate to your page on localhost:3000
-    await driver.get("http://localhost:3000/login");
+    await driver.get("http://127.0.0.1:3000/login");
 
     // Find the button element by its ID
     const button = await driver.findElement(By.id("login_go_to_register"));
