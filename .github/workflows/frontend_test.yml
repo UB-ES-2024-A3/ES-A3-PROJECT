@@ -35,7 +35,7 @@ jobs:
         run: npm --prefix frontend run build
 
       - name: Start application
-        run: npm --prefix frontend start
+        run: npm --prefix frontend start &
 
       # Run Selenium tests
       - name: Run tests
