@@ -28,18 +28,14 @@ jobs:
       - name: Install dependencies
         run: npm --prefix frontend install
 
+      - name: Install jest
+        run: npm --prefix frontend install --save-dev jest-environment-jsdom
 
-      - name: Setup Chromedriver
-        uses: nanasess/setup-chromedriver@v2
-
-      - name: Run Chromedriver
-        run: |
-          export DISPLAY=:99
-          chromedriver --url-base=/wd/hub &
-          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
+      - name: Build application
+        run: npm --prefix frontend run build
 
       - name: Start application
-        run: npm --prefix frontend run dev
+        run: npm --prefix frontend start
 
       # Run Selenium tests
       - name: Run tests

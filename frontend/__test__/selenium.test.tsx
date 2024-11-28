@@ -8,7 +8,7 @@ describe("Button Text Test", () => {
 
   beforeAll(async () => {
     // Create a new WebDriver instance for Chrome
-    driver = await new Builder().forBrowser("chrome").build();
+    driver = await new Builder().forBrowser("firefox").build();
   });
 
   afterAll(async () => {
