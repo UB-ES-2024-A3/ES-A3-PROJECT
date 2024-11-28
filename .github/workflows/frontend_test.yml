@@ -38,6 +38,8 @@ jobs:
         run: |
           npm --prefix frontend run build
           npm --prefix frontend start &
+        env:
+          PORT: 3000
 
       - name: Wait for application to be ready
         run: |
