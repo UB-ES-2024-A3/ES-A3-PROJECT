@@ -19,10 +19,12 @@ jobs:
         image: selenium/standalone-chrome
 
     steps:
-      - name: Install required dependencies
-        run: sudo apt-get update && sudo apt-get install -y libnss3 libgconf-2-4
+      - name: Install Chrome
+        run: sudo apt-get install -y google-chrome-stable
 
-        
+      - name: Install ChromeDriver
+        run: sudo apt-get install -y chromedriver
+
       # Checkout the repository code
       - name: Checkout code
         uses: actions/checkout@v3
@@ -51,9 +53,6 @@ jobs:
 
       - name: Test application connectivity
         run: curl -v http://localhost:3000/login
-
-      - name: Set up Selenium
-        uses: selenium-actions/setup-selenium@v2
 
       # Run Selenium tests
       - name: Run tests
