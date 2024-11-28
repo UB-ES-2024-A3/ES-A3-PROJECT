@@ -28,11 +28,8 @@ jobs:
       - name: Install dependencies
         run: npm --prefix frontend install
 
-      - name: Install jest
-        run: npm --prefix frontend install --save-dev jest-environment-jsdom
-
       - name: Start application
-        run: npm --prefix frontend run dev &
+        run: npm --prefix frontend start &
 
       # Run Selenium tests
       - name: Run tests
