@@ -13,6 +13,12 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      selenium:
+        image: selenium/standalone-firefox:latest
+        ports:
+          - "4444:4444"
+
     steps:
       # Checkout the repository code
       - name: Checkout code
@@ -29,7 +35,14 @@ jobs:
         run: npm --prefix frontend install
 
       - name: Start application
-        run: npm --prefix frontend start &
+        run: |
+          npm --prefix frontend run build
+          npm --prefix frontend start &
+
+      - name: Wait for application to be ready
+        run: |
+          echo "Waiting for application to start..."
+          sleep 5
 
       # Run Selenium tests
       - name: Run tests
