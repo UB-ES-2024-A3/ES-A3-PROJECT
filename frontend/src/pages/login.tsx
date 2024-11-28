@@ -2,6 +2,8 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import LoginService from '@/services/loginService';
 import InputField from '@/components/input_field';
+import Image from 'next/image';
+import Head from 'next/head';
 
 const LoginPage: React.FC = () => {
   const router = useRouter();
@@ -70,37 +72,43 @@ const LoginPage: React.FC = () => {
     router.push('/register');
   };
   return (
-    <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', height: '100vh' }}>
-      <div style={{ 
-        boxShadow: "0 1px 1px 0 grey", 
-        margin: "10%", 
-        padding: "4%", 
-        backgroundColor: 'white', 
-        display: 'flex', 
-        alignItems: 'center', 
-        flexDirection: 'column', 
-        justifyContent: 'center', 
-        width: '33%',  
-        borderRadius: "5%"
-      }}>
-        <h1 style={{ margin: '10px 0px', width: '100%', textAlign: 'center' }}>Login</h1>
-        <form onSubmit={handleLogin} style={{ width: '100%' }}>
-          <InputField label={"Username or email:"} type={"text"} id={"username"} value={username} onChange={setUsername} error={errors.username}/>
-          <InputField label={"Password:"} type={"password"} id={"password"} value={password} onChange={setPassword} error={errors.password}/>
-          <div style={{ margin: '10px 5px'}}>
-            <button type="submit" style={{ width: '100%'}}>Login</button><br />
+    <>
+      <Head>
+        <title>Login</title>
+      </Head>
+      <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', height: '100vh' }}>
+        <div style={{ 
+          boxShadow: "0 1px 1px 0 grey", 
+          margin: "10%", 
+          padding: "4%", 
+          backgroundColor: 'white', 
+          display: 'flex', 
+          alignItems: 'center', 
+          flexDirection: 'column', 
+          justifyContent: 'center', 
+          width: '33%',  
+          borderRadius: "5%"
+        }}>
+          <Image src='/rebook_logo.png' alt='Rebook Logo' width={200} height={200} />
+          <h1 style={{ margin: '10px 0px', width: '100%', textAlign: 'center', fontSize: '32pt' }}>Login</h1>
+          <form onSubmit={handleLogin} style={{ width: '100%' }}>
+            <InputField label={"Username or email:"} type={"text"} id={"username"} value={username} onChange={setUsername} error={errors.username}/>
+            <InputField label={"Password:"} type={"password"} id={"password"} value={password} onChange={setPassword} error={errors.password}/>
+            <div style={{ margin: '10px 5px'}}>
+              <button type="submit" style={{ width: '100%'}}>Login</button><br />
+            </div>
+          </form>
+          {errors.credentials && (
+            <p className="mt-1 text-sm text-red-500">{errors.credentials}</p>
+          )}
+          <div style={{ margin: 5}}>
+            <button style={{ padding: 0, width: '100%' }} className="secondaryButton" onClick={handleRegister}>
+              <u>Don&apos;t have an account? Register</u>
+            </button>
           </div>
-        </form>
-        {errors.credentials && (
-          <p className="mt-1 text-sm text-red-500">{errors.credentials}</p>
-        )}
-        <div style={{ margin: 5}}>
-          <button style={{ padding: 0, width: '100%' }} className="secondaryButton" onClick={handleRegister}>
-            <u>Don&apos;t have an account? Register</u>
-          </button>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

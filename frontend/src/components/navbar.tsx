@@ -1,8 +1,9 @@
 import React from 'react';
 import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
-import { FaUser, FaHome } from 'react-icons/fa';
+import { FaUser } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 // Component parameters definition
 interface NavBarProps {
@@ -12,6 +13,7 @@ interface NavBarProps {
 const NavBar: React.FC<NavBarProps> = ({ children }) => {
   const router = useRouter();
   const [tabSelected, setTabSelected] = useState("profile");
+  const [logoSource, setLogoSource] = useState("/rebook_logo_without_name.png");
 
   // Updates the tab selected when the user clicks on a new tab
   const handleNavigation = (tab: string) => {
@@ -22,7 +24,7 @@ const NavBar: React.FC<NavBarProps> = ({ children }) => {
   const buttons = [
     {
       name: 'timeline',
-      icon: <FaHome size={32} className="mx-auto" />,
+      icon: <Image src={logoSource} alt='Timeline' width={50} height={50} />,
     },
     {
       name: 'profile',
@@ -34,8 +36,10 @@ const NavBar: React.FC<NavBarProps> = ({ children }) => {
     const currentPath = router.pathname;
     if (currentPath.startsWith("/timeline")) {
       setTabSelected('timeline');
+      setLogoSource('/rebook_logo_without_name.png');
     } else if (currentPath.startsWith("/profile")) {
       setTabSelected('profile');
+      setLogoSource('/rebook_logo_without_name_gray.png');
     }
   }, [router.pathname]);
 
