@@ -7,13 +7,19 @@ describe("Button Text Test", () => {
   let driver: WebDriver;
 
   beforeAll(async () => {
-    // Create a new WebDriver instance for Chrome
-    driver = await new Builder().forBrowser("firefox").usingServer("http://127.0.0.1:4444/wd/hub").build();
+    // Microsoft uses a longer name for Edge
+    let browser = 'chrome';
+    const host = 'selenium';
+    driver = await new Builder()
+        .forBrowser(browser)
+        .build()
   });
 
   afterAll(async () => {
     // Quit the WebDriver instance
-    await driver.quit();
+    if(driver){
+            await driver.quit();
+        }
   });
 
   test("checks if the button contains the correct text", async () => {

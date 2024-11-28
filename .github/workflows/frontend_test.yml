@@ -11,44 +11,29 @@ on:
 
 jobs:
   test:
+    name: Test
     runs-on: ubuntu-latest
+
+    container:
+      image: node:18
 
     services:
       selenium:
-        image: selenium/standalone-firefox:latest
-        ports:
-          - "4444:4444"
+        image: selenium/standalone-chrome
+        options: --shm-size=2gb
 
     steps:
-      # Checkout the repository code
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      # Set up Node.js environment
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: '18' # Specify your Node.js version
-
-      # Install dependencies
-      - name: Install dependencies
-        run: npm --prefix frontend install
-
-      - name: Start application
-        run: |
+          node-version: '18'
+          cache: 'npm'
+      - run: |
           npm --prefix frontend run build
           npm --prefix frontend start &
-        env:
-          PORT: 3000
-
-      - name: Wait for application to be ready
-        run: |
-          echo "Waiting for application to start..."
-          sleep 5
-
-      - name: Test application connectivity
-        run: curl -v http://localhost:3000/login
-
-      # Run Selenium tests
-      - name: Run tests
-        run: npm --prefix frontend test
+      - run: npm --prefix frontend run test
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: screenshots
+          path: screenshots/
