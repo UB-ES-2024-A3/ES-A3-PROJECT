@@ -4,7 +4,7 @@ from supabase import create_client
 from dotenv import load_dotenv
 import re
 from src.models.user_model import User
-
+import uuid
 
 # Getter client
 def get_db_client():
@@ -120,3 +120,24 @@ def authenticate(identifier: str, password: str):
     if(result.data != [] and result.data[0]['password'] == password):
         return result.data[0]['id']
     return False
+
+def search_users_by_partial_username_crud(username: str, max_num: int):
+    try:
+        supabase = get_db_client()
+        result = supabase.rpc(
+            "search_similar_users",
+            {
+                "search_term": username,
+                "limit_num": max_num
+            }
+        ).execute()
+        users = result.data
+        return [
+            {
+                "username": user["username"],
+                "user_id": uuid.UUID(user["user_id"])
+            } for user in users
+        ]
+    except Exception as e:
+        print(f"Error fetching users from the database: {e}")
+        raise HTTPException(status_code=500, detail="Error fetching users from the database")

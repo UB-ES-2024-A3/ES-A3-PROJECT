@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from typing import List
+from typing import List, Optional
 from src.models.user_model import User
 from src.controllers.user_controller import UserController
 
@@ -90,3 +90,16 @@ async def get_username_by_id(user_id: str) -> str:
         raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error searching user by id")
+
+@router.get("/users/search")
+async def search_users(username: str, max_num: Optional[int] = None):
+    try:
+        # Call the controller method
+        users = userController.search_users_by_partial_username(username, max_num)
+        if not users:  # This will check if the list is empty
+            return []
+        return users
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error fetching users")
