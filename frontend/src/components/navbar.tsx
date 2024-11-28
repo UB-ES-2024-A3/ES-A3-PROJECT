@@ -13,6 +13,7 @@ interface NavBarProps {
 const NavBar: React.FC<NavBarProps> = ({ children }) => {
   const router = useRouter();
   const [tabSelected, setTabSelected] = useState("profile");
+  const [logoSource, setLogoSource] = useState("/rebook_logo_without_name.png");
 
   // Updates the tab selected when the user clicks on a new tab
   const handleNavigation = (tab: string) => {
@@ -23,7 +24,7 @@ const NavBar: React.FC<NavBarProps> = ({ children }) => {
   const buttons = [
     {
       name: 'timeline',
-      icon: <Image src='/rebook_logo_without_name.png' alt='Timeline' width={50} height={50} />,
+      icon: <Image src={logoSource} alt='Timeline' width={50} height={50} />,
     },
     {
       name: 'profile',
@@ -35,8 +36,10 @@ const NavBar: React.FC<NavBarProps> = ({ children }) => {
     const currentPath = router.pathname;
     if (currentPath.startsWith("/timeline")) {
       setTabSelected('timeline');
+      setLogoSource('/rebook_logo_without_name.png');
     } else if (currentPath.startsWith("/profile")) {
       setTabSelected('profile');
+      setLogoSource('/rebook_logo_without_name_gray.png');
     }
   }, [router.pathname]);
 
