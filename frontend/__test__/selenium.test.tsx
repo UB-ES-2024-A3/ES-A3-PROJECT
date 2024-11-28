@@ -1,4 +1,5 @@
 import { Builder, By, until, WebDriver } from "selenium-webdriver";
+import chrome from 'selenium-webdriver/chrome';
 
 // Increase Jest's default timeout to handle Selenium operations
 jest.setTimeout(30000);
@@ -8,10 +9,18 @@ describe("Button Text Test", () => {
 
   beforeAll(async () => {
     // Microsoft uses a longer name for Edge
-    let browser = 'chrome';
+    const options = new chrome.Options();
+    options.addArguments(
+        '--headless',          // Run in headless mode
+        '--no-sandbox',        // Required for some CI environments
+        '--disable-dev-shm-usage', // Prevent crashes in resource-limited environments
+        '--disable-gpu',       // Disable GPU rendering for better compatibility
+        '--window-size=1920,1080' // Set window size for consistent viewport
+  );
+
     const host = 'selenium';
     driver = await new Builder()
-        .forBrowser(browser)
+        .forBrowser('chrome').setChromeOptions(options)
         .build()
   });
 
