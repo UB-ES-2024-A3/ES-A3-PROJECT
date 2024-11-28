@@ -91,9 +91,9 @@ class UserController:
             )
         
         # Validate max_num is within the allowed range
-        if not (1 <= max_num <= 15):
+        if (max_num !=  None and max_num <= 0):
             raise HTTPException(
-                status_code=400, detail="max_num must be between 1 and 15."
+                status_code=400, detail="max_num must be a positive number."
             )
         
         # Delegate to the CRUD layer
