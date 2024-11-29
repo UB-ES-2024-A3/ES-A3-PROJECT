@@ -70,13 +70,13 @@ def get_book_matches_by_title(partial_title: str, max_num: Optional[int] = None)
             text = re.sub(r"[^\w\s]", "", text)
             return text.lower().strip()
         
-        normalized_partial_title = normalize_text(partial_title)
+        normalized_partial_title = normalize_text(partial_title)  
         rpc_params = {
             "search_term": normalized_partial_title,
-            "limit_num": max_num
+            "limit_num": max_num or 10
         }
         result = supabase.rpc("search_books_by_title", rpc_params).execute()
-        
+        print(result)
         books = []
         if result.data and isinstance(result.data, list):
             for book_data in result.data:
