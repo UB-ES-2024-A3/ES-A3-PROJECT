@@ -1,4 +1,5 @@
-import { renderStars } from "./stars_rating"
+import { useRouter } from "next/router";
+import ProfileReviewCard from "./profile_review_card";
 
 export interface TimelineReviewProps {
     userId: string,
@@ -13,11 +14,17 @@ export interface TimelineReviewProps {
 }
 
 export default function TimelineReviewCard({ userId, username, bookId, bookTitle, author, rating, comment, date, time }: TimelineReviewProps) {
+    const router = useRouter();
+    const handleClickUsername = () => {
+        // TODO: should redirect to user page
+        router.push("/users/" + userId);
+    }
+
     return (
         <div style={{ height: "fit-content", minWidth: "100%", margin: "0 auto", padding: "24px", borderRadius: "8px", backgroundColor: "white"}}>
             <div style={{ display: "flex", alignItems: "center" }}>
                 <div style={{ flexGrow: 1 }}>
-                    <button className="secondaryButton" style={{ fontWeight: "bold" }}>
+                    <button className="secondaryButton" style={{ fontWeight: "bold" }} onClick={handleClickUsername}>
                         {username}
                     </button>
                 </div>
@@ -28,7 +35,15 @@ export default function TimelineReviewCard({ userId, username, bookId, bookTitle
                     </div>
                 )}
             </div>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "solid black 1px", padding: "16px"}}>
+            <hr />
+            <ProfileReviewCard 
+                book_id={bookId}
+                bookTitle={bookTitle}
+                author={author}
+                rating={rating}
+                review={comment}
+            />
+            {/* <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "solid black 1px", padding: "16px"}}>
                 <div>
                     <button className="secondaryButton" style={{ fontSize: "1.25rem", fontWeight: "bold", display: "contents" }} >
                         {bookTitle}
@@ -44,7 +59,7 @@ export default function TimelineReviewCard({ userId, username, bookId, bookTitle
                 <p style={{ lineHeight: "1.625", marginTop: "16px" }}>
                     {comment}
                 </p>
-            )}
+            )} */}
             
         </div>
     );
