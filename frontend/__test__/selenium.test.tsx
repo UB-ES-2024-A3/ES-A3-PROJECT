@@ -15,7 +15,6 @@ describe("Button Text Test", () => {
         '--no-sandbox',        // Required for some CI environments
         '--disable-dev-shm-usage', // Prevent crashes in resource-limited environments
         '--disable-gpu',       // Disable GPU rendering for better compatibility
-        '--window-size=1920,1080' // Set window size for consistent viewport
   );
 
     const host = 'selenium';
@@ -33,10 +32,10 @@ describe("Button Text Test", () => {
 
   test("checks if the button contains the correct text", async () => {
     // Navigate to your page on localhost:3000
-    await driver.get("http://127.0.0.1:3000/login");
+    await driver.get("https://www.boe.es/");
 
     // Find the button element by its ID
-    const button = await driver.findElement(By.id("login_go_to_register"));
+    const button = await driver.findElement(By.className("botonBuscar"));
 
     // Wait until the button is visible and accessible
     await driver.wait(until.elementIsVisible(button), 5000);
@@ -45,6 +44,6 @@ describe("Button Text Test", () => {
     const buttonText = await button.getText();
 
     // Assert that the button's text is what you expect
-    expect(buttonText).toBe("Don't have an account? Register");
+    expect(buttonText).toBe("Buscar");
   });
 });
