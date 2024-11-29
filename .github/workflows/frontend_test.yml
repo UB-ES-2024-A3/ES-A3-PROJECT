@@ -12,19 +12,13 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     services:
       selenium:
         image: selenium/standalone-chrome
 
     steps:
-      - name: Install Chrome
-        run: sudo apt-get install -y google-chrome-stable
-
-      - name: Install ChromeDriver
-        run: sudo apt-get install -y chromedriver
-
       # Checkout the repository code
       - name: Checkout code
         uses: actions/checkout@v3
