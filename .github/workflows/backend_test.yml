@@ -1,6 +1,9 @@
 name: Run backend tests
 
 on:
+  push:
+    branches:
+      - 15_3_frontend_tests
   pull_request:
     types:
       - opened
