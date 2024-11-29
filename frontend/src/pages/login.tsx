@@ -88,7 +88,7 @@ const LoginPage: React.FC = () => {
           <InputField label={"Username or email:"} type={"text"} id={"username"} value={username} onChange={setUsername} error={errors.username}/>
           <InputField label={"Password:"} type={"password"} id={"password"} value={password} onChange={setPassword} error={errors.password}/>
           <div style={{ margin: '10px 5px'}}>
-            <button type="submit" style={{ width: '100%'}}>Login</button><br />
+            <button type="submit" id="login_button" style={{ width: '100%'}}>Login</button><br />
           </div>
         </form>
         {errors.credentials && (

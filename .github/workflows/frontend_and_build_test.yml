@@ -50,4 +50,7 @@ jobs:
         run: curl -v http://localhost:3000/login
 
       - name: Run tests
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
         run: npm --prefix frontend test

@@ -1,7 +1,7 @@
 module.exports = {
     preset: 'ts-jest', // Use ts-jest for TypeScript
     testEnvironment: 'jest-environment-jsdom', // Use jsdom for testing React components
-    setupFilesAfterEnv: ['<rootDir>/jest.setup.js'], // Set up testing-library
+    setupFilesAfterEnv: ['<rootDir>/jest.setup.js', 'dotenv/config'], // Set up testing-library
     transform: {
       '^.+\\.tsx?$': 'ts-jest', // Use ts-jest for .ts and .tsx files
     },
