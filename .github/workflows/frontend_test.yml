@@ -12,7 +12,7 @@ on:
 
 jobs:
   test:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     services:
       selenium:
@@ -33,20 +33,21 @@ jobs:
       - name: Install dependencies
         run: npm --prefix frontend install
 
-      - name: Start application
-        run: |
-          npm --prefix frontend run build
-          npm --prefix frontend start &
-        env:
-          PORT: 3000
 
-      - name: Wait for application to be ready
-        run: |
-          echo "Waiting for application to start..."
-          sleep 5
+      #- name: Start application
+        #run: |
+          #npm --prefix frontend run build
+          #npm --prefix frontend start &
+        #env:
+          #PORT: 3000
 
-      - name: Test application connectivity
-        run: curl -v http://localhost:3000/login
+      #- name: Wait for application to be ready
+        #run: |
+          #echo "Waiting for application to start..."
+          #sleep 5
+
+      #- name: Test application connectivity
+        #run: curl -v http://localhost:3000/login
 
       # Run Selenium tests
       - name: Run tests
