@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import SearchBar from '@/components/searchbar';
-import ListSearch from '@/components/list_search';
 import { useTimelineContext } from '@/contexts/TimelineContext';
 import NavBar from '@/components/navbar';
 

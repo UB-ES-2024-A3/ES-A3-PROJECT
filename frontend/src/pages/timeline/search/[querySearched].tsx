@@ -118,7 +118,9 @@ const ListSearch: React.FC<ListSearchProps> = () => {
               {userResults.length > 0? (
                 <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
                   {userResults.map((user) => (
-                    <UserBar key={user.id} id={user.id} username={user.username}/>
+                    <div key={user.id} style={{margin: '3px'}}>
+                      <UserBar key={user.id} id={user.id} username={user.username}/>
+                    </div>
                   ))}
                 </div>
               ):(
