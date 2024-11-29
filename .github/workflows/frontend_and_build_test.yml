@@ -33,7 +33,7 @@ jobs:
 
       - name: Build frontend Docker Image
         run: |
-          docker build -t frontend:${{ github.sha }} -f frontend/Dockerfile --build-arg API_DB_URL=http://localhost:8000 frontend
+          docker build -t frontend -f frontend/Dockerfile --build-arg API_DB_URL=http://localhost:8000 frontend
           docker run -p 3000:3000 frontend &
 
       # Set up Node.js environment
