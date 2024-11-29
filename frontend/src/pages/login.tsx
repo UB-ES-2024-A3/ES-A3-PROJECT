@@ -95,8 +95,8 @@ const LoginPage: React.FC = () => {
           <p className="mt-1 text-sm text-red-500">{errors.credentials}</p>
         )}
         <div style={{ margin: 5}}>
-          <button style={{ padding: 0, width: '100%' }} className="secondaryButton" onClick={handleRegister}>
-            <u>Don&apos;t have an account yet? Register.</u>
+          <button style={{ padding: 0, width: '100%' }} className="secondaryButton" id="login_go_to_register" onClick={handleRegister}>
+            <u>Don&apos;t have an account? Register</u>
           </button>
         </div>
       </div>
