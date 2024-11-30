@@ -1,18 +1,20 @@
 import React from 'react';
-import { Pen } from 'lucide-react'
 
 
-interface ProfileNavBarProps {
+interface ListSearchNavBarProps {
   activeTab: string;
   setActiveTab: (id: string) => void;
 }
 
-const ProfileNavBar: React.FC<ProfileNavBarProps> = ({ activeTab, setActiveTab }) => {
+const ListSearchNavBar: React.FC<ListSearchNavBarProps> = ({ activeTab, setActiveTab }) => {
     const tabs = [
         {
-        id: 'reviews',
-        label: 'REVIEWS',
-        icon: <Pen className="w-4 h-4" />
+        id: 'books',
+        label: 'BOOKS',
+        },
+        {
+        id: 'users',
+        label: 'USERS',
         }
     ]
     
@@ -20,11 +22,10 @@ const ProfileNavBar: React.FC<ProfileNavBarProps> = ({ activeTab, setActiveTab }
     <div style={{ display: 'flex', justifyContent: 'center' }}>
       {tabs.map((tab) => (
         <button
-          className={`navigation ${activeTab === tab.id ? 'active' : ''}`}
+            className={`navigation ${activeTab === tab.id ? 'active' : ''}`}
           key={tab.id}
           onClick={() => setActiveTab(tab.id)}
         >
-          {tab.icon}
           {tab.label}
         </button>
       ))}
@@ -32,4 +33,4 @@ const ProfileNavBar: React.FC<ProfileNavBarProps> = ({ activeTab, setActiveTab }
   );
 };
 
-export default ProfileNavBar;
+export default ListSearchNavBar;
