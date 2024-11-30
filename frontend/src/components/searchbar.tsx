@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import BookBar from './bookbar';
+import UserBar from './userbar';
 import SearchService from '@/services/searchService';
 import { useTimelineContext } from '@/contexts/TimelineContext';
 import { useRouter } from 'next/router';
@@ -15,17 +16,22 @@ interface Book {
   title: string;
   author: string;
 }
+interface User {
+  id: string;
+  username: string;
+}
 
 const SearchBar: React.FC<SearchBarProps> = ({ children, placeholder, buttonLabel }) => {
   const router = useRouter();
   const {setTimelineState} = useTimelineContext();
   const [query, setQuery] = useState('');
-  const num_results = 10;
-  const [searchResults, setSearchResults] = useState<Book[]>([]);
+  const num_results = 3;
+  const [bookResults, setBookResults] = useState<Book[]>([]);
+  const [userResults, setUserResults] = useState<User[]>([]);
 
   const handleSearch = () => {
     if (query.trim()) {
-      setSearchResults([]);
+      setBookResults([]);
       setTimelineState({page: "search", data: query});
       router.push("/timeline");
       setQuery('');
@@ -33,7 +39,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ children, placeholder, buttonLabe
   };
 
   const handleOpenBook = (id: string) => {
-    setSearchResults([]);
+    setBookResults([]);
     setTimelineState({page: "book", data: id});
     router.push("/timeline/book/" + id);
     setQuery('');
@@ -42,24 +48,37 @@ const SearchBar: React.FC<SearchBarProps> = ({ children, placeholder, buttonLabe
   useEffect(() => {
     if (query.trim()) {
       const debounceTimeout = setTimeout(() => {
-        SearchService.searchRequest(query, num_results)
+        SearchService.bookRequest(query, num_results)
           .then(results => {
             const books = results.map((book: Book) => ({
               id: book.id,
               title: book.title,
               author: book.author,
             }));
-            setSearchResults(books);
+            setBookResults(books);
           })
           .catch(errorMsgs => {
             console.log(errorMsgs);
-            setSearchResults([]);
+            setBookResults([]);
+          });
+        SearchService.userRequest(query, num_results)
+          .then(results => {
+            const users = results.map((user: User) => ({
+              id: user.id,
+              username: user.username
+            }));
+            setUserResults(users);
+          })
+          .catch(errorMsgs => {
+            console.log(errorMsgs);
+            setUserResults([]);
           });
       }, 300); // 300 ms debounce
 
       return () => clearTimeout(debounceTimeout);
     } else {
-      setSearchResults([]);
+      setBookResults([]);
+      setUserResults([]);
     }
   }, [query]);
 
@@ -105,16 +124,33 @@ const SearchBar: React.FC<SearchBarProps> = ({ children, placeholder, buttonLabe
             </button>
           </div>
           <div style={{ width: '45%', marginTop: '0px', overflowY: 'scroll', display: 'flex', flexDirection: 'column', position: 'absolute', maxHeight: '80vh'}}>
-            {searchResults.length > 0 ? 
-            (<div style={{border: '2px solid #ccc'}}> 
-              {searchResults.map((book) => (
-                <BookBar key={book.id} id={book.id} title={book.title} author={book.author} showRating={false} rating={5} handleOpenBook={handleOpenBook}/>
-              ))}
-            </div>
-            ):(
-            <div> 
-            </div>
-            )}
+            <>
+              {bookResults.length > 0 ? 
+              (<div style = {{border: '2px solid #ccc', borderRadius: '3px'}}>
+                <div style={{textAlign: 'left', backgroundColor: '#ccc', color: 'black', paddingLeft: '7px'}}> Books </div>
+                <div style={{}}> 
+                {bookResults.map((book) => (
+                  <BookBar key={book.id} id={book.id} title={book.title} author={book.author} showRating={false} rating={5} handleOpenBook={handleOpenBook}/>
+                ))}
+                </div>
+              </div>
+              ):(<> </>)
+              }
+            </>
+            <>
+              {userResults.length > 0? 
+              (<>
+                <div style={{textAlign: 'left', backgroundColor: '#ccc', color: 'black', paddingLeft: '7px'}}> Users </div>
+                <div style={{}}> 
+                {userResults.map((user) => (
+                  <UserBar key={user.id} id={user.id} username={user.username}/>
+                ))}
+                </div>
+              </>
+              ):(<></>)
+              }
+            </>
+            
             
           </div>
         </div>
