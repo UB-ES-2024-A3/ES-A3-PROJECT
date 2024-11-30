@@ -13,7 +13,7 @@ describe("Button Text Test", () => {
   supabaseURL ??= "not_found";
   supabaseKey ??= "not_found";
   expect(supabaseURL).not.toBe("not_found")
-  expect(supabaseURL).not.toBe("not_found")
+  expect(supabaseKey).not.toBe("not_found")
   const supabase = createClient(supabaseURL, supabaseKey);
 
   let baseUrl = "http://localhost:3000/"
