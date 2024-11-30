@@ -33,7 +33,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ children, placeholder, buttonLabe
     if (query.trim()) {
       setBookResults([]);
       setTimelineState({page: "search", data: query});
-      router.push("/timeline");
+      router.push("/timeline/search/" + query);
       setQuery('');
     }
   };

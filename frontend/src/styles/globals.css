@@ -38,6 +38,27 @@
     background-color: white;
   }
 
-  .profileNavigation{
-    background-color: var(--primary-beige)
+  .navigation {
+    background-color: var(--primary-beige);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 48px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    border-radius: 0;
+    color: gray;
   }
+  
+  .navigation.active {
+    color: black;
+    font-weight: bold;
+    border-top: 2px solid black;
+    margin-top: -1px;
+  }
+  
+  .navigation:hover {
+    color: black;
+  }
+  
