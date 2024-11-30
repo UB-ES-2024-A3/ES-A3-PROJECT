@@ -99,7 +99,7 @@ def test_follow_user_valid_id(client: TestClient):
     created_user_1 = crud.user.create_user(user1)
     created_user_2 = crud.user.create_user(user2)
 
-    response = client.get(f"/users/follow/{created_user_1.id}/{created_user_2.id}")
+    response = client.post(f"/users/follow/{created_user_1.id}/{created_user_2.id}")
     response_data = response.json()
 
     updated_user_1 = crud.user.search_by_id(user1.id)

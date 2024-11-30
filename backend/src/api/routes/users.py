@@ -94,7 +94,7 @@ async def get_user_data_by_id(user_id: str) -> dict:
 
 
 # Endpoint to follow a user 
-@router.get("/users/follow/{user_id}/{user_to_follow_id}", response_model = Follower)
+@router.post("/users/follow/{user_id}/{user_to_follow_id}", response_model = Follower)
 async def follow_user(user_id: str, user_to_follow_id: str):
     try:
         follower = userController.follow_user(user_id, user_to_follow_id)
