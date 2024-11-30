@@ -57,6 +57,7 @@ const NavBar: React.FC<NavBarProps> = ({ children }) => {
                 icon={button.icon}
                 active={tabSelected === button.name}
                 onClick={() => handleNavigation(button.name)}
+                data-testid={`menuitem-${button.name}`}
                 rootStyles={{
                   color: tabSelected === button.name ? 'var(--icon-selected)' : 'var(--icon-normal)',
                   justifyContent: 'center',

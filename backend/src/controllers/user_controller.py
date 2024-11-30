@@ -83,3 +83,18 @@ class UserController:
             return True
         except ValueError:
             return False
+    def search_users_by_partial_username(self, username: str, max_num: int):
+        # Validate username length
+        if len(username) < 1 or len(username) > 15:
+            raise HTTPException(
+                status_code=400, detail="Username must be between 1 and 15 characters."
+            )
+        
+        # Validate max_num is within the allowed range
+        if (max_num !=  None and max_num <= 0):
+            raise HTTPException(
+                status_code=400, detail="max_num must be a positive number."
+            )
+        
+        # Delegate to the CRUD layer
+        return search_users_by_partial_username_crud(username, max_num)
