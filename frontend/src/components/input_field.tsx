@@ -25,7 +25,7 @@ interface InputFieldProps {
           style={{ width: '100%' }}
         />
         {error && (
-          <p className="mt-1 text-sm text-red-500">{error}</p>
+          <p className="mt-1 text-sm text-red-500" id={id+'-error'}>{error}</p>
         )}
       </div>
     );

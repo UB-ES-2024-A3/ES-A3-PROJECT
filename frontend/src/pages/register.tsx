@@ -76,7 +76,6 @@ const RegisterPage: React.FC = () => {
     return !emailError && !usernameError && !passwordError && !repeatedPasswordError; 
   };
 
-  // Fakes a register
   const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); // Prevents the page from rerendering when the form is submitted
     if (!validateInputs())
@@ -114,8 +113,6 @@ const RegisterPage: React.FC = () => {
     router.push('/login');
   };
 
-
-
   return (
     <>
       <Head>
@@ -142,11 +139,11 @@ const RegisterPage: React.FC = () => {
             <InputField label={"Password:"} type={"password"} id={"password"} value={password} onChange={setPassword} error={errors.password}/>
             <InputField label={"Password (repeat):"} type={"password"} id={"password2"} value={repeatedPassword} onChange={setRepeatedPassword} error={errors.repeatedPassword}/>
             <div style={{ margin: '10px 5px'}}>
-              <button type="submit" style={{ width: '100%'}}>Register</button><br />
+              <button type="submit" id="register_button" style={{ width: '100%'}}>Register</button><br />
             </div>
           </form>
           <div style={{ margin: 5}}>
-            <button style={{ padding: 0, width: '100%' }} className="secondaryButton" onClick={handleLogin}>
+            <button style={{ padding: 0, width: '100%' }}  id="register_go_to_login"  className="secondaryButton" onClick={handleLogin}>
               <u>Already have an account? Login</u>
             </button>
           </div>
