@@ -43,7 +43,7 @@ const UserProfile = () => {
             console.log(except);
             setReviews([]);
         });
-        UserService.getUsername(String(userId))
+        UserService.getUsername(userId)
         .then(userName => {
             setUsername(userName);
         })
