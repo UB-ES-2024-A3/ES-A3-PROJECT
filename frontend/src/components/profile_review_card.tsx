@@ -24,7 +24,7 @@ export default function ProfileReviewCard({ bookTitle, author, rating, review, d
     <div style={{ height: "fit-content", minWidth: "100%", margin: "0 auto", padding: "24px", borderRadius: "8px", backgroundColor: "white"}}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center"}}>
         <div>
-          <button className="secondaryButton" style={{ fontSize: "1.25rem", fontWeight: "bold", display: "contents" }} onClick={handleClickTitle}>
+          <button className="secondaryButton titleButton" style={{ fontSize: "1.25rem", fontWeight: "bold", display: "contents" }} onClick={handleClickTitle}>
             {bookTitle}
           </button>
           <p style={{ color: "grey", marginTop: "4px" }}>{author}</p>
