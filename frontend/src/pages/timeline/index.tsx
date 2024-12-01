@@ -24,7 +24,7 @@ const Timeline = () => {
 
     return (
     <NavBar>
-        <SearchBar placeholder="Search..." buttonLabel="Search">
+        <SearchBar placeholder="Search..." buttonLabel="Search" id='searchbar'>
             <div style={{margin: '5px', textAlign: 'center', justifyContent: 'center', height: '80vh', display: 'flex', flexDirection: 'column'}}> 
                 <h2 style={{fontSize: '2em', color: 'grey'}}>Find a book!</h2>
                 <h3 style={{color: 'grey'}}>Search you favourite book to add a review.</h3>
