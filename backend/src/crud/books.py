@@ -107,9 +107,7 @@ def get_all_titles():
     except Exception as e:
         print(f"Error al obtener los títulos de los libros: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-# ENDREGION
 
-# REGION 6.1 search by id
 # Method to get a book by ID
 def get_book_by_id(book_id: str):
     supabase = get_db_client()
@@ -128,7 +126,6 @@ def get_book_by_id(book_id: str):
     except Exception as e:
         print(f"Error retrieving book by id {book_id}: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-    #
     
     # Method to update book attributes
 def update_book_attributes(book_id: str, attributes: dict):

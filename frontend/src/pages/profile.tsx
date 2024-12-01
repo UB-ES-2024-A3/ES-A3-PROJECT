@@ -62,7 +62,7 @@ const Profile = () => {
             <div style={{ width: '65%', display: 'flex', flexDirection: 'column', minHeight: '100%' }}>
                 <header style={{ padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #ccc' }}>
                     <h1 style={{ fontSize: '1.2rem', fontWeight: '500' }}>{username}</h1>
-                    <button onClick={handleLogout}>Logout</button>
+                    <button id="logout_button" onClick={handleLogout}>Logout</button>
                 </header>
                 <div style={{ width: '100%', borderTop: '1px solid #bbb' }}>
                     <ProfileNavBar activeTab={activeTab} setActiveTab={setActiveTab} />
