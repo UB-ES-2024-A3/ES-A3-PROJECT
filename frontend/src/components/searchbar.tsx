@@ -9,6 +9,7 @@ interface SearchBarProps {
   children: React.ReactNode,
   placeholder?: string;
   buttonLabel?: string;
+  id: string;
 }
 
 interface Book {
@@ -21,7 +22,7 @@ interface User {
   username: string;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ children, placeholder, buttonLabel }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ children, placeholder, buttonLabel, id }) => {
   const router = useRouter();
   const {setTimelineState} = useTimelineContext();
   const [query, setQuery] = useState('');
@@ -95,10 +96,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ children, placeholder, buttonLabe
   return (
     <div style={{ display: 'flex', padding: '20px' , flexDirection: 'column', alignItems: 'center', height: '100vh', width: "100%"}}>
       <div style={{width: '100%'}}>
-        <div style={{ width: '50%', margin: '0 auto'}}>
+        <div id={id} style={{ width: '50%', margin: '0 auto'}}>
           <div style={{ display: 'flex' , width: "100%"}}>
             <input
               type="text"
+              id={id + '-input'}
               placeholder={placeholder}
               value={query}
               onChange={handleInputChange}
@@ -113,6 +115,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ children, placeholder, buttonLabe
               }}
             />
             <button
+              id={id + '-button'}
               onClick={handleSearch}
               style={{
                 width: '10%', 
@@ -123,7 +126,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ children, placeholder, buttonLabe
               {buttonLabel}
             </button>
           </div>
-          <div style={{ width: '45%', marginTop: '0px', overflowY: 'scroll', display: 'flex', flexDirection: 'column', position: 'absolute', maxHeight: '80vh'}}>
+          <div id={id + '-results'} style={{ width: '45%', marginTop: '0px', overflowY: 'scroll', display: 'flex', flexDirection: 'column', position: 'absolute', maxHeight: '80vh'}}>
             <>
               {bookResults.length > 0 ? 
               (<div style = {{border: '2px solid #ccc', borderRadius: '3px'}}>

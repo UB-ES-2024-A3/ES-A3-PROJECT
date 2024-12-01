@@ -11,7 +11,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     const authStatus = localStorage.getItem('isAuthenticated');
     if (authStatus === 'true') {
-      router.push('/profile');
+      if (router.pathname.endsWith("/login") || router.pathname.endsWith("/register"))
+        router.push('/profile');
     } else {
       router.push('/login');
     }
