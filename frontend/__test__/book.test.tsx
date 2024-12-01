@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
-import { createWebDriver, bookTest, loginAsUserTest } from "./test.utils";
+import { createWebDriver, loginAsUserTest } from "./test.utils";
 import { By } from "selenium-webdriver";
+import { log } from "console";
 
 jest.setTimeout(30000);
 
@@ -20,6 +21,24 @@ const userTest = {
     password: "fr_password",
   };
 
+const bookTest = {
+    id: "frontend-test-book",
+    title: "Frontend Test Book",
+    author: "Frontend, Rebook",
+    description: "Test book for the frontend tests.",
+    genres: "Test"
+};
+
+const reviewTest = {
+    id: "frontend-book-review-test",
+    user_id: "user_frontend_test_books",
+    book_id: 'frontend-test-book',
+    date: '15/11/2024',
+    time: '11:00:00',
+    stars: 4,
+    comment: 'I liked it'
+};
+
 beforeAll(async () => {
     await supabase
     .from("users")
@@ -28,9 +47,18 @@ beforeAll(async () => {
     await supabase
     .from('books')
     .insert(bookTest);
+
+    await supabase
+    .from('reviews')
+    .insert(reviewTest);
 });
 
 afterAll(async () => {
+    await supabase
+    .from('reviews')
+    .delete()
+    .eq('id', reviewTest.id);
+
     await supabase
     .from("users")
     .delete()
@@ -42,14 +70,14 @@ afterAll(async () => {
     .eq('id', bookTest.id);
 });
 
+const timelineUrl = baseUrl + "timeline";
+const bookPageUrl = timelineUrl + "/book/" + bookTest.id;
 describe("Links to book page", () => {
-    const timelineUrl = baseUrl + "timeline";
 
     test("Link from searchbar results", async () => {
-        const bookPageUrl = timelineUrl + "/book/" + bookTest.id;
         const driver = await createWebDriver();
         try {
-            await loginAsUserTest(driver);
+            await loginAsUserTest(driver, userTest);
             await driver.get(timelineUrl);
             // Search the test book
             await driver.findElement(By.id("searchbar-input"))
@@ -58,15 +86,12 @@ describe("Links to book page", () => {
                     searchbar.sendKeys(bookTest.title);
                 });
             // Container of the search results
-            const resultsContainer = (await driver.findElement(By.id("searchbar-results"))
-                .then(element => {
-                    return element.findElements(By.css("div"));
-                }))[0];
+            const resultsContainer = await driver.findElement(By.id("searchbar-results"));
             // Wait for searchbar debounce
             await driver.wait(async () => {
                 let results = await resultsContainer.findElements(By.css("button"));
                 return results.length > 0;
-            }, 1000);
+            }, 5000);
             // Click the result under the searchbar
             await driver.findElement(By.id(bookTest.id))
                 .then(button => {
@@ -84,12 +109,77 @@ describe("Links to book page", () => {
         }
     });
     
-    test("Link from search results", () => {
-        
+    test("Link from search results", async () => {
+        const driver = await createWebDriver();
+        try {
+            await loginAsUserTest(driver, userTest);
+            await driver.get(timelineUrl);
+            // Search the test book
+            await driver.findElement(By.id("searchbar-input"))
+                .then(searchbar => {
+                    searchbar.clear();
+                    searchbar.sendKeys(bookTest.title);
+                });
+            await driver.findElement(By.id("searchbar-button"))
+                .then(button => {
+                    button.click();
+                });
+            // Wait for search result page
+            await driver.wait(async () => {
+                let currentUrl = await driver.getCurrentUrl();
+                return currentUrl !== timelineUrl;
+            }, 10000);
+            let searchUrl = await driver.getCurrentUrl();
+            await driver.findElement(By.id('search-books-tab'))
+                .then(button => {
+                    button.click();
+                });
+            await driver.wait(async() => {
+                const buttons = await driver.findElements(By.id(bookTest.id));
+                return buttons.length > 0;
+            }, 5000);
+            // Click the result
+            await driver.findElement(By.id(bookTest.id))
+                .then(button => {
+                    button.click();
+                });
+            await driver.wait(async () => {
+                let currentUrl = await driver.getCurrentUrl();
+                return currentUrl !== searchUrl;
+            }, 10000);
+            let currentUrl = await driver.getCurrentUrl();
+            expect(currentUrl).toBe(bookPageUrl);
+        }
+        finally {
+            await driver.quit();
+        }
     });
     
-    test("Link from profile reviews", () => {
-        
+    test("Link from profile reviews", async () => {
+        const driver = await createWebDriver();
+        try {
+            await loginAsUserTest(driver, userTest);
+            await driver.get(baseUrl + 'profile');
+            await driver.wait(async () => {
+                return (
+                    await driver.findElements(By.className("secondaryButton titleButton"))
+                ).length > 0;
+            }, 5000);
+            // There is only one review
+            await driver.findElement(By.className("secondaryButton titleButton"))
+                .then(button => {
+                    button.click();
+                });
+            await driver.wait(async () => {
+                let currentUrl = await driver.getCurrentUrl();
+                return currentUrl !== baseUrl + "profile";
+            }, 10000);
+            let currentUrl = await driver.getCurrentUrl();
+            expect(currentUrl).toBe(bookPageUrl);
+        }
+        finally {
+            await driver.quit();
+        }
     });    
 });
 

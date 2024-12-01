@@ -56,7 +56,7 @@ export const supabaseResponses = {
     deleteStatusText: "OK",
 };
 
-export const loginAsUserTest = async (driver: WebDriver) => {
+export const loginAsUserTest = async (driver: WebDriver, user: {username: string, password: string}) => {
   const loginUrl = "http://localhost:3000/login";
   // Navigate to page on localhost:3000/login
   await driver.get(loginUrl);
@@ -65,14 +65,14 @@ export const loginAsUserTest = async (driver: WebDriver) => {
   await driver.findElement(By.id("username"))
     .then(inputName => {
       inputName.clear();
-      inputName.sendKeys(userTest.username);
+      inputName.sendKeys(user.username);
     });
 
   //Input password
   await driver.findElement(By.id("password"))
     .then(inputPwd => {
       inputPwd.clear();
-      inputPwd.sendKeys(userTest.password);
+      inputPwd.sendKeys(user.password);
     });
 
   //Click login button
