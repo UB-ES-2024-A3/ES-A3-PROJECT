@@ -181,16 +181,80 @@ describe("Links to book page", () => {
 
 describe.skip("Book page content", () => {
     test("Visualization of book data", async () => {
-        
+        const driver = await createWebDriver();
+        try {
+            await loginAsUserTest(driver, userTest);
+            await driver.get(bookPageUrl);
+            
+        }
+        finally {
+            await driver.quit();
+        }
     });
     
     test("Check book reviews", async () => {
-        
+        const driver = await createWebDriver();
+        try {
+            await loginAsUserTest(driver, userTest);
+            await driver.get(bookPageUrl);
+            
+        }
+        finally {
+            await driver.quit();
+        }
     });
 });
 
-describe.skip("Review creation button", () => {
+describe("Review creation button", () => {
     test("Open the review creation pop-up", async () => {
-        
+        const driver = await createWebDriver();
+        try {
+            await loginAsUserTest(driver, userTest);
+            await driver.get(bookPageUrl);
+            await driver.findElement(By.id("add-review-btn"))
+                .then(button => {
+                    button.click();
+                });
+            await driver.sleep(500);
+            const popup = await driver.findElements(By.id("add-review-popup"))
+                .then(found => {
+                    expect(found.length).toBe(1);
+                    return found[0];
+                });
+            // Check the "done" button is disabled
+            await popup.findElement(By.id("post-review-btn"))
+                .then(button => {
+                    return button.isEnabled();
+                })
+                .then(isEnabled => {
+                    expect(isEnabled).toBeFalsy();
+                });
+            // Check the "done" button is enabled after setting a rating
+            await popup.findElement(By.id("rating-btns"))
+                .findElements(By.css("button"))
+                .then(buttons => {
+                    buttons[2].click();
+                });
+            await popup.findElement(By.id("post-review-btn"))
+                .then(button => {
+                    return button.isEnabled();
+                })
+                .then(isEnabled => {
+                    expect(isEnabled).toBeTruthy();
+                });
+            // Close popup
+            await popup.findElement(By.id("cancel-review-btn"))
+                .then(button => {
+                    button.click();
+                });
+            await driver.sleep(500);
+            await driver.findElements(By.id("add-review-popup"))
+                .then(popups => {
+                    expect(popups.length).toBe(0);
+                });
+        }
+        finally {
+            await driver.quit();
+        }
     });
 })
