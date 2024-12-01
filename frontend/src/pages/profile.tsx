@@ -66,8 +66,6 @@ const Profile = () => {
                     <button onClick={handleLogout}>Logout</button>
                 </header>
                 <ProfileContents reviews={reviews}/>
-                <button onClick={()=> router.push("/timeline/user/40f0fff2-c686-4c61-a14b-f2e285061537")}>SELF USER</button>
-                <button onClick={()=> router.push("/timeline/user/43133d55-cd75-4224-abb7-801a418bbf44")}>OTHER USER</button>
             </div>
         </div>
     </NavBar>

@@ -41,6 +41,11 @@ const ListSearch: React.FC<ListSearchProps> = () => {
       setTimelineState({page: "book", data: id});
       router.push("/timeline/book/"+ id)
     }
+    const handleOpenUser = (id: string) =>{
+      setUserResults([]);
+      setTimelineState({page: "user", data: id});
+      router.push("/timeline/user/"+ id)
+    }
     useEffect(() => {
       if (search.trim()) {
         setIsLoadingBooks(true);
@@ -119,7 +124,7 @@ const ListSearch: React.FC<ListSearchProps> = () => {
                 <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
                   {userResults.map((user) => (
                     <div key={user.id} style={{margin: '3px'}}>
-                      <UserBar key={user.id} id={user.id} username={user.username}/>
+                      <UserBar key={user.id} id={user.id} username={user.username} handleOpenUser={handleOpenUser}/>
                     </div>
                   ))}
                 </div>

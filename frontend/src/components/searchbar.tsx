@@ -17,7 +17,7 @@ interface Book {
   author: string;
 }
 interface User {
-  id: string;
+  user_id: string;
   username: string;
 }
 
@@ -45,6 +45,13 @@ const SearchBar: React.FC<SearchBarProps> = ({ children, placeholder, buttonLabe
     setQuery('');
   }
 
+  const handleOpenUser = (id: string) => {
+    setUserResults([]);
+    setTimelineState({page: "user", data: id});
+    router.push("/timeline/user/" + id);
+    setQuery('');
+  }
+
   useEffect(() => {
     if (query.trim()) {
       const debounceTimeout = setTimeout(() => {
@@ -64,7 +71,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ children, placeholder, buttonLabe
         SearchService.userRequest(query, num_results)
           .then(results => {
             const users = results.map((user: User) => ({
-              id: user.id,
+              user_id: user.user_id,
               username: user.username
             }));
             setUserResults(users);
@@ -143,7 +150,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ children, placeholder, buttonLabe
                 <div style={{textAlign: 'left', backgroundColor: '#ccc', color: 'black', paddingLeft: '7px'}}> Users </div>
                 <div style={{}}> 
                 {userResults.map((user) => (
-                  <UserBar key={user.id} id={user.id} username={user.username}/>
+                  <UserBar key={user.user_id} id={user.user_id} username={user.username} handleOpenUser={handleOpenUser}/>
                 ))}
                 </div>
               </>
