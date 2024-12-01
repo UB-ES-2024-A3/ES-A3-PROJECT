@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import ReviewService from '@/services/reviewService';
 import UserService from '@/services/userService';
 import ProfileContents from '@/components/profile_content';
-import { useTimelineContext } from '@/contexts/TimelineContext';
 
 export interface UserReviewCardProps {
     title: string,
@@ -18,9 +17,8 @@ export interface UserReviewCardProps {
 
 const UserProfile = () => {
   const [reviews, setReviews] = useState<UserReviewCardProps[]>([]);
-  const router = useRouter();
-  const {timelineState} = useTimelineContext();
-  const  userId  = timelineState.data;
+  const router = useRouter()
+  let userId = router.query.userId as string;
   const [username, setUsername] = useState('');
   const [follows, setFollows] = useState(false);
   const [followButton, setFollowButton] = useState({label: "Follow", style: ""});
@@ -33,17 +31,20 @@ const UserProfile = () => {
   }, []);
 
   useEffect(() => {
+    userId = router.query.userId as string;
+  }, [router.query.userId]);
+
+  useEffect(() => {
     if (userId && router.isReady){
         ReviewService.getUserReviews(userId)
         .then(reviewList => {
-            console.log(reviewList)
             setReviews(reviewList);
         })
         .catch(except => {
             console.log(except);
             setReviews([]);
         });
-        UserService.getUsername(String(userId))
+        UserService.getUsername(userId)
         .then(userName => {
             setUsername(userName);
         })

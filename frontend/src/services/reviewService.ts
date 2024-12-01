@@ -53,7 +53,7 @@ const ReviewService = {
         .then(response => {
             // Fetch author and title from received data.
             const reviews = response.data.map((review: { books: { author: string, title: string}, time: string }) => {
-                return {...review, author: review.books.author, title: review.books.title,  time: review.time.slice(0, 8)};
+                return {...review, author: review.books.author, title: review.books.title,  time: review.time ? review.time.slice(0, 8) : ""};
             })
             return reviews;
         })
