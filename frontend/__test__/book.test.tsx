@@ -1,7 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { createWebDriver, loginAsUserTest } from "./test.utils";
-import { By } from "selenium-webdriver";
-import { log } from "console";
+import { By, WebElement } from "selenium-webdriver";
 
 jest.setTimeout(30000);
 
@@ -33,7 +32,7 @@ const reviewTest = {
     id: "frontend-book-review-test",
     user_id: "user_frontend_test_books",
     book_id: 'frontend-test-book',
-    date: '15/11/2024',
+    date: '2024-11-30',
     time: '11:00:00',
     stars: 4,
     comment: 'I liked it'
@@ -160,20 +159,17 @@ describe("Links to book page", () => {
         try {
             await loginAsUserTest(driver, userTest);
             await driver.get(baseUrl + 'profile');
+            let reviewList: WebElement[] = [];
             await driver.wait(async () => {
-                return (
-                    await driver.findElements(By.className("secondaryButton titleButton"))
-                ).length > 0;
-            }, 5000);
+                reviewList = await driver.findElements(By.className("titleButton"));
+                return reviewList.length > 0;
+            }, 5000, 'Could not load reviews');
             // There is only one review
-            await driver.findElement(By.className("secondaryButton titleButton"))
-                .then(button => {
-                    button.click();
-                });
+            await reviewList[0].click();
             await driver.wait(async () => {
                 let currentUrl = await driver.getCurrentUrl();
                 return currentUrl !== baseUrl + "profile";
-            }, 10000);
+            }, 10000, 'Does not route to book page');
             let currentUrl = await driver.getCurrentUrl();
             expect(currentUrl).toBe(bookPageUrl);
         }
@@ -184,17 +180,17 @@ describe("Links to book page", () => {
 });
 
 describe.skip("Book page content", () => {
-    test("Visualization of book data", () => {
+    test("Visualization of book data", async () => {
         
     });
     
-    test("Check book reviews", () => {
+    test("Check book reviews", async () => {
         
     });
 });
 
 describe.skip("Review creation button", () => {
-    test("Open the review creation pop-up", () => {
+    test("Open the review creation pop-up", async () => {
         
     });
 })
