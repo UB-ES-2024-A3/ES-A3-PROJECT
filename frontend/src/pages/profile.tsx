@@ -64,7 +64,7 @@ const Profile = () => {
                     <h1 style={{ fontSize: '1.2rem', fontWeight: '500' }}>{username}</h1>
                     <button id="logout_button" onClick={handleLogout}>Logout</button>
                 </header>
-                <div style={{ width: '100%', borderTop: '1px solid #ddd' }}>
+                <div style={{ width: '100%', borderTop: '1px solid #bbb' }}>
                     <ProfileNavBar activeTab={activeTab} setActiveTab={setActiveTab} />
                 </div>
                 <main style={{ flex: 1, padding: '16px' }}>
