@@ -207,7 +207,7 @@ describe("Book page content", () => {
                 let currentUrl = await driver.getCurrentUrl();
                 return currentUrl !== timelineUrl;
             }, 10000, 'Does not route to book page');
-            await driver.sleep(5000);
+            await driver.sleep(1000);
             await driver.findElement(By.id("book-title"))
                 .getText()
                 .then(title => {
@@ -242,8 +242,41 @@ describe("Book page content", () => {
         const driver = await createWebDriver();
         try {
             await loginAsUserTest(driver, userTest);
-            await driver.get(bookPageUrl);
-            
+            await driver.get(timelineUrl);
+            // Search the test book
+            await driver.findElement(By.id("searchbar-input"))
+                .then(searchbar => {
+                    searchbar.clear();
+                    searchbar.sendKeys(bookTest.title);
+                });
+                const resultsContainer = await driver.findElement(By.id("searchbar-results"));
+                // Wait for searchbar debounce
+                await driver.wait(async () => {
+                    let results = await resultsContainer.findElements(By.css("button"));
+                    return results.length > 0;
+                }, 5000, 'Debounce timeout');
+                // Click the result under the searchbar
+                await driver.findElement(By.id(bookTest.id))
+                    .then(button => {
+                        button.click();
+                    });
+                // Wait for search result page
+            await driver.wait(async () => {
+                let currentUrl = await driver.getCurrentUrl();
+                return currentUrl !== timelineUrl;
+            }, 10000, 'Does not route to book page');
+            await driver.sleep(2000);
+            const review = await driver.findElement(By.id("review-container"))
+                .findElements(By.className("review-card"))
+                .then(reviews => {
+                    expect(reviews.length).toBe(1);
+                    return reviews[0];
+                });
+            await review.findElement(By.css("h2"))
+                .getText()
+                .then(username => {
+                    expect(username).toBe(userTest.username);
+                });
         }
         finally {
             await driver.quit();
