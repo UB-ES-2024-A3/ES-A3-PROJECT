@@ -19,7 +19,7 @@ export default function BookReviewCard({ username, stars, comment, date, time }:
       border: 'outset gray 2px',
       borderRadius: "16px",
       backgroundColor: "white"
-    }}>
+    }} className="review-card">
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center"}}>
         <div>
           <h2 style={{ fontSize: "1.25rem", fontWeight: "bold", display: "inline-block" }}>
