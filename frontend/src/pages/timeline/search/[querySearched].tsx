@@ -96,7 +96,7 @@ const ListSearch: React.FC<ListSearchProps> = () => {
         <div style={{margin: '5px 0px 5px 0px'}}>
             <ListSearchNavBar activeTab={activeTab} setActiveTab={setActiveTab} />
         </div>
-        <div style={{ width: '100%', marginTop: '0px', display: 'flex', flexDirection: 'column', overflowY: 'auto'}}>
+        <div id = {'list-results'} style={{ width: '100%', marginTop: '0px', display: 'flex', flexDirection: 'column', overflowY: 'auto'}}>
         {activeTab == 'books'? 
           ( <div style={{ width: '100%', marginTop: '0px', display: 'flex', flexDirection: 'column', overflowY: 'auto'}}>
               {bookResults.length > 0 ? (
