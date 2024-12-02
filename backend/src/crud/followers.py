@@ -31,7 +31,6 @@ def create_follower(follower_id: str, followed_id: str):
         created_follower = Follower(**result.data[0])
         return created_follower
     except Exception as e:
-        print(f"An error occurred while inserting the follower: {e}")
         raise HTTPException(status_code=500, detail=str(e))
     
 def get_follower(follower_id: str, followed_id: str):
@@ -53,3 +52,17 @@ def delete_follower(follower_id: str, followed_id: str):
     except Exception as e:
         print(f"An error occurred while deleting the follower: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+    
+def get_timeline(user_id: str):
+    supabase = get_db_client()
+    try:
+        result = supabase.rpc(
+            "get_timeline",
+            {
+                "given_id": user_id
+            }
+        ).execute()
+        timeline = result.data
+        return timeline
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error fetching data from the database")

@@ -151,3 +151,14 @@ async def follow_user(user_id: str, user_to_unfollow_id: str):
         raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error searching user by id")
+    
+# Endpoint to get a user timeline
+@router.get("/users/timeline/{user_id}")
+async def get_user_timeline(user_id: str):
+    try:
+        timeline = userController.get_user_timeline(user_id)
+        return timeline
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail={e})
