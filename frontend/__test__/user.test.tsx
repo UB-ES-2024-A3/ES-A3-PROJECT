@@ -2,7 +2,6 @@ import { By, until } from "selenium-webdriver";
 import { createClient } from '@supabase/supabase-js'
 import {userTest, otherUserTest, bookTest, reviewTest, supabaseResponses, createWebDriver} from "./test.utils"
 
-// Increase Jest's default timeout to handle Selenium operations
 jest.setTimeout(120000);
 
 describe("Button Text Test", () => {
@@ -20,7 +19,6 @@ describe("Button Text Test", () => {
   let profileUrl = baseUrl+ "profile"
 
   beforeAll(async () => {
-    //Create user for test
     let message = await supabase
     .from('users')
     .insert({id: userTest.id, email: userTest.email, password: userTest.password, username: userTest.username});
@@ -43,18 +41,18 @@ describe("Button Text Test", () => {
       numreviews: bookTest.numreviews,
       avgstars: bookTest.avgstars});
 
-      expect(message["status"]).toBe(supabaseResponses.insertStatus)
-      expect(message["statusText"]).toBe(supabaseResponses.insertStatusText)
+    expect(message["status"]).toBe(supabaseResponses.insertStatus)
+    expect(message["statusText"]).toBe(supabaseResponses.insertStatusText)
 
-      message = await supabase
-      .from('reviews')
-      .insert({id: reviewTest.id,
-        user_id: reviewTest.user_id,
-        book_id: reviewTest.book_id,
-        stars: reviewTest.stars});
+    message = await supabase
+    .from('reviews')
+    .insert({id: reviewTest.id,
+      user_id: reviewTest.user_id,
+      book_id: reviewTest.book_id,
+      stars: reviewTest.stars});
 
-      expect(message["status"]).toBe(supabaseResponses.insertStatus)
-      expect(message["statusText"]).toBe(supabaseResponses.insertStatusText)
+    expect(message["status"]).toBe(supabaseResponses.insertStatus)
+    expect(message["statusText"]).toBe(supabaseResponses.insertStatusText)
   });
 
   afterAll(async () => {
@@ -95,7 +93,6 @@ describe("Button Text Test", () => {
     expect(message["statusText"]).toBe(supabaseResponses.deleteStatusText)
   });
 
-
   test("Check go to book page", async () => {
 
     const driver = await createWebDriver();
@@ -105,23 +102,21 @@ describe("Button Text Test", () => {
           localStorage.setItem('isAuthenticated', 'true');
           localStorage.setItem('userId', '${userTest.id}');
         `);
-        // Navigate to page on localhost:3000/login
+
         await driver.get(otherUserUrl);
 
         
         let book_title = driver.wait(
-          until.elementLocated(By.id('book_id')), 120000
+          until.elementLocated(By.id(bookTest.id)), 120000
         );
 
         await book_title.click();
         
-        // Wait until the URL is different from the initial one
         await driver.wait(async () => {
             let currentUrl = await driver.getCurrentUrl();
             return currentUrl !== otherUserUrl;
         }, 10000);
 
-        // Get the new URL and assert it's the profile page
         let currentUrl = await driver.getCurrentUrl();
         expect(currentUrl).toBe(bookUrl);
 
@@ -129,5 +124,34 @@ describe("Button Text Test", () => {
         await driver.quit();
     }
   });
+  
+  test("Follow/Unfollow user", async () => {
 
+    const driver = await createWebDriver();
+    try{
+        await driver.get(profileUrl);
+        await driver.executeScript(`
+          localStorage.setItem('isAuthenticated', 'true');
+          localStorage.setItem('userId', '${userTest.id}');
+        `);
+
+        await driver.get(otherUserUrl);
+
+        
+        let follow_button = driver.wait(
+          until.elementLocated(By.id("follow")), 120000
+        );
+
+        await follow_button.click();
+        let followButtonText = await follow_button.getText(); 
+        expect(followButtonText).toBe("Unfollow");
+
+        await follow_button.click();
+        followButtonText = await follow_button.getText(); 
+        expect(followButtonText).toBe("Follow");
+
+    } finally{
+        await driver.quit();
+    }
+  });
 });

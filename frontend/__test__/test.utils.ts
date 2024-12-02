@@ -5,6 +5,7 @@ import chrome from 'selenium-webdriver/chrome';
 export const createWebDriver = async (): Promise<WebDriver> => {
   const options = new chrome.Options();
   options.addArguments(
+    '--headless',
     '--no-sandbox',
     '--disable-dev-shm-usage',
     '--disable-gpu',

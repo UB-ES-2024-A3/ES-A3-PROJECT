@@ -85,7 +85,7 @@ const handleFollow = () => {
                             <span style={{ fontSize: '0.85rem', color: '#6b7280' }}>Following</span>
                         </div>
                     </div>
-                    <button onClick={handleFollow} className={followButton.style}>{followButton.label}</button>
+                    <button onClick={handleFollow} id={"follow"} className={followButton.style}>{followButton.label}</button>
                 </header>
                 <ProfileContents reviews={reviews}/>
             </div>
