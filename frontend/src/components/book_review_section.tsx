@@ -67,7 +67,7 @@ const BookReviewSection: React.FC<BookReviewSectionFields> = ({ book, callback }
                     flexDirection: 'column',
                     rowGap: '16px',
                     overflowY: 'visible'
-                }}>
+                }} id="review-container">
                     {reviews.length? (reviews.map((review, index) => (
                             <BookReviewCard
                                 key={index}
