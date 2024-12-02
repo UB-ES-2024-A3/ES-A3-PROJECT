@@ -47,6 +47,7 @@ export default function TimelineReviewCard({ review_id, user_id, username, book_
                 review={comment}
                 review_id={review_id}
                 user_id={user_id}
+                callback={() => {}}
             />
         </div>
     );

@@ -1,16 +1,22 @@
 import ProfileReviewCard from '@/components/profile_review_card';
 import ProfileNavBar from '@/components/profile_navbar';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { UserReviewCardProps } from '@/pages/timeline/user/[userId]';
 
 interface ProfileContentsProps {
     reviews: UserReviewCardProps[];
     isSelfUser: boolean;
+    callback: (id: string) => void;
   }
 
-const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, isSelfUser }) => {
+const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, isSelfUser, callback }) => {
     const [activeTab, setActiveTab] = useState('reviews');
+    const [reviewList, setReviewList] = useState(reviews);
     const no_reviews_message = isSelfUser? "You have no reviews yet." : "This user has not made any reviews yet.";
+
+    useEffect(() => {
+        setReviewList(reviews);
+    }, [reviews]);
 
   return (
     <>
@@ -28,7 +34,7 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, isSelfUser }
                 paddingRight: '16px',
             }}
             >
-            {reviews.length? (reviews.map(review => (
+            {reviewList.length? (reviewList.map(review => (
                 <ProfileReviewCard
                     key={review.id}
                     bookTitle={review.title}
@@ -40,6 +46,7 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, isSelfUser }
                     book_id={review.book_id}
                     review_id={review.id}
                     user_id={review.user_id}
+                    callback={callback}
                 />
             ))):(
                 <div style={{margin: '5px', textAlign: 'center', justifyContent: 'center', height: '80vh', display: 'flex', flexDirection: 'column'}}> 

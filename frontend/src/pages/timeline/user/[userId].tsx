@@ -126,7 +126,7 @@ const handleFollow = () => {
                         <button onClick={handleFollow} id={"follow"} className={followButton.style}>{followButton.label}</button>
                     }
                 </header>
-                <ProfileContents reviews={reviews} isSelfUser={false}/>
+                <ProfileContents reviews={reviews} isSelfUser={false} callback={() => {}}/>
             </div>
         </div>
     </NavBar>

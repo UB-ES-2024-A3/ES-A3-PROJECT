@@ -20,6 +20,14 @@ const Profile = () => {
     localStorage.removeItem('userId');
     router.push('/login');
   };
+
+  const deleteReviewCallback = (review_id: string) => {
+    const reviewIndex = reviews.findIndex((review) => {
+        return review.id === review_id;
+    });
+    setReviews(reviews.slice(0, reviewIndex).concat(reviews.slice(reviewIndex + 1)));
+  };
+
   useEffect(() => {
     if (userId){
         ReviewService.getUserReviews(userId)
@@ -61,7 +69,7 @@ const Profile = () => {
                     </div>                    
                     <button id="logout_button" onClick={handleLogout}>Logout</button>
                 </header>
-                <ProfileContents reviews={reviews} isSelfUser={true}/>
+                <ProfileContents reviews={reviews} isSelfUser={true} callback={deleteReviewCallback}/>
             </div>
         </div>
     </NavBar>
