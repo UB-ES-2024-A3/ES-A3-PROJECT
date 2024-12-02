@@ -36,7 +36,7 @@ const BookPage = () => {
         <title>{book.title} | Rebook</title>
       </Head>
       <NavBar>
-          <SearchBar placeholder="Search..." buttonLabel="Search">
+          <SearchBar placeholder="Search..." buttonLabel="Search" id='searchbar'>
             <>
                 <BookInformation book={book} />
                 <BookReviewSection book={book} callback={newReviewCallback} />

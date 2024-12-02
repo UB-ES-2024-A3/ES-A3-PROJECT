@@ -3,10 +3,7 @@ import type { AppProps } from 'next/app';
 import { TimelineProvider } from '../contexts/TimelineContext';
 import Head from 'next/head';
 
-
-
-function MyApp({ Component, pageProps }: AppProps) {
-  
+function MyApp({ Component, pageProps }: AppProps) { 
   return (
     <>
       <Head>
