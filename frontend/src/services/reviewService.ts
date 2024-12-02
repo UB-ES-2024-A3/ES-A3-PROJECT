@@ -37,8 +37,8 @@ const ReviewService = {
         )
         .then(response => {
             // Fetch username from received data.
-            const reviews = response.data.map((review: { users: { username: string }, time: string}) => {
-                return {...review, username: review.users.username, time: review.time.slice(0, 8)};
+            const reviews = response.data.map((review: { users: { username: string, id: string }, time: string}) => {
+                return {...review, username: review.users.username, time: review.time.slice(0, 8), userId: review.users.id};
             })
             return reviews;
         })

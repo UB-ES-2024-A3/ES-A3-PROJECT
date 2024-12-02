@@ -1,6 +1,9 @@
 import { renderStars } from "./stars_rating";
+import { useRouter } from "next/router";
+import { useTimelineContext } from "@/contexts/TimelineContext";
 
 export interface BookReviewCardProps {
+  userId: string,
   username: string,
   stars: number,
   comment?: string,
@@ -8,8 +11,14 @@ export interface BookReviewCardProps {
   time?: string
 }
 
-export default function BookReviewCard({ username, stars, comment, date, time }: BookReviewCardProps) {
+export default function BookReviewCard({ userId, username, stars, comment, date, time }: BookReviewCardProps) {
+  const router = useRouter();
+  const {setTimelineState} = useTimelineContext();
 
+  const handleClickTitle = () =>{
+    setTimelineState({page: 'user', data: userId});
+    router.push("/timeline/user/" + userId)
+  }
   return (
     <div style={{
       height: "fit-content",
@@ -22,9 +31,9 @@ export default function BookReviewCard({ username, stars, comment, date, time }:
     }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center"}}>
         <div>
-          <h2 style={{ fontSize: "1.25rem", fontWeight: "bold", display: "inline-block" }}>
+          <button className="secondaryButton" style={{  fontSize: "1.25rem", fontWeight: "bold", padding: "inherit", color: "black"}} onClick={handleClickTitle}>
             {username}
-          </h2>
+          </button>
           <div style={{ display: "flex", marginTop: "8px" }}>
             {renderStars(stars)} 
           </div>

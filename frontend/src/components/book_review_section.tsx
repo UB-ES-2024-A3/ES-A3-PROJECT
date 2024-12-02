@@ -71,6 +71,7 @@ const BookReviewSection: React.FC<BookReviewSectionFields> = ({ book, callback }
                     {reviews.length? (reviews.map((review, index) => (
                             <BookReviewCard
                                 key={index}
+                                userId={review.userId}
                                 username={review.username || 'username'}
                                 stars={review.stars}
                                 comment={review.comment}
