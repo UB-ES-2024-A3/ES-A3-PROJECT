@@ -3,6 +3,7 @@ import ProfileReviewCard from "./profile_review_card";
 import { useTimelineContext } from "@/contexts/TimelineContext";
 
 export interface TimelineReviewProps {
+    review_id: string,
     user_id: string,
     username: string,
     rating: number,
@@ -14,7 +15,7 @@ export interface TimelineReviewProps {
     time?: string
 }
 
-export default function TimelineReviewCard({ user_id, username, book_id, title, author, rating, description: comment, date, time }: TimelineReviewProps) {
+export default function TimelineReviewCard({ review_id, user_id, username, book_id, title, author, rating, description: comment, date, time }: TimelineReviewProps) {
     const router = useRouter();
     const {setTimelineState} = useTimelineContext();
     const handleClickUsername = () => {
@@ -44,6 +45,8 @@ export default function TimelineReviewCard({ user_id, username, book_id, title, 
                 author={author}
                 rating={rating}
                 review={comment}
+                review_id={review_id}
+                user_id={user_id}
             />
         </div>
     );

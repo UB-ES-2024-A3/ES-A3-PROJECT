@@ -13,7 +13,9 @@ export interface UserReviewCardProps {
     comment?: string,
     date?: string,
     time?: string,
-    book_id: string
+    book_id: string,
+    id: string,
+    user_id: string
   }
 
 const UserProfile = () => {

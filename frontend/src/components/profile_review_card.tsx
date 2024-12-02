@@ -9,17 +9,25 @@ interface ProfileReviewCardProps {
   review?: string;
   date?: string;
   time?: string;
+  review_id: string;
   book_id: string;
+  user_id: string;
 }
 
-export default function ProfileReviewCard({ bookTitle, author, rating, review, date, time, book_id }: ProfileReviewCardProps) {
+export default function ProfileReviewCard({ bookTitle, author, rating, review, date, time, book_id, review_id, user_id }: ProfileReviewCardProps) {
   const router = useRouter();
   const {setTimelineState} = useTimelineContext();
+  const isCurrentUser = localStorage.getItem('userId') === user_id;
 
   const handleClickTitle = () =>{
     setTimelineState({page: 'book', data: book_id});
     router.push("/timeline/book/" + book_id)
-  }
+  };
+
+  const handleClickDelete = () => {
+    console.log("Deleting review: " + review_id);
+  };
+
   return (
     <div style={{ height: "fit-content", minWidth: "100%", margin: "0 auto", padding: "24px", borderRadius: "8px", backgroundColor: "white"}}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center"}}>
@@ -47,7 +55,11 @@ export default function ProfileReviewCard({ bookTitle, author, rating, review, d
           {review}
         </p>
       )}
-      
+      {isCurrentUser && (
+        <button className="delete-btn" style={{ float: "right" }} onClick={handleClickDelete}>
+          Delete
+        </button>
+      )}
     </div>
   )
 }

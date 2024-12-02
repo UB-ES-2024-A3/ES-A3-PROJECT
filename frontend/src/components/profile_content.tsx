@@ -28,8 +28,19 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, isSelfUser }
                 paddingRight: '16px',
             }}
             >
-            {reviews.length? (reviews.map((review, index) => (
-                <ProfileReviewCard key={index} bookTitle={review.title} author={review.author} rating={review.stars} date={review.date} time={review.time} review={review.comment} book_id={review.book_id}/>
+            {reviews.length? (reviews.map(review => (
+                <ProfileReviewCard
+                    key={review.id}
+                    bookTitle={review.title}
+                    author={review.author}
+                    rating={review.stars}
+                    date={review.date}
+                    time={review.time}
+                    review={review.comment}
+                    book_id={review.book_id}
+                    review_id={review.id}
+                    user_id={review.user_id}
+                />
             ))):(
                 <div style={{margin: '5px', textAlign: 'center', justifyContent: 'center', height: '80vh', display: 'flex', flexDirection: 'column'}}> 
                     <h2 style={{fontSize: '2em', color: 'grey'}}>{no_reviews_message}</h2>
