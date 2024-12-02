@@ -393,3 +393,41 @@ def test_get_follower_not_following(client: TestClient):
 
     assert response.status_code == 200, f"Expected 404, got {response.status_code}. Details: {response.json()}"
     assert response.json() == False
+def test_get_timeline_invalid_user(client: TestClient):
+    invalid_user_id = str(uuid.uuid4())
+    response = client.get(f"users/timeline/{invalid_user_id}")
+
+    assert response.status_code == 404, f"Expected 404, got {response.status_code}. Details: {response.json()}"
+
+def test_get_timeline_no_followed(client: TestClient):
+    user_data_1 = {"email": "user2024@hotmail.com", "username": "user2024", "password": "dumbPassword"}
+    
+    user1 = User(**user_data_1)
+    
+    created_user_1 = crud.user.create_user(user1)
+    response = client.get(f"users/timeline/{created_user_1.id}")
+    timeline = response.json()
+
+    crud.user.delete_user(created_user_1.id)
+
+    assert response.status_code == 200, f"Expected 200, got {response.status_code}. Details: {response.json()}"
+    assert response.json() == []
+
+def test_get_timeline_no_reviews(client: TestClient):
+    userData = [
+        {"email": "user2024@hotmail.com", "username": "user2024", "password": "dumbPassword"},
+        {"email": "user22024@hotmail.com", "username": "user22024", "password": "dumbPassword2"},
+    ]
+    
+    users = [crud.user.create_user(User(**data)) for data in userData]
+
+    user_controller.follow_user(users[0].id, users[1].id)
+
+    response = client.get(f"users/timeline/{users[0].id}")
+    timeline = response.json()
+
+    for u in users:
+        crud.user.delete_user(u.id)
+        
+    assert response.status_code == 200, f"Expected 200, got {response.status_code}. Details: {response.json()}"
+    assert response.json() == []
