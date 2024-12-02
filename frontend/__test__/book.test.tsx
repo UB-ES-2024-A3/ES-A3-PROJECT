@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { createWebDriver, loginAsUserTest } from "./test.utils";
-import { By, WebElement } from "selenium-webdriver";
+import { By, until, WebElement } from "selenium-webdriver";
 
 jest.setTimeout(30000);
 
@@ -266,8 +266,8 @@ describe("Book page content", () => {
                 return currentUrl !== timelineUrl;
             }, 10000, 'Does not route to book page');
             await driver.sleep(2000);
-            const review = await driver.findElement(By.id("review-container"))
-                .findElements(By.className("review-card"))
+            await driver.wait(until.elementsLocated(By.className("review-card")), 5000);
+            const review = await driver.findElements(By.className("review-card"))
                 .then(reviews => {
                     expect(reviews.length).toBe(1);
                     return reviews[0];
