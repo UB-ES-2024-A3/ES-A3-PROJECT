@@ -89,6 +89,22 @@ class UserController:
             return followed
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
+    
+    def get_user_timeline(self, user_id: str):
+        # Check if user_id is a valid UUID
+        if not self.is_valid_uuid(user_id):
+            raise HTTPException(status_code=400, detail="Invalid user ID format")
+
+        # Check if the user exists by ID
+        if self.search_by_id(user_id) == -1:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        try:
+            data = followers.get_timeline(user_id)
+            return data
+        
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
 
     def search_by_username(self, username: str):
         # Validate username length
