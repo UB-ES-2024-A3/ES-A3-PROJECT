@@ -37,6 +37,13 @@ const Profile = () => {
     router.push('/login');
   };
 
+  const deleteReviewCallback = (review_id: string) => {
+    const reviewIndex = reviews.findIndex((review) => {
+        return review.id === review_id;
+    });
+    setReviews(reviews.slice(0, reviewIndex).concat(reviews.slice(reviewIndex + 1)));
+  };
+
   useEffect(() => {
     if (userId){
         ReviewService.getUserReviews(userId)
@@ -80,9 +87,9 @@ const Profile = () => {
                         paddingRight: '16px',
                     }}
                     >
-                    {reviews.length? (reviews.map((review, index) => (
+                    {reviews.length? (reviews.map(review => (
                         <ProfileReviewCard
-                            key={index}
+                            key={review.id}
                             bookTitle={review.title}
                             author={review.author}
                             rating={review.stars}
@@ -92,6 +99,7 @@ const Profile = () => {
                             book_id={review.book_id}
                             review_id={review.id}
                             user_id={review.user_id}
+                            callback={deleteReviewCallback}
                             />
                     ))):(
                         <div style={{margin: '5px', textAlign: 'center', justifyContent: 'center', height: '80vh', display: 'flex', flexDirection: 'column'}}> 
