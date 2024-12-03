@@ -76,14 +76,22 @@ const UserProfile = () => {
 
 const handleFollow = () => {
     if (follows) {
-        setFollowButton({label: "Follow", style: ""});
-        setFollows(!follows);
+        FollowersService.unfollowUser(selfUserId, userId)
+        .then(succeed => {
+            if(succeed){
+                setFollows(false);
+                setFollowButton({label: "Follow", style: ""});
+            }
+        })
+        .catch(except => {
+            console.log(except);
+        });
     }
     else{
         FollowersService.followUser(selfUserId, userId)
         .then(succeed => {
             if(succeed){
-                setFollows(!follows);
+                setFollows(true);
                 setFollowButton({label: "Unfollow", style: "secondaryButton"})
             }
         })
@@ -112,7 +120,9 @@ const handleFollow = () => {
                             <span style={{ fontSize: '0.85rem', color: '#6b7280' }}>Following</span>
                         </div>
                     </div>
-                    <button onClick={handleFollow} id={"follow"} className={followButton.style}>{followButton.label}</button>
+                    {userId && selfUserId &&
+                        <button onClick={handleFollow} id={"follow"} className={followButton.style}>{followButton.label}</button>
+                    }
                 </header>
                 <ProfileContents reviews={reviews} isSelfUser={false}/>
             </div>

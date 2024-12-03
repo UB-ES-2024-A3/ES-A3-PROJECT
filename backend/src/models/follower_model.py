@@ -11,13 +11,3 @@ class Follower(BaseModel):
 
     class Config:
         from_attributes = True
-
-    # Getters
-
-    @property
-    def follower_id(self) -> str:
-        return self.follower_id
-
-    @property
-    def followed_id(self) -> str:
-        return self.followed_id
