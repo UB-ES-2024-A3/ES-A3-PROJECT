@@ -10,7 +10,7 @@ const Profile = () => {
   const router = useRouter();
   const [reviews, setReviews] = useState<UserReviewCardProps[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
-  const [username, setUsername] = useState('');
+  const [userData, setUserData] = useState({"username": '', "followers": null, "following": null});
   useEffect(() => {
     const storedUserId = localStorage.getItem('userId');
     setUserId(storedUserId); 
@@ -30,13 +30,12 @@ const Profile = () => {
             console.log(except);
             setReviews([]);
         });
-        UserService.getUsername(userId)
-        .then(userName => {
-            setUsername(userName);
+        UserService.getUser(userId)
+        .then(userData => {
+            setUserData(userData);
         })
         .catch(except => {
             console.log(except);
-            setUsername('');
         });
     }
 }, [userId]);
@@ -46,7 +45,7 @@ const Profile = () => {
             <div style={{ width: '65%', display: 'flex', flexDirection: 'column', minHeight: '100%' }}>
                 <header style={{ padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #ccc' }}>
                     <div>
-                        <h1 style={{ fontSize: '1.2rem', fontWeight: '500' }}>{username}</h1>
+                        <h1 style={{ fontSize: '1.2rem', fontWeight: '500' }}>{userData.username}</h1>
                         <div
                             style={{
                             display: 'flex',
@@ -54,15 +53,15 @@ const Profile = () => {
                             gap: '10px'
                             }}
                         >
-                            <span style={{ fontWeight: 'bold', fontSize: '0.85rem' }}>100</span>
+                            <span style={{ fontWeight: 'bold', fontSize: '0.85rem' }}>{userData.followers}</span>
                             <span style={{ fontSize: '0.85rem', color: '#6b7280' }}>Followers</span>
-                            <span style={{ fontWeight: 'bold', fontSize: '0.85rem', marginLeft: '10px' }}>100</span>
+                            <span style={{ fontWeight: 'bold', fontSize: '0.85rem', marginLeft: '10px' }}>{userData.following}</span>
                             <span style={{ fontSize: '0.85rem', color: '#6b7280' }}>Following</span>
                         </div>
                     </div>                    
                     <button id="logout_button" onClick={handleLogout}>Logout</button>
                 </header>
-                <ProfileContents reviews={reviews}/>
+                <ProfileContents reviews={reviews} isSelfUser={true}/>
             </div>
         </div>
     </NavBar>

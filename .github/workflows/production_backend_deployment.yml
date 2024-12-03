@@ -1,10 +1,10 @@
-name: Deployment of frontend
+name: Deployment of backend
 
 on:
   workflow_dispatch:
   push:
     branches:
-      - pre_production
+      - main
 
 jobs:
   build-and-deploy:
@@ -31,15 +31,15 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t rebookcontainers.azurecr.io/frontend:${{ github.sha }} -f frontend/Dockerfile --build-arg API_DB_URL=${{ secrets.API_DB_URL }} frontend
-          docker push rebookcontainers.azurecr.io/frontend:${{ github.sha }}
-          
+          docker build -t rebookcontainers.azurecr.io/production_backend:${{ github.sha }} -f backend/Dockerfile --build-arg SUPABASE_URL=${{ secrets.PRODUCTION_SUPABASE_URL }} --build-arg SUPABASE_KEY=${{ secrets.PRODUCTION_SUPABASE_KEY }} backend
+          docker push rebookcontainers.azurecr.io/production_backend:${{ github.sha }}
+
       - name: Deploy to Azure Web App for Containers
         run: |
           az webapp config container set \
-            --name ReBookFrontend \
+            --name ProductionReBookBackend \
             --resource-group ReBookGroup \
-            --docker-custom-image-name rebookcontainers.azurecr.io/frontend:${{ github.sha }} \
+            --docker-custom-image-name rebookcontainers.azurecr.io/production_backend:${{ github.sha }} \
             --docker-registry-server-url https://rebookcontainers.azurecr.io \
             --docker-registry-server-user ${{ secrets.ACR_USERNAME }} \
             --docker-registry-server-password ${{ secrets.ACR_PASSWORD }}

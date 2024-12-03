@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from typing import List, Optional
 from src.models.user_model import User
+from src.models.follower_model import Follower
 from src.controllers.user_controller import UserController
 
 userController = UserController()
@@ -80,12 +81,12 @@ async def get_user_by_id(user_id: str):
 
 # Endpoint to get the username given an id   
 @router.get("/users/username/id/{user_id}")
-async def get_username_by_id(user_id: str) -> str:
+async def get_user_data_by_id(user_id: str) -> dict:
     try:
         user = userController.search_by_id(user_id)
         if user == -1:
             raise HTTPException(status_code=404, detail="User not found")
-        return user.username
+        return {"username": user.username, "followers": user.followers, "following": user.following}
     except HTTPException as e:
         raise e
     except Exception as e:
@@ -103,3 +104,51 @@ async def search_users(username: str, max_num: Optional[int] = None):
         raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error fetching users")
+
+@router.get("/users/search")
+async def search_users(username: str, max_num: Optional[int] = None):
+    try:
+        # Call the controller method
+        users = userController.search_users_by_partial_username(username, max_num)
+        if not users:  # This will check if the list is empty
+            return []
+        return users
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error fetching users")
+
+# Endpoint to follow a user 
+@router.post("/users/follow/{user_id}/{user_to_follow_id}", response_model = Follower)
+async def follow_user(user_id: str, user_to_follow_id: str):
+    try:
+        follower = userController.follow_user(user_id, user_to_follow_id)
+        return follower
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error searching user by id")
+
+# Endpoint to follow a user 
+@router.get("/users/follow/{user_id}/{user_to_follow_id}")
+async def follow_user(user_id: str, user_to_follow_id: str):
+    try:
+        follower = userController.check_follower(user_id, user_to_follow_id)
+        return follower
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error searching user by id")
+    
+
+    
+# Endpoint to get a user timeline
+@router.get("/users/timeline/{user_id}")
+async def get_user_timeline(user_id: str):
+    try:
+        timeline = userController.get_user_timeline(user_id)
+        return timeline
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail={e})

@@ -79,12 +79,7 @@ def create_user(user: User):
                 status_code=500,
                 detail="Error inserting user: No data returned from Supabase",
             )
-        created_user = User(
-            id=result.data[0]["id"],
-            email=result.data[0]["email"],
-            username=result.data[0]["username"],
-            password=result.data[0]["password"],
-        )
+        created_user = User(**result.data[0])
         return created_user
     except Exception as e:
         print(f"An error occurred while inserting the user: {e}")
@@ -122,6 +117,7 @@ def authenticate(identifier: str, password: str):
         return result.data[0]['id']
     return False
 
+
 def search_users_by_partial_username_crud(username: str, max_num: int):
     try:
         supabase = get_db_client()
@@ -142,3 +138,13 @@ def search_users_by_partial_username_crud(username: str, max_num: int):
     except Exception as e:
         print(f"Error fetching users from the database: {e}")
         raise HTTPException(status_code=500, detail="Error fetching users from the database")
+
+# Method to update the 'followers' and 'following' fields
+def update_follower_fields(user_id: str, attributes: dict):
+    supabase = get_db_client()
+    try:
+        result = supabase.table("users").update(attributes).eq("id", user_id).execute()
+        if not result.data:
+            raise HTTPException(status_code=500, detail="Failed to update user attributes")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error updating user attributes: {str(e)}")
