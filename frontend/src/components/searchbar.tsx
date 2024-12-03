@@ -10,7 +10,6 @@ interface SearchBarProps {
   placeholder?: string;
   buttonLabel?: string;
   id: string;
-  id: string;
 }
 
 interface Book {
@@ -20,11 +19,9 @@ interface Book {
 }
 interface User {
   user_id: string;
-  user_id: string;
   username: string;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ children, placeholder, buttonLabel, id }) => {
 const SearchBar: React.FC<SearchBarProps> = ({ children, placeholder, buttonLabel, id }) => {
   const router = useRouter();
   const {setTimelineState} = useTimelineContext();
@@ -76,7 +73,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ children, placeholder, buttonLabe
           .then(results => {
             const users = results.map((user: User) => ({
               user_id: user.user_id,
-              user_id: user.user_id,
               username: user.username
             }));
             setUserResults(users);
@@ -108,11 +104,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ children, placeholder, buttonLabe
     <div style={{ display: 'flex', padding: '20px' , flexDirection: 'column', alignItems: 'center', height: '100vh', width: "100%"}}>
       <div style={{width: '100%'}}>
         <div id={id} style={{ width: '50%', margin: '0 auto'}}>
-        <div id={id} style={{ width: '50%', margin: '0 auto'}}>
           <div style={{ display: 'flex' , width: "100%"}}>
             <input
               type="text"
-              id={id + '-input'}
               id={id + '-input'}
               placeholder={placeholder}
               value={query}
@@ -129,7 +123,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ children, placeholder, buttonLabe
             />
             <button
               id={id + '-button'}
-              id={id + '-button'}
               onClick={handleSearch}
               style={{
                 width: '10%', 
@@ -140,7 +133,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ children, placeholder, buttonLabe
               {buttonLabel}
             </button>
           </div>
-          <div id={id + '-results'} style={{ width: '45%', marginTop: '0px', overflowY: 'scroll', display: 'flex', flexDirection: 'column', position: 'absolute', maxHeight: '80vh'}}>
           <div id={id + '-results'} style={{ width: '45%', marginTop: '0px', overflowY: 'scroll', display: 'flex', flexDirection: 'column', position: 'absolute', maxHeight: '80vh'}}>
             <>
               {bookResults.length > 0 ? 
@@ -168,8 +160,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ children, placeholder, buttonLabe
               ):(<></>)
               }
             </>
-            
-            
           </div>
         </div>
       </div>
