@@ -75,6 +75,7 @@ const UserProfile = () => {
 }, [userId, router.isReady, follows]);
 
 const handleFollow = () => {
+    console.log("u" + userId + "u" + selfUserId)
     if (follows) {
         FollowersService.unfollowUser(selfUserId, userId)
         .then(succeed => {
@@ -120,7 +121,9 @@ const handleFollow = () => {
                             <span style={{ fontSize: '0.85rem', color: '#6b7280' }}>Following</span>
                         </div>
                     </div>
-                    <button onClick={handleFollow} id={"follow"} className={followButton.style}>{followButton.label}</button>
+                    {userId && selfUserId &&
+                        <button onClick={handleFollow} id={"follow"} className={followButton.style}>{followButton.label}</button>
+                    }
                 </header>
                 <ProfileContents reviews={reviews} isSelfUser={false}/>
             </div>
