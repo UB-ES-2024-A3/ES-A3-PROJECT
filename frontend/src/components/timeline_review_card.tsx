@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import ProfileReviewCard from "./profile_review_card";
+import { useTimelineContext } from "@/contexts/TimelineContext";
 
 export interface TimelineReviewProps {
     userId: string,
@@ -15,9 +16,10 @@ export interface TimelineReviewProps {
 
 export default function TimelineReviewCard({ userId, username, bookId, bookTitle, author, rating, comment, date, time }: TimelineReviewProps) {
     const router = useRouter();
+    const {setTimelineState} = useTimelineContext();
     const handleClickUsername = () => {
-        // TODO: should redirect to user page
-        router.push("/users/" + userId);
+        setTimelineState({page: 'user', data: userId});
+        router.push("/timeline/user/" + userId);
     }
 
     return (
