@@ -21,6 +21,7 @@ interface Book {
 
 interface User {
   user_id: string;
+  user_id: string;
   username: string;
 }
 
@@ -72,6 +73,7 @@ const ListSearch: React.FC<ListSearchProps> = () => {
             .then(results => {
               const users = results.map((user: User) => ({
                 user_id: user.user_id,
+                user_id: user.user_id,
                 username: user.username
               }));
               setUserResults(users);
@@ -93,9 +95,11 @@ const ListSearch: React.FC<ListSearchProps> = () => {
     return(
     <NavBar>
       <SearchBar placeholder="Search..." buttonLabel="Search" id='searchbar'>
+      <SearchBar placeholder="Search..." buttonLabel="Search" id='searchbar'>
         <div style={{margin: '5px 0px 5px 0px'}}>
             <ListSearchNavBar activeTab={activeTab} setActiveTab={setActiveTab} />
         </div>
+        <div id = {'list-results'} style={{ width: '100%', marginTop: '0px', display: 'flex', flexDirection: 'column', overflowY: 'auto'}}>
         <div id = {'list-results'} style={{ width: '100%', marginTop: '0px', display: 'flex', flexDirection: 'column', overflowY: 'auto'}}>
         {activeTab == 'books'? 
           ( <div style={{ width: '100%', marginTop: '0px', display: 'flex', flexDirection: 'column', overflowY: 'auto'}}>
