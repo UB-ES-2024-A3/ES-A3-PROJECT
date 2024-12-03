@@ -3,25 +3,39 @@ import NavBar from '@/components/navbar';
 import { useRouter } from 'next/router';
 import ReviewService from '@/services/reviewService';
 import UserService from '@/services/userService';
-import { UserReviewCardProps } from './timeline/user/[userId]';
 import ProfileContents from '@/components/profile_content';
 
-const Profile = () => {
-  const router = useRouter();
+export interface UserReviewCardProps {
+    title: string,
+    author: string,
+    stars: number,
+    comment?: string,
+    date?: string,
+    time?: string,
+    book_id: string
+  }
+
+const UserProfile = () => {
   const [reviews, setReviews] = useState<UserReviewCardProps[]>([]);
-  const [userId, setUserId] = useState<string | null>(null);
+  const router = useRouter()
+  let userId = router.query.userId as string;
   const [username, setUsername] = useState('');
+  const [follows, setFollows] = useState(false);
+  const [followButton, setFollowButton] = useState({label: "Follow", style: ""});
+
   useEffect(() => {
     const storedUserId = localStorage.getItem('userId');
-    setUserId(storedUserId); 
+    if (storedUserId == userId) {
+        router.push("/profile")
+    }
   }, []);
-  const handleLogout = () => {
-    localStorage.removeItem('isAuthenticated');
-    localStorage.removeItem('userId');
-    router.push('/login');
-  };
+
   useEffect(() => {
-    if (userId){
+    userId = router.query.userId as string;
+  }, [router.query.userId]);
+
+  useEffect(() => {
+    if (userId && router.isReady){
         ReviewService.getUserReviews(userId)
         .then(reviewList => {
             setReviews(reviewList);
@@ -39,7 +53,18 @@ const Profile = () => {
             setUsername('');
         });
     }
-}, [userId]);
+}, [userId, router.isReady]);
+
+const handleFollow = () => {
+    setFollows(!follows);
+    if (follows) {
+        setFollowButton({label: "Follow", style: ""});
+    }
+    else{
+        setFollowButton({label: "Unfollow", style: "secondaryButton"})
+    }
+    
+}
   return (
     <NavBar>
         <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -59,13 +84,14 @@ const Profile = () => {
                             <span style={{ fontWeight: 'bold', fontSize: '0.85rem', marginLeft: '10px' }}>100</span>
                             <span style={{ fontSize: '0.85rem', color: '#6b7280' }}>Following</span>
                         </div>
-                    </div>                    
-                    <button id="logout_button" onClick={handleLogout}>Logout</button>
+                    </div>
+                    <button onClick={handleFollow} id={"follow"} className={followButton.style}>{followButton.label}</button>
                 </header>
                 <ProfileContents reviews={reviews}/>
             </div>
         </div>
     </NavBar>
-    );
+  );
 };
-export default Profile;
+
+export default UserProfile;
