@@ -106,7 +106,6 @@ async def search_users(username: str, max_num: Optional[int] = None):
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error fetching users")
 
-
 # Endpoint to follow a user 
 @router.post("/users/follow/{user_id}/{user_to_follow_id}", response_model = Follower)
 async def follow_user(user_id: str, user_to_follow_id: str):

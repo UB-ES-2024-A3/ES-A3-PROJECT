@@ -2,7 +2,7 @@ import endpoint from "@/endpoints.config";
 import axios from 'axios';
 
 const UserService = {
-    getUsername: async (userId: string) => {
+    getUser: async (userId: string) => {
         return axios.get(
             endpoint.dbURL + "/users/username/id/" + userId,
         )
