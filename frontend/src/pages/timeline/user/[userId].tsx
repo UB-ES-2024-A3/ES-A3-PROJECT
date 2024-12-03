@@ -87,7 +87,7 @@ const handleFollow = () => {
                     </div>
                     <button onClick={handleFollow} id={"follow"} className={followButton.style}>{followButton.label}</button>
                 </header>
-                <ProfileContents reviews={reviews}/>
+                <ProfileContents reviews={reviews} isSelfUser={false}/>
             </div>
         </div>
     </NavBar>

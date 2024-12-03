@@ -62,7 +62,7 @@ const Profile = () => {
                     </div>                    
                     <button id="logout_button" onClick={handleLogout}>Logout</button>
                 </header>
-                <ProfileContents reviews={reviews}/>
+                <ProfileContents reviews={reviews} isSelfUser={true}/>
             </div>
         </div>
     </NavBar>
