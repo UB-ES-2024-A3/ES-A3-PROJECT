@@ -33,3 +33,14 @@ def create_follower(follower_id: str, followed_id: str):
     except Exception as e:
         print(f"An error occurred while inserting the follower: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+    
+def get_follower(user_id: str, followed_id: str):
+    supabase = get_db_client()
+    try:
+        result = supabase.table("followers").select('*').eq("follower_id", user_id).eq("followed_id", followed_id).execute()
+        # If user not found return False as user doesn't follow other user
+        if not result.data:
+            return False
+        return True
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
