@@ -27,8 +27,8 @@ const reviews: TimelineReviewProps[] = [
         time: '14:32:07'
     },
     {
-        userId: '0002',
-        username: 'avid-reader',
+        userId:"93781ed1-b2ff-4332-bb9c-199990019633",
+        username: 'avid_reader',
         bookId: '8468d0fe-5e08-4594-a86d-92a239e8ad6e',
         bookTitle: 'The Nativity Story',
         author: 'Voiland, Stephanie (EDT)',
