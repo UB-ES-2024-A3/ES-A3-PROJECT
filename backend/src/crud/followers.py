@@ -39,9 +39,8 @@ def get_follower(follower_id: str, followed_id: str):
     try:
         result = supabase.table("followers").select('*').eq("follower_id", follower_id).eq("followed_id", followed_id).execute()
         if not result.data:
-            return -1
-        follower = Follower(**result.data[0])
-        return follower
+            return False
+        return True
     except Exception as e:
         print(f"An error occurred while getting the follower: {e}")
         raise HTTPException(status_code=500, detail=str(e))

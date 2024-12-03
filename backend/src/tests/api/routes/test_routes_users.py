@@ -143,7 +143,7 @@ def test_unfollow_user(client: TestClient):
 
 
     user = crud.followers.get_follower(user1.id, user2.id)
-    assert user == -1
+    assert user == False
 
     # Try to delete unfollower with invalid ID
     response = client.delete(f"/users/unfollow/{created_user_1.id}/{created_user_2.id}")
