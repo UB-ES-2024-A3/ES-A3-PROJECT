@@ -34,13 +34,22 @@ def create_follower(follower_id: str, followed_id: str):
         print(f"An error occurred while inserting the follower: {e}")
         raise HTTPException(status_code=500, detail=str(e))
     
-def get_follower(user_id: str, followed_id: str):
+def get_follower(follower_id: str, followed_id: str):
     supabase = get_db_client()
     try:
-        result = supabase.table("followers").select('*').eq("follower_id", user_id).eq("followed_id", followed_id).execute()
-        # If user not found return False as user doesn't follow other user
+        result = supabase.table("followers").select('*').eq("follower_id", follower_id).eq("followed_id", followed_id).execute()
         if not result.data:
             return False
         return True
     except Exception as e:
+        print(f"An error occurred while getting the follower: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+    
+# Method to read all users from database
+def delete_follower(follower_id: str, followed_id: str):
+    supabase = get_db_client()
+    try:
+        result = supabase.table("followers").delete().eq("follower_id", follower_id).eq("followed_id", followed_id).execute()
+    except Exception as e:
+        print(f"An error occurred while deleting the follower: {e}")
         raise HTTPException(status_code=500, detail=str(e))
