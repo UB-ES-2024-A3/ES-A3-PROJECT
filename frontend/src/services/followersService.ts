@@ -25,7 +25,18 @@ const FollowersService = {
             throw except;
         });
     },
-    
+    unfollowUser : async (selfUserId: string, otherUserId: string) => {
+        return axios.delete(
+            endpoint.dbURL + '/users/unfollow/' + selfUserId + "/" + otherUserId
+        )
+        .then(response => {
+            const succeed = response.status == 200
+            return succeed;
+        })
+        .catch(except => {
+            throw except;
+        });
+    },
 };
 
 export default FollowersService;

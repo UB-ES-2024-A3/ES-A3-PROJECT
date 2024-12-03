@@ -101,6 +101,13 @@ class UserController:
         
         if user == -1 or user_to_unfollow == -1:
             raise HTTPException(status_code=404, detail="User not found")
+        
+        try:
+            followed = self.check_follower(user_id, user_to_unfollow_id)
+            if not followed:
+                raise HTTPException(status_code=404, detail="User already followed")
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
         try:
             # We create a new row in the follower table
             followers.delete_follower(user_id, user_to_unfollow_id)

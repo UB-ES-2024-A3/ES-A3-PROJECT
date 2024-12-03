@@ -21,14 +21,14 @@ export const createWebDriver = async (): Promise<WebDriver> => {
 
 
 export const userTest = {
-  id: "user_frontend_test",
+  id: "50e971a8-ed37-4879-95a3-8b14f1bab8f1",
   email: "fr_user@gmail.com",
   username: "test_user",
   password: "fr_password",
 };
 
 export const otherUserTest = {
-  id: "other_user_frontend_test",
+  id: "1bb3e290-fcaf-400d-b72b-fff16ca3d7dc",
   email: "o_user@gmail.com",
   username: "other_test_user",
   password: "other_password",
