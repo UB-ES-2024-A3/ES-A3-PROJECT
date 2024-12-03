@@ -132,9 +132,6 @@ def test_search_users(client: TestClient):
     # Check for nonexistent username
     response = client.get(f"/users/search?username=nonexistent&max_num=2")
     assert response.status_code == 200, f"Expected 200, got {response.status_code}. Details: {response.json()}"
-    assert response_data["username"] == created_user.username, f"Expected {created_user.username}, got {response_data()["username"]}"
-    assert response_data["followers"] == created_user.followers, f"Expected {created_user.followers}, got {response_data()["followers"]}"
-    assert response_data["following"] == created_user.following, f"Expected {created_user.following}, got {response_data()["following"]}"
 
 
 def test_get_username_with_invalid_id(client: TestClient):
