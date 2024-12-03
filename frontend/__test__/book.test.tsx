@@ -272,7 +272,7 @@ describe("Book page content", () => {
                     expect(reviews.length).toBe(1);
                     return reviews[0];
                 });
-            await review.findElement(By.css("h2"))
+            await review.findElement(By.css("button"))
                 .getText()
                 .then(username => {
                     expect(username).toBe(userTest.username);

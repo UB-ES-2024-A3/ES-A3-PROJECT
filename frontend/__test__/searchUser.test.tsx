@@ -20,7 +20,7 @@ const userTest = {
     email: "fr_searching@gmail.com",
     username: "test_searching",
     password: "fr_password",
-}
+};
 const searchedUserTest = {
     id: "e2e27e12-1602-4347-8ce0-0a5043d5a3b4",
     email: "fr_search_user@gmail.com",
@@ -71,6 +71,8 @@ afterAll(async () => {
 
 describe("Search bar for users", () => {
     const timelineUrl = baseUrl + 'timeline';
+    const userUrl = baseUrl + 'timeline/user/' + searchedUserTest.id; 
+    const searchUrl = baseUrl + 'timeline/search/' + searchedUserTest.username; 
 
     test("Check user in search bar", async () => {
         const driver = await createWebDriver();
@@ -98,7 +100,19 @@ describe("Search bar for users", () => {
                     expect(username).toBe(searchedUserTest.username);
                 });
 
-            // Now test that the page of the user opens.
+            // Now we test that the page of the user opens.
+            // Click the result under the searchbar
+            await driver.findElement(By.id(searchedUserTest.id))
+                .then(button => {
+                    button.click();
+                });
+            await driver.wait(async () => {
+                let currentUrl = await driver.getCurrentUrl();
+                return currentUrl !== timelineUrl;
+            }, 10000);
+            let currentUrl = await driver.getCurrentUrl();
+            expect(currentUrl).toBe(userUrl);
+
         }
         finally{
             await driver.quit();
@@ -128,8 +142,8 @@ describe("Search bar for users", () => {
             }, 10000);
 
             // Test that the URL is the expected
-            let searchUrl = await driver.getCurrentUrl();
-            expect(searchUrl).toBe(timelineUrl+'/search/'+searchedUserTest.username);
+            let searchedUrl = await driver.getCurrentUrl();
+            expect(searchedUrl).toBe(timelineUrl+'/search/'+searchedUserTest.username);
             
             await driver.findElement(By.id('search-users-tab'))
                 .then(button => {
@@ -150,7 +164,19 @@ describe("Search bar for users", () => {
                     expect(username).toBe(searchedUserTest.username);
                 });
 
-            // Now test that the page of the user opens.
+            // Now we test that the page of the user opens from the list of users.
+            // Click the result in the list of users
+            await driver.findElement(By.id(searchedUserTest.id))
+                .then(button => {
+                    button.click();
+                });
+            await driver.wait(async () => {
+                let currentUrl = await driver.getCurrentUrl();
+                return currentUrl !== searchUrl;
+            }, 10000);
+            let currentUrl = await driver.getCurrentUrl();
+            expect(currentUrl).toBe(userUrl);
+
         }
         finally{
             await driver.quit();
