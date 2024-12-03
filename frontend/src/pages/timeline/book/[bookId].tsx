@@ -6,7 +6,16 @@ import { useEffect, useState } from 'react';
 import ShowBookService from '@/services/showBookService';
 import { useTimelineContext } from '@/contexts/TimelineContext';
 import BookReviewSection from '@/components/book_review_section';
-import { Book } from '..';
+
+export interface Book {
+    id: string;
+    title: string;
+    author: string;
+    description: string;
+    genres: string[];
+    avgstars: number;
+    numreviews: number;
+}
 
 const BookPage = () => {
   const {timelineState} = useTimelineContext();

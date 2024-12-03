@@ -1,18 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SearchBar from '@/components/searchbar';
-import { useTimelineContext } from '@/contexts/TimelineContext';
 import NavBar from '@/components/navbar';
 import TimelineReviewCard, { TimelineReviewProps } from '@/components/timeline_review_card';
-
-export interface Book{
-    id: string,
-    title: string,
-    author: string,
-    description: string,
-    genres: string[],
-    avgstars: number,
-    numreviews: number
-}
 
 const reviews: TimelineReviewProps[] = [
     {
@@ -39,14 +28,6 @@ const reviews: TimelineReviewProps[] = [
 ];
 
 const Timeline = () => {
-    const {timelineState} = useTimelineContext();
-    const [search, setSearch] = useState('');
-    useEffect(() => {
-        if (timelineState.page == "search") {
-            setSearch(timelineState.data)
-        }
-      }, [timelineState]);
-
     return (
     <NavBar>
         <SearchBar placeholder="Search..." buttonLabel="Search" id='searchbar'>
