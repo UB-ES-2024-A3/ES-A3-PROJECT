@@ -63,12 +63,6 @@ afterAll(async () => {
     expect(message2["statusText"]).toBe(supabaseResponses.deleteStatusText)    
 });
 
-// Testejar si al buscar un user apareix el user a la barra de navegació
-// Al clicar Search, a la llista de users apareix allà també. Mirar que s'ha canviat la pàg.
-
-//No sé si arribar fins a clicar a l'usuari i que el porti a la pàgina de user.
-
-
 describe("Search bar for users", () => {
     const timelineUrl = baseUrl + 'timeline';
     const userUrl = baseUrl + 'timeline/user/' + searchedUserTest.id; 
