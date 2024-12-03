@@ -5,10 +5,12 @@ import { UserReviewCardProps } from '@/pages/timeline/user/[userId]';
 
 interface ProfileContentsProps {
     reviews: UserReviewCardProps[];
+    isSelfUser: boolean;
   }
 
-const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews }) => {
+const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, isSelfUser }) => {
     const [activeTab, setActiveTab] = useState('reviews');
+    const no_reviews_message = isSelfUser? "You have no reviews yet." : "This user has not made any reviews yet.";
 
   return (
     <>
@@ -30,7 +32,7 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews }) => {
                 <ProfileReviewCard key={index} bookTitle={review.title} author={review.author} rating={review.stars} date={review.date} time={review.time} review={review.comment} book_id={review.book_id}/>
             ))):(
                 <div style={{margin: '5px', textAlign: 'center', justifyContent: 'center', height: '80vh', display: 'flex', flexDirection: 'column'}}> 
-                    <h2 style={{fontSize: '2em', color: 'grey'}}>You have no reviews yet.</h2>
+                    <h2 style={{fontSize: '2em', color: 'grey'}}>{no_reviews_message}</h2>
                 </div>
             )}
             </div>
