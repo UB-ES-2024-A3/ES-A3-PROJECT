@@ -26,7 +26,7 @@ export default function TimelineReviewCard({ userId, username, bookId, bookTitle
         <div style={{ height: "fit-content", minWidth: "100%", margin: "0 auto", padding: "24px", borderRadius: "8px", backgroundColor: "white"}}>
             <div style={{ display: "flex", alignItems: "center" }}>
                 <div style={{ flexGrow: 1 }}>
-                    <button className="secondaryButton" style={{ fontWeight: "bold" }} onClick={handleClickUsername}>
+                    <button className="secondaryButton usernameButton" onClick={handleClickUsername}>
                         {username}
                     </button>
                 </div>
