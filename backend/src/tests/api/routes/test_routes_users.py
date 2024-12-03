@@ -8,6 +8,10 @@ from src.models.review_model import Review
 import uuid
 import pytest
 from fastapi.testclient import TestClient
+import time
+import logging
+
+logger = logging.getLogger(__name__)
 
 @pytest.fixture
 def client():
@@ -187,63 +191,6 @@ def test_search_users(client: TestClient):
     assert response.status_code == 200, f"Expected 200, got {response.status_code}. Details: {response.json()}"
     assert response.json() == [], "Expected an empty list for nonexistent username"
 
-def test_get_timeline(client: TestClient):
-    userData = [
-        {"email": "user22024@hotmail.com", "username": "user22024", "password": "dumbPassword2"},
-        {"email": "user32024@hotmail.com", "username": "user32024", "password": "dumbPassword3"}
-    ]
-    user_data_1 = {"email": "user2024@hotmail.com", "username": "user2024", "password": "dumbPassword"}
-    
-    user1 = User(**user_data_1)
-    
-    users = [crud.user.create_user(User(**data)) for data in userData]
-    created_user_1 = crud.user.create_user(user1)
-
-    user_controller.follow_user(created_user_1.id, users[0].id)
-    user_controller.follow_user(created_user_1.id, users[1].id)
-
-    book_id1 = "afedad77-d554-438d-9cf6-19a0fc9c6335"
-    book_id2 = "5db5545e-cf02-4c37-b6fc-d415edd2eaf4"
-    book_1 = book_controller.get_book_by_id_query(book_id1)
-    book_2 = book_controller.get_book_by_id_query(book_id2)
-
-    books = [book_2, book_1]
-    
-    reviewData = [
-        {"comment": "Test Review 1", "stars": 2, "user_id": users[1].id, "book_id": book_id1},
-        {"comment": "Test Review 3", "stars": 1, "user_id": users[0].id, "book_id": book_id2}
-    ]
-
-    user1_review = {"comment": "Test Review 2", "stars": 3, "user_id": user1.id, "book_id": book_id2}
-
-
-    reviews = [review_controller.add_review_command(Review(**data)) for data in reviewData]
-    review1 = review_controller.add_review_command(Review(**user1_review))
-    reviews_sorted = sorted(reviews, key=lambda review: review.time, reverse=True)
-
-    response = client.get(f"users/timeline/{created_user_1.id}")
-    timeline = response.json()
-
-    for r in reviews:
-        crud.reviews.delete_review_by_id(r.id)
-    crud.reviews.delete_review_by_id(review1.id)
-    crud.user.delete_user(created_user_1.id)
-    crud.user.delete_user(users[0].id)
-    crud.user.delete_user(users[1].id)
-
-    assert response.status_code == 200, f"Expected 200, got {response.status_code}. Details: {response.json()}"
-    assert len(reviews) == len(timeline), f"Expected {len(reviews)} reviews, but got {len(timeline)}."
-    
-    for i in range(len(reviews)):
-        assert timeline[i]["user_id"] == users[i].id
-        assert timeline[i]["book_id"] == books[i].id
-        assert timeline[i]["username"] == users[i].username
-        assert timeline[i]["title"] == books[i].title
-        assert timeline[i]["author"] == books[i].author
-        assert timeline[i]["rating"] == reviews_sorted[i].stars
-        assert timeline[i]["description"] == reviews_sorted[i].comment
-        assert str(timeline[i]["date"]) == str(reviews_sorted[i].date)
-        assert str(timeline[i]["time"])[:12] == str(reviews_sorted[i].time)[:12]
 
 def test_get_timeline(client: TestClient):
     userData = [
@@ -274,14 +221,16 @@ def test_get_timeline(client: TestClient):
 
     user1_review = {"comment": "Test Review 2", "stars": 3, "user_id": user1.id, "book_id": book_id2}
 
+    r1 =review_controller.add_review_command(Review(**reviewData[0]))
+    time.sleep(60)
+    r2 = review_controller.add_review_command(Review(**reviewData[1]))
 
-    reviews = [review_controller.add_review_command(Review(**data)) for data in reviewData]
+    reviews = [r2, r1]
     review1 = review_controller.add_review_command(Review(**user1_review))
-    reviews_sorted = sorted(reviews, key=lambda review: review.time, reverse=True)
 
     response = client.get(f"users/timeline/{created_user_1.id}")
     timeline = response.json()
-
+     
     for r in reviews:
         crud.reviews.delete_review_by_id(r.id)
     crud.reviews.delete_review_by_id(review1.id)
@@ -298,10 +247,10 @@ def test_get_timeline(client: TestClient):
         assert timeline[i]["username"] == users[i].username
         assert timeline[i]["title"] == books[i].title
         assert timeline[i]["author"] == books[i].author
-        assert timeline[i]["rating"] == reviews_sorted[i].stars
-        assert timeline[i]["description"] == reviews_sorted[i].comment
-        assert str(timeline[i]["date"]) == str(reviews_sorted[i].date)
-        assert str(timeline[i]["time"])[:12] == str(reviews_sorted[i].time)[:12]
+        assert timeline[i]["rating"] == reviews[i].stars
+        assert timeline[i]["description"] == reviews[i].comment
+        assert str(timeline[i]["date"]) == str(reviews[i].date)
+        assert str(timeline[i]["time"])[:12] == str(reviews[i].time)[:12]
 
 
 def test_follow_user_valid_id(client: TestClient):
