@@ -63,18 +63,18 @@ const AddReviewButton: React.FC<AddReviewButtonFields> = ({title, author, bookId
 
   return (
     <div style={{ padding: '1rem' }}>
-      <button onClick={() => setIsOpen(true)}>
+      <button id='add-review-btn' onClick={() => setIsOpen(true)}>
         Add a Review
       </button>
 
       {isOpen && (
         <div style={{ position: 'fixed', inset: '0', backgroundColor: 'rgba(0, 0, 0, 0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem',}}>
-          <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', width: '100%', height: 'fit-content', maxWidth: '50%'}}>
+          <div id='add-review-popup' style={{ backgroundColor: 'white', borderRadius: '0.5rem', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', width: '100%', height: 'fit-content', maxWidth: '50%'}}>
             <div style={{ padding: '1.5rem' }}>
               <h2 style={{ fontSize: '1.5rem', fontWeight: '600', marginBottom: '1rem' }}>
                 Review for &quot;{title}&quot; by &quot;{author}&quot;
               </h2>
-              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+              <div id='rating-btns' style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
                     key={star}
@@ -110,12 +110,14 @@ const AddReviewButton: React.FC<AddReviewButtonFields> = ({title, author, bookId
 
               <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
                 <button
+                  id='cancel-review-btn'
                   onClick={handleCancelReview}
                   className='secondaryButton'
                 >
                   Cancel
                 </button>
                 <button
+                  id='post-review-btn'
                   onClick={handleSubmit}
                   disabled={!rating}
                   style={{ cursor: rating ? 'pointer' : 'not-allowed', opacity: rating ? '1' : '0.5' }}

@@ -24,6 +24,7 @@ const ListSearchNavBar: React.FC<ListSearchNavBarProps> = ({ activeTab, setActiv
         <button
             className={`navigation ${activeTab === tab.id ? 'active' : ''}`}
           key={tab.id}
+          id={'search-' + tab.id + '-tab'}
           onClick={() => setActiveTab(tab.id)}
         >
           {tab.label}
