@@ -60,6 +60,17 @@ const ReviewService = {
         .catch(except => {
             throw except.detail;
         });
+    },
+    getTimelineReviews : async (userId: string) => {
+        return axios.get(
+            endpoint.dbURL + '/users/timeline/' + userId
+        )
+        .then(response => {
+            return response.data;
+        })
+        .catch(except => {
+            throw except.detail;
+        })
     }
 };
 

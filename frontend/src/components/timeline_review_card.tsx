@@ -3,23 +3,23 @@ import ProfileReviewCard from "./profile_review_card";
 import { useTimelineContext } from "@/contexts/TimelineContext";
 
 export interface TimelineReviewProps {
-    userId: string,
+    user_id: string,
     username: string,
     rating: number,
-    bookId: string,
-    bookTitle: string,
+    book_id: string,
+    title: string,
     author: string,
-    comment?: string,
+    description?: string,
     date?: string,
     time?: string
 }
 
-export default function TimelineReviewCard({ userId, username, bookId, bookTitle, author, rating, comment, date, time }: TimelineReviewProps) {
+export default function TimelineReviewCard({ user_id, username, book_id, title, author, rating, description: comment, date, time }: TimelineReviewProps) {
     const router = useRouter();
     const {setTimelineState} = useTimelineContext();
     const handleClickUsername = () => {
-        setTimelineState({page: 'user', data: userId});
-        router.push("/timeline/user/" + userId);
+        setTimelineState({page: 'user', data: user_id});
+        router.push("/timeline/user/" + user_id);
     }
 
     return (
@@ -39,30 +39,12 @@ export default function TimelineReviewCard({ userId, username, bookId, bookTitle
             </div>
             <hr />
             <ProfileReviewCard 
-                book_id={bookId}
-                bookTitle={bookTitle}
+                book_id={book_id}
+                bookTitle={title}
                 author={author}
                 rating={rating}
                 review={comment}
             />
-            {/* <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "solid black 1px", padding: "16px"}}>
-                <div>
-                    <button className="secondaryButton" style={{ fontSize: "1.25rem", fontWeight: "bold", display: "contents" }} >
-                        {bookTitle}
-                    </button>
-                    <p style={{ color: "grey", marginTop: "4px" }}>{author}</p>
-                </div>
-                <div style={{ display: "flex", marginTop: "8px", alignItems: "flex-end" }}>
-                    {renderStars(rating)} 
-                </div>
-
-            </div>
-            {comment && (
-                <p style={{ lineHeight: "1.625", marginTop: "16px" }}>
-                    {comment}
-                </p>
-            )} */}
-            
         </div>
     );
 }

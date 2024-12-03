@@ -2,32 +2,24 @@ import React, { useState, useEffect } from 'react';
 import SearchBar from '@/components/searchbar';
 import NavBar from '@/components/navbar';
 import TimelineReviewCard, { TimelineReviewProps } from '@/components/timeline_review_card';
-
-const reviews: TimelineReviewProps[] = [
-    {
-        userId: '0001',
-        username: 'bookworm',
-        bookId: '1000',
-        bookTitle: 'The Hunger Games',
-        author: 'Suzanne Collins',
-        rating: 5,
-        comment: 'What an increadible story!',
-        date: '12/05/2024',
-        time: '14:32:07'
-    },
-    {
-        userId:"93781ed1-b2ff-4332-bb9c-199990019633",
-        username: 'avid_reader',
-        bookId: '8468d0fe-5e08-4594-a86d-92a239e8ad6e',
-        bookTitle: 'The Nativity Story',
-        author: 'Voiland, Stephanie (EDT)',
-        rating: 4,
-        date: '10/05/2024',
-        time: '18:13:22'
-    }
-];
+import ReviewService from '@/services/reviewService';
 
 const Timeline = () => {
+    const [reviews, setReviews] = useState<TimelineReviewProps[]>([]);
+
+    useEffect(() => {
+        const userId = localStorage.getItem('userId');
+        if (userId)
+            ReviewService.getTimelineReviews(userId)
+            .then(reviews => {
+                setReviews(reviews);
+            })
+            .catch(except => {
+                console.log(except);
+                setReviews([]);
+            })
+    }, [])
+
     return (
     <NavBar>
         <SearchBar placeholder="Search..." buttonLabel="Search" id='searchbar'>
@@ -35,13 +27,13 @@ const Timeline = () => {
                 {reviews.length? (reviews.map((review) => {
                     return (
                         <TimelineReviewCard
-                            userId={review.userId}
+                            user_id={review.user_id}
                             username={review.username}
-                            bookId={review.bookId}
-                            bookTitle={review.bookTitle}
+                            book_id={review.book_id}
+                            title={review.title}
                             author={review.author}
                             rating={review.rating}
-                            comment={review.comment}
+                            description={review.description}
                             date={review.date}
                             time={review.time}
                         />
