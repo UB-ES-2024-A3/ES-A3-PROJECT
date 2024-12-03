@@ -38,6 +38,21 @@
     background-color: white;
   }
 
+  .titleButton {
+    font-size: 1.25rem;
+    font-weight: bold;
+    padding: inherit;
+  }
+
+  .usernameButton {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: black;
+  }
+  .usernameButton:hover {
+    color: black;
+  }
+
   .navigation {
     background-color: var(--primary-beige);
     display: flex;
