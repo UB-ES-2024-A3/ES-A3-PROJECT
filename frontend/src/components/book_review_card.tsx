@@ -28,7 +28,7 @@ export default function BookReviewCard({ userId, username, stars, comment, date,
       border: 'outset gray 2px',
       borderRadius: "16px",
       backgroundColor: "white"
-    }}>
+    }} className="review-card">
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center"}}>
         <div>
           <button className="secondaryButton" style={{  fontSize: "1.25rem", fontWeight: "bold", padding: "inherit", color: "black"}} onClick={handleClickTitle}>

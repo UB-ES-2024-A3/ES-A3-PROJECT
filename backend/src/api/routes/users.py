@@ -92,6 +92,7 @@ async def get_user_data_by_id(user_id: str) -> dict:
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error searching user by id")
 
+
 @router.get("/users/search")
 async def search_users(username: str, max_num: Optional[int] = None):
     try:
@@ -104,7 +105,7 @@ async def search_users(username: str, max_num: Optional[int] = None):
         raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error fetching users")
-    
+
 # Endpoint to follow a user 
 @router.post("/users/follow/{user_id}/{user_to_follow_id}", response_model = Follower)
 async def follow_user(user_id: str, user_to_follow_id: str):

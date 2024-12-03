@@ -117,6 +117,7 @@ def authenticate(identifier: str, password: str):
         return result.data[0]['id']
     return False
 
+
 def search_users_by_partial_username_crud(username: str, max_num: int):
     try:
         supabase = get_db_client()
@@ -137,8 +138,6 @@ def search_users_by_partial_username_crud(username: str, max_num: int):
     except Exception as e:
         print(f"Error fetching users from the database: {e}")
         raise HTTPException(status_code=500, detail="Error fetching users from the database")
-
-
 
 # Method to update the 'followers' and 'following' fields
 def update_follower_fields(user_id: str, attributes: dict):
