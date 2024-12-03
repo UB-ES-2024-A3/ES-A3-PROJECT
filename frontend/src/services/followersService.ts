@@ -7,9 +7,19 @@ const FollowersService = {
             endpoint.dbURL + '/users/follow/' + selfUserId + "/" + otherUserId
         )
         .then(response => {
-            console.log(response)
             const succeed = response.status == 200
             return succeed;
+        })
+        .catch(except => {
+            throw except;
+        });
+    },
+    isFollower : async (selfUserId: string, otherUserId: string) => {
+        return axios.get(
+            endpoint.dbURL + '/users/follow/' + selfUserId + "/" + otherUserId
+        )
+        .then(response => {
+            return response.data;
         })
         .catch(except => {
             throw except;

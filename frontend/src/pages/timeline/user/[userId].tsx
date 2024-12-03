@@ -23,7 +23,7 @@ const UserProfile = () => {
   const [selfUserId, setSelfUserId] = useState('');
   const [userData, setUserData] = useState({"username": '', "followers": null, "following": null});
   const [follows, setFollows] = useState<boolean|null>(null);
-  const [followButton, setFollowButton] = useState({label: "", style: ""});
+  const [followButton, setFollowButton] = useState({label: "Follow", style: ""});
 
   useEffect(() => {
     const storedUserId = localStorage.getItem('userId') as string;
@@ -31,9 +31,24 @@ const UserProfile = () => {
     if (storedUserId == userId) {
         router.push("/profile")
     }
-    setFollowButton({label: "Follow", style: ""})
-    setFollows(false)
   }, []);
+
+  useEffect(() => {
+    FollowersService.isFollower(selfUserId, userId)
+        .then(isFollower => {
+            if(isFollower){
+                setFollows(true);
+                setFollowButton({label: "Unfollow", style: "secondaryButton"})
+            }
+            else{
+                setFollows(false);
+                setFollowButton({label: "Follow", style: ""})
+            }
+        })
+        .catch(except => {
+            console.log(except);
+        });
+  }, [selfUserId, userId]);
 
   useEffect(() => {
     userId = router.query.userId as string;
