@@ -20,7 +20,7 @@ interface Book {
 }
 
 interface User {
-  id: string;
+  user_id: string;
   username: string;
 }
 
@@ -40,6 +40,11 @@ const ListSearch: React.FC<ListSearchProps> = () => {
       setBookResults([]);
       setTimelineState({page: "book", data: id});
       router.push("/timeline/book/"+ id)
+    }
+    const handleOpenUser = (id: string) =>{
+      setUserResults([]);
+      setTimelineState({page: "user", data: id});
+      router.push("/timeline/user/"+ id)
     }
     useEffect(() => {
       if (search.trim()) {
@@ -66,7 +71,7 @@ const ListSearch: React.FC<ListSearchProps> = () => {
           SearchService.userRequest(search, null)
             .then(results => {
               const users = results.map((user: User) => ({
-                id: user.id,
+                user_id: user.user_id,
                 username: user.username
               }));
               setUserResults(users);
@@ -87,11 +92,11 @@ const ListSearch: React.FC<ListSearchProps> = () => {
 
     return(
     <NavBar>
-      <SearchBar placeholder="Search..." buttonLabel="Search">
+      <SearchBar placeholder="Search..." buttonLabel="Search" id='searchbar'>
         <div style={{margin: '5px 0px 5px 0px'}}>
             <ListSearchNavBar activeTab={activeTab} setActiveTab={setActiveTab} />
         </div>
-        <div style={{ width: '100%', marginTop: '0px', display: 'flex', flexDirection: 'column', overflowY: 'auto'}}>
+        <div id = {'list-results'} style={{ width: '100%', marginTop: '0px', display: 'flex', flexDirection: 'column', overflowY: 'auto'}}>
         {activeTab == 'books'? 
           ( <div style={{ width: '100%', marginTop: '0px', display: 'flex', flexDirection: 'column', overflowY: 'auto'}}>
               {bookResults.length > 0 ? (
@@ -118,8 +123,8 @@ const ListSearch: React.FC<ListSearchProps> = () => {
               {userResults.length > 0? (
                 <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
                   {userResults.map((user) => (
-                    <div key={user.id} style={{margin: '3px'}}>
-                      <UserBar key={user.id} id={user.id} username={user.username}/>
+                    <div key={user.user_id} style={{margin: '3px'}}>
+                      <UserBar key={user.user_id} id={user.user_id} username={user.username} handleOpenUser={handleOpenUser}/>
                     </div>
                   ))}
                 </div>

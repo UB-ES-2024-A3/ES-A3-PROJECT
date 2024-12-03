@@ -2,6 +2,8 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import RegisterService from '@/services/registerService';
 import InputField from '@/components/input_field';
+import Image from 'next/image';
+import Head from 'next/head';
 
 const RegisterPage: React.FC = () => {
   const router = useRouter();
@@ -115,36 +117,42 @@ const RegisterPage: React.FC = () => {
 
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', height: '100vh' }}>
-      <div style={{ 
-        boxShadow: "0 1px 1px 0 grey", 
-        margin: "10%", 
-        padding: "4%", 
-        backgroundColor: 'white', 
-        display: 'flex', 
-        alignItems: 'center', 
-        flexDirection: 'column', 
-        justifyContent: 'center', 
-        width: '33%',  
-        borderRadius: "5%"
-      }}>
-        <h1 style={{ margin: '10px 0px', width: '100%', textAlign: 'center' }}>Register</h1>
-        <form onSubmit={handleRegister} style={{ width: '100%' }}>
-          <InputField label={"Username:"} type={"text"} id={"username"} value={username} onChange={setUsername} error={errors.username}/>
-          <InputField label={"Email:"} type={"text"} id={"email"} value={email} onChange={setEmail} error={errors.email}/>
-          <InputField label={"Password:"} type={"password"} id={"password"} value={password} onChange={setPassword} error={errors.password}/>
-          <InputField label={"Password (repeat):"} type={"password"} id={"password2"} value={repeatedPassword} onChange={setRepeatedPassword} error={errors.repeatedPassword}/>
-          <div style={{ margin: '10px 5px'}}>
-            <button type="submit" style={{ width: '100%'}}>Register</button><br />
+    <>
+      <Head>
+        <title>Register</title>
+      </Head>
+      <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', height: '100vh' }}>
+        <div style={{ 
+          boxShadow: "0 1px 1px 0 grey", 
+          margin: "10%", 
+          padding: "4%", 
+          backgroundColor: 'white', 
+          display: 'flex', 
+          alignItems: 'center', 
+          flexDirection: 'column', 
+          justifyContent: 'center', 
+          width: '33%',  
+          borderRadius: "5%"
+        }}>
+          <Image src='/rebook_logo.png' alt='Rebook Logo' width={200} height={200} />
+          <h1 style={{ margin: '10px 0px', width: '100%', textAlign: 'center', fontSize: '32pt' }}>Register</h1>
+          <form onSubmit={handleRegister} style={{ width: '100%' }}>
+            <InputField label={"Username:"} type={"text"} id={"username"} value={username} onChange={setUsername} error={errors.username}/>
+            <InputField label={"Email:"} type={"text"} id={"email"} value={email} onChange={setEmail} error={errors.email}/>
+            <InputField label={"Password:"} type={"password"} id={"password"} value={password} onChange={setPassword} error={errors.password}/>
+            <InputField label={"Password (repeat):"} type={"password"} id={"password2"} value={repeatedPassword} onChange={setRepeatedPassword} error={errors.repeatedPassword}/>
+            <div style={{ margin: '10px 5px'}}>
+              <button type="submit" style={{ width: '100%'}}>Register</button><br />
+            </div>
+          </form>
+          <div style={{ margin: 5}}>
+            <button style={{ padding: 0, width: '100%' }} className="secondaryButton" onClick={handleLogin}>
+              <u>Already have an account? Login</u>
+            </button>
           </div>
-        </form>
-        <div style={{ margin: 5}}>
-          <button style={{ padding: 0, width: '100%' }} className="secondaryButton" onClick={handleLogin}>
-            <u>Already have an account? Login</u>
-          </button>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

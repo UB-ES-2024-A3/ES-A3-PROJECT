@@ -71,7 +71,7 @@ def create_user(user: User):
             "id": user.id,
             "email": user.email,
             "username": user.username,
-            "password": user.password,  # FIXME: Should we hash the pwd?
+            "password": user.password,
         }
         result = supabase.table("users").insert(data).execute()
         if not result.data:
@@ -95,7 +95,8 @@ def create_user(user: User):
 def delete_user(user_id: str):
     supabase = get_db_client()
     try:
-        result = supabase.table("users").delete().eq("id", user_id).execute()
+        supabase.table("reviews").delete().eq("user_id", user_id).execute()
+        supabase.table("users").delete().eq("id", user_id).execute()
         return True
     except Exception as e:
         print(f"Error deleting user with id {user_id}: {e}")

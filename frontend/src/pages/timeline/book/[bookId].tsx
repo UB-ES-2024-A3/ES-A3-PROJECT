@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import NavBar from '@/components/navbar';
 import SearchBar from '@/components/searchbar';
 import BookInformation from '@/components/book_information';
@@ -30,14 +31,19 @@ const BookPage = () => {
   }
 
   return (
-    <NavBar>
-        <SearchBar placeholder="Search..." buttonLabel="Search">
-          <>
-              <BookInformation book={book} />
-              <BookReviewSection book={book} callback={newReviewCallback} />
-          </>
-        </SearchBar>
-    </NavBar>
+    <>
+      <Head>
+        <title>{book.title} | Rebook</title>
+      </Head>
+      <NavBar>
+          <SearchBar placeholder="Search..." buttonLabel="Search" id='searchbar'>
+            <>
+                <BookInformation book={book} />
+                <BookReviewSection book={book} callback={newReviewCallback} />
+            </>
+          </SearchBar>
+      </NavBar>
+    </>
   );
 };
 

@@ -4,6 +4,7 @@ from src.models.review_model import Review
 from supabase import create_client
 from dotenv import load_dotenv
 import os
+import pytz
 
 # Getter client
 def get_db_client():
@@ -13,10 +14,10 @@ def get_db_client():
 def add_review_to_db(review: Review):
     try:
         supabase = get_db_client()
-        now = datetime.now()
+        tz = pytz.timezone('Europe/Madrid') # Set timezone to spain (ignore system datetime)  (CET Time is  GMT+1)
+        now = datetime.now(tz)
         current_date = now.date().isoformat()  # Current date in ISO format
-        current_time = now.time().isoformat()  # Current time in ISO 
-        
+        current_time = now.time().isoformat()[:5]  # Current time in ISO and format (HH:mm)
         if isinstance(review.comment, property) or review.comment is None:
             comment_value = ""  # Set to empty string if invalid
         else:

@@ -1,0 +1,53 @@
+name: Frontend Tests
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      selenium:
+        image: selenium/standalone-chrome
+
+    steps:
+      # Checkout the repository code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build backend Docker Image
+        run: |
+          docker build -t backend -f backend/Dockerfile --build-arg SUPABASE_URL=${{ secrets.SUPABASE_URL }} --build-arg SUPABASE_KEY=${{ secrets.SUPABASE_KEY }} backend
+          docker run -p 8000:8000 backend &
+
+      - name: Build frontend Docker Image
+        run: |
+          docker build -t frontend -f frontend/Dockerfile --build-arg API_DB_URL=http://localhost:8000 frontend
+          docker run -p 3000:3000 frontend &
+
+      # Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # Specify your Node.js version
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm --prefix frontend install
+
+      - name: Test application connectivity
+        run: curl -v http://localhost:3000/login
+
+      - name: Run tests
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: npm --prefix frontend test
