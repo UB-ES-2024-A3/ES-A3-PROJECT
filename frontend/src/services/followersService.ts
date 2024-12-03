@@ -26,7 +26,7 @@ const FollowersService = {
         });
     },
     unfollowUser : async (selfUserId: string, otherUserId: string) => {
-        return axios.get(
+        return axios.delete(
             endpoint.dbURL + '/users/unfollow/' + selfUserId + "/" + otherUserId
         )
         .then(response => {

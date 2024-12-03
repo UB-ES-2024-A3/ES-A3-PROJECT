@@ -75,7 +75,6 @@ const UserProfile = () => {
 }, [userId, router.isReady, follows]);
 
 const handleFollow = () => {
-    console.log("u" + userId + "u" + selfUserId)
     if (follows) {
         FollowersService.unfollowUser(selfUserId, userId)
         .then(succeed => {
