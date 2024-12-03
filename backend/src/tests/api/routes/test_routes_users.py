@@ -159,9 +159,6 @@ def test_unfollow_user(client: TestClient):
 
     assert response.status_code == 404, f"Expected 404, got {response.status_code}. Details: {response.json()}"
 
-
-
-
 def test_get_username_with_invalid_id(client: TestClient):
     invalid_id = str(uuid.uuid4())
     response = client.get(f"/users/username/id/{invalid_id}")
