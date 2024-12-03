@@ -213,7 +213,7 @@ def test_get_follower(client: TestClient):
     crud.user.delete_user(created_user_1.id)
     crud.user.delete_user(created_user_2.id)
 
-    assert response.status_code == 200, f"Expected 404, got {response.status_code}. Details: {response.json()}"
+    assert response.status_code == 200, f"Expected 200, got {response.status_code}. Details: {response.json()}"
     assert response.json() == True
 
 def test_get_follower_not_following(client: TestClient):
