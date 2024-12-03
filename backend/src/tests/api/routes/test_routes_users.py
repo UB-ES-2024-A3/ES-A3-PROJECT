@@ -63,14 +63,18 @@ def test_get_user_by_id(client: TestClient):
     assert response.status_code == 200, f"Expected 200, got {response.status_code}. Details: {response.json()}"
     assert response.json()["id"] == created_user.id, f"Expected {created_user.id}, got {response.json()['id']}"
 
-# def test_get_username_by_id(client: TestClient):
-#     user_data = {"email": "user2024@hotmail.com", "username": "user2024", "password": "dumbPassword"}
-#     user = User(**user_data)
-#     created_user = crud.user.create_user(user)
-#     response = client.get(f"/users/username/id/{created_user.id}")
-#     crud.user.delete_user(created_user.id)
-#     assert response.status_code == 200, f"Expected 200, got {response.status_code}. Details: {response.json()}"
-#     assert response.json() == created_user.username, f"Expected {created_user.username}, got {response.json()}"
+def test_get_username_by_id(client: TestClient):
+    user_data = {"email": "user2024@hotmail.com", "username": "user2024", "password": "dumbPassword"}
+    user = User(**user_data)
+    created_user = crud.user.create_user(user)
+    response = client.get(f"/users/username/id/{created_user.id}")
+    crud.user.delete_user(created_user.id)
+    response_data = response.json()
+    assert response.status_code == 200, f"Expected 200, got {response.status_code}. Details: {response.json()}"
+    assert response_data["username"] == created_user.username, f"Expected {created_user.username}, got {response_data()["username"]}"
+    assert response_data["followers"] == created_user.followers, f"Expected {created_user.followers}, got {response_data()["followers"]}"
+    assert response_data["following"] == created_user.following, f"Expected {created_user.following}, got {response_data()["following"]}"
+
 
 def test_get_username_with_invalid_id(client: TestClient):
     invalid_id = str(uuid.uuid4())
@@ -123,7 +127,10 @@ def test_search_users(client: TestClient):
     # Check for nonexistent username
     response = client.get(f"/users/search?username=nonexistent&max_num=2")
     assert response.status_code == 200, f"Expected 200, got {response.status_code}. Details: {response.json()}"
-    assert response.json() == created_user.username, f"Expected {created_user.username}, got {response.json()}"
+    assert response_data["username"] == created_user.username, f"Expected {created_user.username}, got {response_data()["username"]}"
+    assert response_data["followers"] == created_user.followers, f"Expected {created_user.followers}, got {response_data()["followers"]}"
+    assert response_data["following"] == created_user.following, f"Expected {created_user.following}, got {response_data()["following"]}"
+
 
 def test_get_username_with_invalid_id(client: TestClient):
     invalid_id = str(uuid.uuid4())
@@ -177,3 +184,91 @@ def test_search_users(client: TestClient):
     response = client.get(f"/users/search?username=nonexistent&max_num=2")
     assert response.status_code == 200, f"Expected 200, got {response.status_code}. Details: {response.json()}"
     assert response.json() == [], "Expected an empty list for nonexistent username"
+
+
+def test_follow_user_valid_id(client: TestClient):
+    user_data_1 = {"email": "user2024@hotmail.com", "username": "user2024", "password": "dumbPassword"}
+    user_data_2 = {"email": "user22024@hotmail.com", "username": "user22024", "password": "dumbPassword2"}
+    user1 = User(**user_data_1)
+    user2 = User(**user_data_2)
+    created_user_1 = crud.user.create_user(user1)
+    created_user_2 = crud.user.create_user(user2)
+
+    response = client.post(f"/users/follow/{created_user_1.id}/{created_user_2.id}")
+    response_data = response.json()
+
+    updated_user_1 = crud.user.search_by_id(user1.id)
+    updated_user_2 = crud.user.search_by_id(user2.id)
+
+    crud.user.delete_user(created_user_1.id)
+    crud.user.delete_user(created_user_2.id)
+
+    print(response_data)
+    assert response_data["follower_id"] == created_user_1.id
+    assert response_data["followed_id"] == created_user_2.id
+    assert updated_user_1.following == (created_user_1.following + 1)
+    assert updated_user_1.followers == created_user_1.followers
+    assert updated_user_2.following == created_user_2.following
+    assert updated_user_2.followers == (created_user_2.followers +1)
+
+def test_follow_user_already_followed(client: TestClient):
+    user_data_1 = {"email": "user2024@hotmail.com", "username": "user2024", "password": "dumbPassword"}
+    user_data_2 = {"email": "user22024@hotmail.com", "username": "user22024", "password": "dumbPassword2"}
+    user1 = User(**user_data_1)
+    user2 = User(**user_data_2)
+    created_user_1 = crud.user.create_user(user1)
+    created_user_2 = crud.user.create_user(user2)
+
+    response = client.post(f"/users/follow/{created_user_1.id}/{created_user_2.id}")
+    response_data = response.json()
+
+    updated_user_1 = crud.user.search_by_id(user1.id)
+    updated_user_2 = crud.user.search_by_id(user2.id)
+
+    crud.user.delete_user(created_user_1.id)
+    crud.user.delete_user(created_user_2.id)
+
+    response = client.post(f"/users/follow/{created_user_1.id}/{created_user_2.id}")
+
+    assert response.status_code == 404, f"Expected 404, got {response.status_code}. Details: {response.json()}"
+
+def test_get_follower(client: TestClient):
+    user_data_1 = {"email": "user2024@hotmail.com", "username": "user2024", "password": "dumbPassword"}
+    user_data_2 = {"email": "user22024@hotmail.com", "username": "user22024", "password": "dumbPassword2"}
+    user1 = User(**user_data_1)
+    user2 = User(**user_data_2)
+    created_user_1 = crud.user.create_user(user1)
+    created_user_2 = crud.user.create_user(user2)
+
+    crud.followers.create_follower(created_user_1.id, created_user_2.id)
+    response = client.get(f"/users/follow/{created_user_1.id}/{created_user_2.id}")
+    response_data = response.json()
+
+    updated_user_1 = crud.user.search_by_id(user1.id)
+    updated_user_2 = crud.user.search_by_id(user2.id)
+
+    crud.user.delete_user(created_user_1.id)
+    crud.user.delete_user(created_user_2.id)
+
+    assert response.status_code == 200, f"Expected 200, got {response.status_code}. Details: {response.json()}"
+    assert response.json() == True
+
+def test_get_follower_not_following(client: TestClient):
+    user_data_1 = {"email": "user2024@hotmail.com", "username": "user2024", "password": "dumbPassword"}
+    user_data_2 = {"email": "user22024@hotmail.com", "username": "user22024", "password": "dumbPassword2"}
+    user1 = User(**user_data_1)
+    user2 = User(**user_data_2)
+    created_user_1 = crud.user.create_user(user1)
+    created_user_2 = crud.user.create_user(user2)
+
+    response = client.get(f"/users/follow/{created_user_1.id}/{created_user_2.id}")
+    response_data = response.json()
+
+    updated_user_1 = crud.user.search_by_id(user1.id)
+    updated_user_2 = crud.user.search_by_id(user2.id)
+
+    crud.user.delete_user(created_user_1.id)
+    crud.user.delete_user(created_user_2.id)
+
+    assert response.status_code == 200, f"Expected 404, got {response.status_code}. Details: {response.json()}"
+    assert response.json() == False
