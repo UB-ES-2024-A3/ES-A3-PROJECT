@@ -64,6 +64,12 @@ class UserController:
         if user == -1 or user_to_follow == -1:
             raise HTTPException(status_code=404, detail="User not found")
         try:
+            followed = self.check_follower(user_id, user_to_follow_id)
+            if followed:
+                raise HTTPException(status_code=404, detail="User already followed")
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+        try:
             # We create a new row in the follower table
             created_follower = followers.create_follower(user_id, user_to_follow_id)
         except Exception as e:
@@ -75,8 +81,14 @@ class UserController:
         new_user_followers = user_to_follow.followers + 1
         update_follower_fields(user.id, {"following": new_user_following})
         update_follower_fields(user_to_follow.id, {"followers": new_user_followers})
-
         return created_follower
+    
+    def check_follower(self, user_id: str, user_to_follow_id: str):
+        try:
+            followed = followers.get_follower(user_id, user_to_follow_id)
+            return followed
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
 
     def search_by_username(self, username: str):
         # Validate username length
