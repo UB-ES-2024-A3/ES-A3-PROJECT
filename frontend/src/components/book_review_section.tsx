@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Book } from "@/pages/timeline";
+import { Book } from '@/pages/timeline/book/[bookId]';
 import BookReviewCard from "./book_review_card";
 import { BookReviewCardProps } from "./book_review_card";
 import AddReviewButton from "./add_review";
