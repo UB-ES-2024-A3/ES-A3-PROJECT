@@ -19,6 +19,10 @@ const BookReviewSection: React.FC<BookReviewSectionFields> = ({ book, callback }
         callback();
     }
 
+    function deleteReviewCallback(id: string) {
+        callback();
+    }
+
     useEffect(() => {
         ReviewService.getBookReviews(book.id)
             .then(reviewList => {
@@ -68,15 +72,17 @@ const BookReviewSection: React.FC<BookReviewSectionFields> = ({ book, callback }
                     rowGap: '16px',
                     overflowY: 'visible'
                 }} id="review-container">
-                    {reviews.length? (reviews.map((review, index) => (
+                    {reviews.length? (reviews.map(review => (
                             <BookReviewCard
-                                key={index}
+                                key={review.id}
+                                id={review.id}
                                 userId={review.userId}
                                 username={review.username || 'username'}
                                 stars={review.stars}
                                 comment={review.comment}
                                 date={review.date}
                                 time={review.time}
+                                callback={deleteReviewCallback}
                             />
                         ))) : (
                             <div style={{ textAlign: 'center' }}>

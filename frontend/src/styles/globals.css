@@ -49,8 +49,18 @@
     font-weight: bold;
     color: black;
   }
+  
   .usernameButton:hover {
     color: black;
+  }
+
+  .delete-btn {
+    float: right;
+    background-color: darkred;
+  }
+
+  .delete-btn:hover {
+    background-color: red;
   }
 
   .navigation {
