@@ -37,8 +37,8 @@ const ReviewService = {
         )
         .then(response => {
             // Fetch username from received data.
-            const reviews = response.data.map((review: { users: { username: string }, time: string}) => {
-                return {...review, username: review.users.username, time: review.time.slice(0, 8)};
+            const reviews = response.data.map((review: { users: { username: string, id: string }, time: string}) => {
+                return {...review, username: review.users.username, time: review.time.slice(0, 8), userId: review.users.id};
             })
             return reviews;
         })
@@ -53,12 +53,35 @@ const ReviewService = {
         .then(response => {
             // Fetch author and title from received data.
             const reviews = response.data.map((review: { books: { author: string, title: string}, time: string }) => {
-                return {...review, author: review.books.author, title: review.books.title,  time: review.time.slice(0, 8)};
+                return {...review, author: review.books.author, title: review.books.title,  time: review.time ? review.time.slice(0, 8) : ""};
             })
             return reviews;
         })
         .catch(except => {
             throw except.detail;
+        });
+    },
+    getTimelineReviews : async (userId: string) => {
+        return axios.get(
+            endpoint.dbURL + '/users/timeline/' + userId
+        )
+        .then(response => {
+            return response.data;
+        })
+        .catch(except => {
+            throw except.detail;
+        })
+    },
+    deleteReviewRequest : async (reviewId: string) => {
+        return axios.delete(
+            endpoint.dbURL + '/reviews/' + reviewId
+        )
+        .then(() => {
+            return true;
+        })
+        .catch(e => {
+            console.log(e.detail);
+            return false;
         });
     }
 };

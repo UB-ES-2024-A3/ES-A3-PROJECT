@@ -4,7 +4,7 @@ from supabase import create_client
 from dotenv import load_dotenv
 import re
 from src.models.user_model import User
-
+import uuid
 
 # Getter client
 def get_db_client():
@@ -71,7 +71,7 @@ def create_user(user: User):
             "id": user.id,
             "email": user.email,
             "username": user.username,
-            "password": user.password,  # FIXME: Should we hash the pwd?
+            "password": user.password,
         }
         result = supabase.table("users").insert(data).execute()
         if not result.data:
@@ -79,12 +79,7 @@ def create_user(user: User):
                 status_code=500,
                 detail="Error inserting user: No data returned from Supabase",
             )
-        created_user = User(
-            id=result.data[0]["id"],
-            email=result.data[0]["email"],
-            username=result.data[0]["username"],
-            password=result.data[0]["password"],
-        )
+        created_user = User(**result.data[0])
         return created_user
     except Exception as e:
         print(f"An error occurred while inserting the user: {e}")
@@ -95,7 +90,12 @@ def create_user(user: User):
 def delete_user(user_id: str):
     supabase = get_db_client()
     try:
-        result = supabase.table("users").delete().eq("id", user_id).execute()
+        supabase.table("reviews").delete().eq("user_id", user_id).execute()
+        supabase.table("users").delete().eq("id", user_id).execute()
+        # If a user is deleted it should be deleted from the 'followers' and 'following' lists
+        supabase.table("followers").delete().eq("follower_id", user_id).execute()
+        supabase.table("followers").delete().eq("followed_id", user_id).execute()
+
         return True
     except Exception as e:
         print(f"Error deleting user with id {user_id}: {e}")
@@ -120,3 +120,37 @@ def authenticate(identifier: str, password: str):
     if(result.data != [] and result.data[0]['password'] == password):
         return result.data[0]['id']
     return False
+
+
+def search_users_by_partial_username_crud(username: str, max_num: int):
+    try:
+        supabase = get_db_client()
+        result = supabase.rpc(
+            "search_similar_users",
+            {
+                "search_term": username,
+                "limit_num": max_num
+            }
+        ).execute()
+        users = result.data
+        return [
+            {
+                "username": user["username"],
+                "user_id": uuid.UUID(user["user_id"])
+            } for user in users
+        ]
+    except Exception as e:
+        print(f"Error fetching users from the database: {e}")
+        raise HTTPException(status_code=500, detail="Error fetching users from the database")
+
+# Method to update the 'followers' and 'following' fields
+def update_follower_fields(user_id: str, attributes: dict):
+    supabase = get_db_client()
+    try:
+        result = supabase.table("users").update(attributes).eq("id", user_id).execute()
+        if not result.data:
+            raise HTTPException(status_code=500, detail="Failed to update user attributes")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error updating user attributes: {str(e)}")
+
+

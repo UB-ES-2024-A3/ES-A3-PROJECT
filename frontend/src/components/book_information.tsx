@@ -1,6 +1,6 @@
 import React from 'react';
 import genreColors from '../styles/genreColors'
-import { Book } from '@/pages/timeline';
+import { Book } from '@/pages/timeline/book/[bookId]';
 import { renderStars } from './stars_rating';
 
 interface BookInformationFields {
@@ -38,21 +38,21 @@ const BookInformation: React.FC<BookInformationFields> = ({ book }) => {
                                 fontSize: '2rem',
                                 fontWeight: 'bold',
                                 marginBottom: '0.5rem'
-                            }}>
+                            }} id='book-title'>
                                 {book.title}
                             </h2>
                             <p style={{
                                 fontSize: '1.5rem',
                                 color: '#4b5563',
                                 marginBottom: '1rem'
-                            }}>
+                            }} id='book-author'>
                                 {book.author}
                             </p>
                         </div>
                         <div style={{
                             display: 'flex',
                             marginRight: '32px'
-                            }}>
+                            }} id='book-rating'>
                             { renderStars(book.avgstars) }
                         </div>
                     </div>
@@ -65,7 +65,7 @@ const BookInformation: React.FC<BookInformationFields> = ({ book }) => {
                             <p style={{
                                 fontSize: '1rem',
                                 lineHeight: '1.5'
-                            }}>
+                            }} id='book-description'>
                                 {book.description}
                             </p>
                         </div>
@@ -74,7 +74,7 @@ const BookInformation: React.FC<BookInformationFields> = ({ book }) => {
                         flexWrap: 'wrap',
                         gap: '0.5rem',
                         marginTop: '1rem'
-                        }}>
+                        }} id='book-genres'>
                         {book.genres && book.genres.length > 0 && book.genres.map((genre) => (
                             <span key={genre} style={{
                             padding: '0.25rem 0.75rem',
