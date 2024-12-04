@@ -68,7 +68,7 @@ export default function BookReviewCard({ id, userId, username, stars, comment, d
         </p>
       )}
       {isCurrentUser && (
-        <button className="delete-btn" style={{ float: "right" }} onClick={handleClickDelete}>
+        <button className="delete-btn" onClick={handleClickDelete}>
           Delete
         </button>
       )}
