@@ -1,14 +1,37 @@
 import { renderStars } from "./stars_rating";
+import { useRouter } from "next/router";
+import { useTimelineContext } from "@/contexts/TimelineContext";
+import ReviewService from "@/services/reviewService";
 
 export interface BookReviewCardProps {
+  id: string,
+  userId: string,
   username: string,
   stars: number,
   comment?: string,
   date?: string,
-  time?: string
+  time?: string,
+  callback: (review_id: string) => void
 }
 
-export default function BookReviewCard({ username, stars, comment, date, time }: BookReviewCardProps) {
+export default function BookReviewCard({ id, userId, username, stars, comment, date, time, callback }: BookReviewCardProps) {
+  const router = useRouter();
+  const {setTimelineState} = useTimelineContext();
+  const isCurrentUser = localStorage.getItem('userId') === userId;
+
+  const handleClickTitle = () =>{
+    setTimelineState({page: 'user', data: userId});
+    router.push("/timeline/user/" + userId)
+  }
+
+  const handleClickDelete = () => {
+    ReviewService.deleteReviewRequest(id)
+    .then(isDeleted => {
+      if (isDeleted) {
+        callback(id);
+      }
+    });
+  };
 
   return (
     <div style={{
@@ -19,12 +42,12 @@ export default function BookReviewCard({ username, stars, comment, date, time }:
       border: 'outset gray 2px',
       borderRadius: "16px",
       backgroundColor: "white"
-    }}>
+    }} className="review-card">
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center"}}>
         <div>
-          <h2 style={{ fontSize: "1.25rem", fontWeight: "bold", display: "inline-block" }}>
+          <button className="secondaryButton usernameButton" style={{ padding: "inherit"}} onClick={handleClickTitle}>
             {username}
-          </h2>
+          </button>
           <div style={{ display: "flex", marginTop: "8px" }}>
             {renderStars(stars)} 
           </div>
@@ -44,7 +67,11 @@ export default function BookReviewCard({ username, stars, comment, date, time }:
           {comment}
         </p>
       )}
-      
+      {isCurrentUser && (
+        <button className="delete-btn" onClick={handleClickDelete}>
+          Delete
+        </button>
+      )}
     </div>
   )
 }

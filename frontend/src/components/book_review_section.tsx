@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Book } from "@/pages/timeline";
+import { Book } from '@/pages/timeline/book/[bookId]';
 import BookReviewCard from "./book_review_card";
 import { BookReviewCardProps } from "./book_review_card";
 import AddReviewButton from "./add_review";
@@ -16,6 +16,10 @@ const BookReviewSection: React.FC<BookReviewSectionFields> = ({ book, callback }
     const [numReviews, setNumReviews] = useState<number>(0);
 
     function addReviewCallback() {
+        callback();
+    }
+
+    function deleteReviewCallback(id: string) {
         callback();
     }
 
@@ -67,15 +71,18 @@ const BookReviewSection: React.FC<BookReviewSectionFields> = ({ book, callback }
                     flexDirection: 'column',
                     rowGap: '16px',
                     overflowY: 'visible'
-                }}>
-                    {reviews.length? (reviews.map((review, index) => (
+                }} id="review-container">
+                    {reviews.length? (reviews.map(review => (
                             <BookReviewCard
-                                key={index}
+                                key={review.id}
+                                id={review.id}
+                                userId={review.userId}
                                 username={review.username || 'username'}
                                 stars={review.stars}
                                 comment={review.comment}
                                 date={review.date}
                                 time={review.time}
+                                callback={deleteReviewCallback}
                             />
                         ))) : (
                             <div style={{ textAlign: 'center' }}>

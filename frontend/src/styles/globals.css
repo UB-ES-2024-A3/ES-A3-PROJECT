@@ -6,7 +6,7 @@
     --icon-normal: #000000; 
     --primary-green: #417154; 
     --hover-green: #417154d5;
-    --primary-beige: #f5f5dc;
+    --primary-beige: #e4d8c0;
     --star-yellow: #FBBF24;
     --star-gray: #D1D5DB;
   }
@@ -38,6 +38,52 @@
     background-color: white;
   }
 
-  .profileNavigation{
-    background-color: var(--primary-beige)
+  .titleButton {
+    font-size: 1.25rem;
+    font-weight: bold;
+    padding: inherit;
   }
+
+  .usernameButton {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: black;
+  }
+  
+  .usernameButton:hover {
+    color: black;
+  }
+
+  .delete-btn {
+    float: right;
+    background-color: darkred;
+  }
+
+  .delete-btn:hover {
+    background-color: red;
+  }
+
+  .navigation {
+    background-color: var(--primary-beige);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 48px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    border-radius: 0;
+    color: gray;
+  }
+  
+  .navigation.active {
+    color: black;
+    font-weight: bold;
+    border-top: 2px solid black;
+    margin-top: -1px;
+  }
+  
+  .navigation:hover {
+    color: black;
+  }
+  

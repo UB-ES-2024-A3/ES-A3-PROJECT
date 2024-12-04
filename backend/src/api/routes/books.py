@@ -26,7 +26,6 @@ async def add_new_book(book: Book):
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error adding book")
     
-# REGION 5.4 search books by title
 # Endpoint to search books by partial title
 @router.get("/books/search/{partial_title}", response_model=List[Book])
 async def get_book_matches_by_title(partial_title: str, max_num: Optional[int] = None):
@@ -48,9 +47,7 @@ async def get_all_titles():
         return titles
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error fetching book titles")
-# ENDREGION
 
-# REGION 6.1 search by id
 # Endpoint to get a book by ID
 @router.get("/books/{book_id}", response_model=Book)
 async def get_book_by_id(book_id: str):
@@ -63,4 +60,3 @@ async def get_book_by_id(book_id: str):
         raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error fetching book by ID")
-    # ENDREGION
