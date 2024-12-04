@@ -31,7 +31,7 @@ export default function BookReviewCard({ userId, username, stars, comment, date,
     }} className="review-card">
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center"}}>
         <div>
-          <button className="secondaryButton" style={{  fontSize: "1.25rem", fontWeight: "bold", padding: "inherit", color: "black"}} onClick={handleClickTitle}>
+          <button className="secondaryButton usernameButton" style={{ padding: "inherit"}} onClick={handleClickTitle}>
             {username}
           </button>
           <div style={{ display: "flex", marginTop: "8px" }}>

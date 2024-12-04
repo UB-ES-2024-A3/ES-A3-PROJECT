@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - main
+      - pre_production
 
 jobs:
   build-and-deploy:
@@ -33,4 +33,14 @@ jobs:
         run: |
           docker build -t rebookcontainers.azurecr.io/backend:${{ github.sha }} -f backend/Dockerfile --build-arg SUPABASE_URL=${{ secrets.SUPABASE_URL }} --build-arg SUPABASE_KEY=${{ secrets.SUPABASE_KEY }} backend
           docker push rebookcontainers.azurecr.io/backend:${{ github.sha }}
+
+      - name: Deploy to Azure Web App for Containers
+        run: |
+          az webapp config container set \
+            --name ReBookBackend \
+            --resource-group ReBookGroup \
+            --docker-custom-image-name rebookcontainers.azurecr.io/backend:${{ github.sha }} \
+            --docker-registry-server-url https://rebookcontainers.azurecr.io \
+            --docker-registry-server-user ${{ secrets.ACR_USERNAME }} \
+            --docker-registry-server-password ${{ secrets.ACR_PASSWORD }}
         
