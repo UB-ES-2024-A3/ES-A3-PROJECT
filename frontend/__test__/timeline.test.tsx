@@ -156,7 +156,7 @@ describe("Review Buttons", () => {
     test("Go to user page", async () => {
         const driver = await createWebDriver();
         try{
-            await driver.get(baseUrl + '/profile');
+            await driver.get(baseUrl + 'profile');
             await driver.executeScript(`
             localStorage.setItem('isAuthenticated', 'true');
             localStorage.setItem('userId', '${userTest.id}');
@@ -181,7 +181,7 @@ describe("Review Buttons", () => {
     test("Go to book page", async () => {
         const driver = await createWebDriver();
         try{
-            await driver.get(baseUrl + '/profile');
+            await driver.get(baseUrl + 'profile');
             await driver.executeScript(`
             localStorage.setItem('isAuthenticated', 'true');
             localStorage.setItem('userId', '${userTest.id}');
@@ -208,19 +208,17 @@ describe("Timeline users", () => {
     test("Only followed users", async () => {
         const driver = await createWebDriver();
         try{
-            await driver.get(baseUrl + '/profile');
+            await driver.get(baseUrl + 'profile');
             await driver.executeScript(`
             localStorage.setItem('isAuthenticated', 'true');
             localStorage.setItem('userId', '${userTest.id}');
             `);
             await driver.get(timelineUrl);
             await driver.wait(until.elementsLocated(By.className('usernameButton')), 10000, "Waiting for timeline to load");
-            await driver.findElements(By.className("usernameButton"))
-            .then(buttons => {
-                buttons.forEach(async button => {
-                    expect(await button.getText()).not.toBe(notFollowed.username);
-                });
-            });
+            const buttons = await driver.findElements(By.className("usernameButton"));
+            for (const button of buttons) {
+                expect(await button.getText()).not.toBe(notFollowed.username);
+            }
         } finally {
         await driver.quit();
         }
