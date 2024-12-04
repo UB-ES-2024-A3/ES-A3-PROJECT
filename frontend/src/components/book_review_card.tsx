@@ -1,24 +1,38 @@
 import { renderStars } from "./stars_rating";
 import { useRouter } from "next/router";
 import { useTimelineContext } from "@/contexts/TimelineContext";
+import ReviewService from "@/services/reviewService";
 
 export interface BookReviewCardProps {
+  id: string,
   userId: string,
   username: string,
   stars: number,
   comment?: string,
   date?: string,
-  time?: string
+  time?: string,
+  callback: (review_id: string) => void
 }
 
-export default function BookReviewCard({ userId, username, stars, comment, date, time }: BookReviewCardProps) {
+export default function BookReviewCard({ id, userId, username, stars, comment, date, time, callback }: BookReviewCardProps) {
   const router = useRouter();
   const {setTimelineState} = useTimelineContext();
+  const isCurrentUser = localStorage.getItem('userId') === userId;
 
   const handleClickTitle = () =>{
     setTimelineState({page: 'user', data: userId});
     router.push("/timeline/user/" + userId)
   }
+
+  const handleClickDelete = () => {
+    ReviewService.deleteReviewRequest(id)
+    .then(isDeleted => {
+      if (isDeleted) {
+        callback(id);
+      }
+    });
+  };
+
   return (
     <div style={{
       height: "fit-content",
@@ -53,7 +67,11 @@ export default function BookReviewCard({ userId, username, stars, comment, date,
           {comment}
         </p>
       )}
-      
+      {isCurrentUser && (
+        <button className="delete-btn" style={{ float: "right" }} onClick={handleClickDelete}>
+          Delete
+        </button>
+      )}
     </div>
   )
 }
