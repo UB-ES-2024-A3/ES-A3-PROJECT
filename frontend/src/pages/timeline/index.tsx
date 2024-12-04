@@ -24,9 +24,10 @@ const Timeline = () => {
     <NavBar>
         <SearchBar placeholder="Search..." buttonLabel="Search" id='searchbar'>
             <main style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '16px', width: '70%' }}>
-                {reviews.length? (reviews.map((review, index) => {
+                {reviews.length? (reviews.map(review => {
                     return (
-                        <TimelineReviewCard key={index}
+                        <TimelineReviewCard key={review.review_id}
+                            review_id={review.review_id}
                             user_id={review.user_id}
                             username={review.username}
                             book_id={review.book_id}

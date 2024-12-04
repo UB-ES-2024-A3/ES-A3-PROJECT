@@ -13,7 +13,9 @@ export interface UserReviewCardProps {
     comment?: string,
     date?: string,
     time?: string,
-    book_id: string
+    book_id: string,
+    id: string,
+    user_id: string
   }
 
 const UserProfile = () => {
@@ -124,7 +126,7 @@ const handleFollow = () => {
                         <button onClick={handleFollow} id={"follow"} className={followButton.style}>{followButton.label}</button>
                     }
                 </header>
-                <ProfileContents reviews={reviews} isSelfUser={false}/>
+                <ProfileContents reviews={reviews} isSelfUser={false} callback={() => {}}/>
             </div>
         </div>
     </NavBar>

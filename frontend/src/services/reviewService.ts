@@ -71,6 +71,18 @@ const ReviewService = {
         .catch(except => {
             throw except.detail;
         })
+    },
+    deleteReviewRequest : async (reviewId: string) => {
+        return axios.delete(
+            endpoint.dbURL + '/reviews/' + reviewId
+        )
+        .then(() => {
+            return true;
+        })
+        .catch(e => {
+            console.log(e.detail);
+            return false;
+        });
     }
 };
 
