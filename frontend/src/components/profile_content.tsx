@@ -2,6 +2,7 @@ import ProfileReviewCard from '@/components/profile_review_card';
 import ProfileNavBar from '@/components/profile_navbar';
 import { useEffect, useState } from 'react';
 import { UserReviewCardProps } from '@/pages/timeline/user/[userId]';
+import CreateListButton from './create_list_button';
 
 interface ProfileContentsProps {
     reviews: UserReviewCardProps[];
@@ -24,7 +25,7 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, isSelfUser, 
             <ProfileNavBar activeTab={activeTab} setActiveTab={setActiveTab} />
         </div>
         <main style={{ flex: 1, padding: '16px' }}>
-        {activeTab === 'reviews' ? (
+        {activeTab === 'reviews' && (
             <div
             style={{
                 display: 'flex',
@@ -54,8 +55,11 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, isSelfUser, 
                 </div>
             )}
             </div>
-        ) : (
-            <p>Loading...</p>
+        ) }
+        {activeTab === 'lists' && (
+            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'end'}}>
+                <CreateListButton></CreateListButton>
+            </div>
         )}
         </main>
     </>
