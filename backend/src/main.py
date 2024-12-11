@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from src.api.routes import users, login, books , review
+from src.api.routes import users, login, books , review, book_lists
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -10,6 +10,7 @@ app.include_router(users.router)
 app.include_router(login.router)
 app.include_router(books.router)
 app.include_router(review.router)
+app.include_router(book_lists.router)
 
 origins = ["*"
 ]
