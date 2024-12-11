@@ -1,15 +1,9 @@
 from typing import Dict
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 from src.models.book_list import BookList
 from src.controllers.book_list_controller import BookListController
 
-
-class UpdateBookListRequest(BaseModel):
-    user_id: str
-    book_id: str
-    book_list: Dict[str, bool]
-    
 bookListController = BookListController()
 router = APIRouter()
 
@@ -25,11 +19,16 @@ async def add_new_book(book_list: BookList):
         raise HTTPException(status_code=500, detail="Error creating list")
     
 @router.post("/booklist/update")
-async def update_book_lists(request: UpdateBookListRequest):
-    
+async def update_book_lists(request: Request):
     try:
-        bookListController.update_book_list_relationship(request.user_id, request.book_id, request.book_list)
+        # Parse the JSON body
+        body = await request.json()
+        user_id = body.get("user_id")
+        book_id = body.get("book_id")
+        book_list = body.get("book_list")
+        bookListController.update_book_list_relationship(user_id, book_id, book_list)
         return True
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error updating book list relationships: {e}")
-    
+        raise HTTPException(
+            status_code=500, detail=f"Error updating book list relationships: {e}"
+        )

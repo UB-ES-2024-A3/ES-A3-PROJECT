@@ -96,12 +96,12 @@ def test_update_book_list_missing_fields():
     book_list = list_result.json()
     update_data = {
         "book_id": "6c6c742a-f645-46b8-994e-3b71aae01372",
-        "book_list": {book_list["name"]: True}
+        "book_list": {book_list["id"]: True}
     }
     result = client.post("/booklist/update", json=update_data)
     book_lists.delete_list(book_list["id"])
     user_controller.delete_user_command(user.id)
-    assert result.status_code == 422, f"Expected 422, got {result.status_code}. Details: {result.json()}"
+    assert result.status_code == 500, f"Expected 500, got {result.status_code}. Details: {result.json()}"
 
 
 def test_update_book_list_invalid_user():
