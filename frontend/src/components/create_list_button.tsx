@@ -1,14 +1,30 @@
 
 import { useState } from 'react'
+import ListService from '@/services/listService';
 
 const CreateListButton = () =>{
   const [isOpen, setIsOpen] = useState(false);
   const [listName, setListName] = useState("");
   const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const maxChars = 50;
 
   const  handleSubmit = async () => {
-      setShowError(true); 
+    if (listName.trim() == ""){
+        setErrorMessage("The list name cannot be empty");
+        setShowError(true); 
+    }
+    else {
+      ListService.createListRequest(listName.trim())
+      .then(results => {
+        handleCancel();
+      })
+      .catch(errorMsg => {
+        const message = errorMsg.split(": ")[1];
+        setErrorMessage(message);
+        setShowError(true); 
+      });
+    }  
   }
   
   const handleCancel = () => {
@@ -54,7 +70,7 @@ const CreateListButton = () =>{
                 />
               </div>
               {showError && (
-                <p className="mt-1 text-sm text-red-500">{"The list name cannot be empty"}</p>
+                <p className="mt-1 text-sm text-red-500">{errorMessage}</p>
               )}
 
               <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
