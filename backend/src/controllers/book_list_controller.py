@@ -16,4 +16,4 @@ class BookListController:
             created_book = book_lists.create_list(book_list)
             return created_book
         except Exception as e:
-            raise HTTPException(status_code=500, detail=f"Error creating list: {str(e)}")
+            raise HTTPException(status_code=500, detail=str(e))
