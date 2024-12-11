@@ -1,6 +1,7 @@
 from src.models.book_list import BookList
 from src.crud.user import search_by_id
 from src.crud import book_lists
+from src.crud.book_lists import *
 from fastapi import HTTPException
 import uuid
 
@@ -17,3 +18,22 @@ class BookListController:
             return created_book
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Error creating list: {str(e)}")
+        
+    def update_book_list_relationship(self, user_id: str, book_id: str, book_list: dict):
+        user_lists = get_lists_by_user(user_id)
+
+        user_list_ids = {list_["id"] for list_ in user_lists}
+
+        invalid_lists = set(book_list.keys()) - user_list_ids
+        if invalid_lists:
+            raise ValueError(f"Invalid list IDs: {invalid_lists}")
+        existing_relationships = get_relationships_by_book(book_id, user_list_ids)
+        existing_list_ids = {rel["list_id"] for rel in existing_relationships}
+
+        for list_id, should_add in book_list.items():
+            
+            if should_add and list_id not in existing_list_ids:
+                add_relationship(list_id, book_id)
+
+            elif not should_add and list_id in existing_list_ids:
+                remove_relationship(list_id, book_id)
