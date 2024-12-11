@@ -66,7 +66,7 @@ const CreateListButton = () =>{
                   Cancel
                 </button>
                 <button
-                  id='create-list-btn'
+                  id='post-list-btn'
                   onClick={handleSubmit}
                 >
                   Create List
