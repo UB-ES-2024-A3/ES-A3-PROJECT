@@ -7,35 +7,30 @@ import ListBar from './listbar';
 
 interface ProfileContentsProps {
     reviews: UserReviewCardProps[];
+    ownLists: ListProps[];
     isSelfUser: boolean;
     callback: (id: string) => void;
   }
 
-interface ListProps {
+export interface ListProps { // TODO: should be moved to the visualize review page
     id: string;
     name: string;
 }
 
-const lists: ListProps[] = [
-    {
-        id: 'list1',
-        name: 'Fantasy and magic'
-    },
-    {
-        id: 'list2',
-        name: '3 a.m. reading'
-    }
-];
-
-const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, isSelfUser, callback }) => {
+const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, isSelfUser, callback }) => {
     const [activeTab, setActiveTab] = useState('reviews');
     const [reviewList, setReviewList] = useState(reviews);
+    const [ownListsList, setOwnListsList] = useState<ListProps[]>(ownLists);
     const no_reviews_message = isSelfUser? "You have no reviews yet." : "This user has not made any reviews yet.";
     const no_lists_message = isSelfUser? "You have no lists yet." : "This user has not made any lists yet.";
     
     useEffect(() => {
         setReviewList(reviews);
     }, [reviews]);
+
+    useEffect(() => {
+        setOwnListsList(ownLists);
+    }, [ownLists]);
 
     const handleOpenList = (id: string) => {
         console.log("Clicked list " + id);
@@ -84,7 +79,7 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, isSelfUser, 
                     <CreateListButton></CreateListButton>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {lists.length ? (lists.map(list => (
+                {ownListsList.length ? (ownListsList.map(list => (
                     <div key={list.id} style={{ margin: '3px' }}>
                         <ListBar
                             key={list.id}
