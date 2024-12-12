@@ -3,8 +3,9 @@ import NavBar from '@/components/navbar';
 import { useRouter } from 'next/router';
 import ReviewService from '@/services/reviewService';
 import UserService from '@/services/userService';
-import ProfileContents from '@/components/profile_content';
+import ProfileContents, { ListProps } from '@/components/profile_content';
 import FollowersService from '@/services/followersService';
+import mockService from '@/services/mockService';
 
 export interface UserReviewCardProps {
     title: string,
@@ -20,6 +21,7 @@ export interface UserReviewCardProps {
 
 const UserProfile = () => {
   const [reviews, setReviews] = useState<UserReviewCardProps[]>([]);
+  const [ownLists, setOwnLists] = useState<ListProps[]>([]);
   const router = useRouter()
   let userId = router.query.userId as string;
   const [selfUserId, setSelfUserId] = useState('');
@@ -72,6 +74,14 @@ const UserProfile = () => {
         })
         .catch(except => {
             console.log(except);
+        });
+        mockService.getUserLists(userId)
+        .then(lists => {
+            setOwnLists(lists);
+        })
+        .catch(except => {
+            console.log(except);
+            setOwnLists([]);
         });
     }
 }, [userId, router.isReady, follows]);
@@ -126,7 +136,7 @@ const handleFollow = () => {
                         <button onClick={handleFollow} id={"follow"} className={followButton.style}>{followButton.label}</button>
                     }
                 </header>
-                <ProfileContents reviews={reviews} isSelfUser={false} callback={() => {}}/>
+                <ProfileContents reviews={reviews} ownLists={ownLists} isSelfUser={false} callback={() => {}}/>
             </div>
         </div>
     </NavBar>

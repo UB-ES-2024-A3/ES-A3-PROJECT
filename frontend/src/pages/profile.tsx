@@ -4,11 +4,13 @@ import { useRouter } from 'next/router';
 import ReviewService from '@/services/reviewService';
 import UserService from '@/services/userService';
 import { UserReviewCardProps } from './timeline/user/[userId]';
-import ProfileContents from '@/components/profile_content';
+import ProfileContents, { ListProps } from '@/components/profile_content';
+import mockService from '@/services/mockService';
 
 const Profile = () => {
   const router = useRouter();
   const [reviews, setReviews] = useState<UserReviewCardProps[]>([]);
+  const [ownLists, setOwnLists] = useState<ListProps[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
   const [userData, setUserData] = useState({"username": '', "followers": null, "following": null});
   useEffect(() => {
@@ -45,6 +47,14 @@ const Profile = () => {
         .catch(except => {
             console.log(except);
         });
+        mockService.getUserLists(userId)
+        .then(lists => {
+            setOwnLists(lists);
+        })
+        .catch(except => {
+            console.log(except);
+            setOwnLists([]);
+        });
     }
 }, [userId]);
   return (
@@ -69,7 +79,7 @@ const Profile = () => {
                     </div>                    
                     <button id="logout_button" onClick={handleLogout}>Logout</button>
                 </header>
-                <ProfileContents reviews={reviews} isSelfUser={true} callback={deleteReviewCallback}/>
+                <ProfileContents reviews={reviews} ownLists={ownLists} isSelfUser={true} callback={deleteReviewCallback}/>
             </div>
         </div>
     </NavBar>

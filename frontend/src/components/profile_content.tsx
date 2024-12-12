@@ -3,21 +3,38 @@ import ProfileNavBar from '@/components/profile_navbar';
 import { useEffect, useState } from 'react';
 import { UserReviewCardProps } from '@/pages/timeline/user/[userId]';
 import CreateListButton from './create_list_button';
+import ListBar from './listbar';
 
 interface ProfileContentsProps {
     reviews: UserReviewCardProps[];
+    ownLists: ListProps[];
     isSelfUser: boolean;
     callback: (id: string) => void;
   }
 
-const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, isSelfUser, callback }) => {
+export interface ListProps { // TODO: should be moved to the visualize review page
+    id: string;
+    name: string;
+}
+
+const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, isSelfUser, callback }) => {
     const [activeTab, setActiveTab] = useState('reviews');
     const [reviewList, setReviewList] = useState(reviews);
+    const [ownListsList, setOwnListsList] = useState<ListProps[]>(ownLists);
     const no_reviews_message = isSelfUser? "You have no reviews yet." : "This user has not made any reviews yet.";
-
+    const no_lists_message = isSelfUser? "You have no lists yet." : "This user has not made any lists yet.";
+    
     useEffect(() => {
         setReviewList(reviews);
     }, [reviews]);
+
+    useEffect(() => {
+        setOwnListsList(ownLists);
+    }, [ownLists]);
+
+    const handleOpenList = (id: string) => {
+        console.log("Clicked list " + id);
+    };
 
   return (
     <>
@@ -57,9 +74,27 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, isSelfUser, 
             </div>
         ) }
         {activeTab === 'lists' && (
-            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'end'}}>
-                <CreateListButton></CreateListButton>
-            </div>
+            <>
+                <div style={{display: 'flex', flexDirection: 'column', alignItems: 'end'}}>
+                    <CreateListButton></CreateListButton>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                {ownListsList.length ? (ownListsList.map(list => (
+                    <div key={list.id} style={{ margin: '3px' }}>
+                        <ListBar
+                            key={list.id}
+                            id={list.id}
+                            name={list.name}
+                            handleOpenList={handleOpenList}
+                        />
+                    </div>
+                ))):(
+                    <div style={{margin: '5px', textAlign: 'center', justifyContent: 'center', height: '80vh', display: 'flex', flexDirection: 'column'}}> 
+                        <h2 style={{fontSize: '2em', color: 'grey'}}>{no_lists_message}</h2>
+                    </div>
+                )}
+                </div>
+            </>
         )}
         </main>
     </>
