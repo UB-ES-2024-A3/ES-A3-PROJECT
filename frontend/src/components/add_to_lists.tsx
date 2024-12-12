@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react'
+import { ChangeEvent, ChangeEventHandler, useEffect, useState } from 'react'
 
 interface AddToListsButtonFields {
   lists: ListCheckboxProps[];
-  callback: () => void;
+  callback: (updateChecks: UpdateListsInterface) => void;
 }
 
 export interface ListCheckboxProps {
@@ -11,43 +11,36 @@ export interface ListCheckboxProps {
   checked: boolean;
 }
 
+export interface UpdateListsInterface {
+  [id_list: string]: boolean;
+}
+
 const AddToListsButton: React.FC<AddToListsButtonFields> = ({lists, callback}) =>{
   const [isOpen, setIsOpen] = useState(false);
   const [listsCheckbox, setListsCheckbox] = useState<ListCheckboxProps[]>(lists);
   const [showError, setShowError] = useState(false);
+  let listCheckState: UpdateListsInterface = {};
 
   useEffect(() => {
     setListsCheckbox(lists);
+    listCheckState = {};
+    lists.forEach(list => {
+      listCheckState[list.list_id] = list.checked;
+    });
   }, [lists]);
 
-  const sendReviewRequest = async () => {
-    // return ReviewService.createReviewRequest(
-    //   bookId
-    // )
-    // .then(result => {
-    //   callback();
-    //   return true;
-    // })
-    // .catch(errorMsg => {
-    //   console.log(errorMsg);
-    //   return false;
-    // });
-  };
-
   const  handleSubmit = async () => {
-    // const success = await sendReviewRequest();
-    // if (success === true) {
-    //   setIsOpen(false);
-    // }
-    // else {
-    //   setShowError(true);
-    // }
-    
+    callback(listCheckState);
+    setIsOpen(false);
   };
   
   const handleCancelReview = () => {
     setIsOpen(false);
   };
+
+  const changeChecked: ChangeEventHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    listCheckState[e.target.id] = e.target.checked;
+  }
 
   return (
     <div style={{ padding: '1rem' }}>
@@ -62,7 +55,7 @@ const AddToListsButton: React.FC<AddToListsButtonFields> = ({lists, callback}) =
               <div style={{ position: 'relative' }}>
               {listsCheckbox.length ? (listsCheckbox.map((list) => (
                 <div key={list.list_id}>
-                  <input type="checkbox" name={list.list_id} id={list.list_id} defaultChecked={list.checked} />
+                  <input type="checkbox" name={list.list_id} id={list.list_id} defaultChecked={list.checked} onChange={changeChecked} />
                   <label htmlFor={list.list_id}>{list.name}</label>
                 </div>
               ))) : (
