@@ -32,3 +32,14 @@ async def update_book_lists(request: Request):
         raise HTTPException(
             status_code=500, detail=f"Error updating book list relationships: {e}"
         )
+
+    
+@router.get("/bookList/{user_id}")
+async def add_new_book(user_id: str):
+    try:
+        result = bookListController.get_user_lists(user_id)
+        return result
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error fetching lists")
