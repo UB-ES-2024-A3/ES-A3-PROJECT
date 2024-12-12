@@ -66,3 +66,26 @@ def get_timeline(user_id: str):
         return timeline
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error fetching data from the database")
+    
+def get_followers_following(user_id: str):
+    supabase = get_db_client()
+    try:
+        # Get the followed users
+        followed = supabase.rpc(
+            "get_followed",
+            {
+                "given_id": user_id
+            }
+        ).execute()
+
+        # Get the following users
+        followers = supabase.rpc(
+            "get_followers",
+            {
+                "given_id": user_id
+            }
+        ).execute()
+        result = {"followers": followers.data, "following": followed.data}
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

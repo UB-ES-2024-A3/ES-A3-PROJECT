@@ -398,3 +398,44 @@ def test_get_timeline_no_reviews(client: TestClient):
         
     assert response.status_code == 200, f"Expected 200, got {response.status_code}. Details: {response.json()}"
     assert response.json() == []
+
+def test_get_followed_following(client: TestClient):
+    userData = [
+        {"email": "user2024@hotmail.com", "username": "user2024", "password": "dumbPassword"},
+        {"email": "user22024@hotmail.com", "username": "user22024", "password": "dumbPassword2"},
+        {"email": "user32024@hotmail.com", "username": "user32024", "password": "dumbPassword3"}
+    ]
+    
+    users = [crud.user.create_user(User(**data)) for data in userData]
+
+    user_controller.follow_user(users[0].id, users[1].id)
+    user_controller.follow_user(users[2].id, users[0].id)
+
+    response = client.get(f"users/followers_following/{users[0].id}")
+    followed_following = response.json()
+    followers = followed_following["followers"]
+    following = followed_following["following"]
+
+    for u in users:
+        crud.user.delete_user(u.id)
+
+    assert response.status_code == 200, f"Expected 200, got {response.status_code}. Details: {response.json()}"
+    assert followers[0]["user_id"] == users[2].id
+    assert followers[0]["username"] == users[2].username
+    assert following[0]["user_id"] == users[1].id
+    assert following[0]["username"] == users[1].username
+    
+def test_no_followers_following(client: TestClient):
+    user_data_1 = {"email": "user2024@hotmail.com", "username": "user2024", "password": "dumbPassword"}
+    
+    user1 = User(**user_data_1)
+    
+    created_user_1 = crud.user.create_user(user1)
+    response = client.get(f"users/followers_following/{created_user_1.id}")
+    followers_following = response.json()
+
+    crud.user.delete_user(created_user_1.id)
+
+    assert response.status_code == 200, f"Expected 200, got {response.status_code}. Details: {response.json()}"
+    assert followers_following["followers"] == []
+    assert followers_following["following"] == []
