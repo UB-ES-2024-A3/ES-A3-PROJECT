@@ -54,7 +54,7 @@ const AddToListsButton: React.FC<AddToListsButtonFields> = ({lists, callback}) =
             <div style={{ padding: '1.5rem' }}>
               <div style={{ position: 'relative' }}>
               {listsCheckbox.length ? (listsCheckbox.map((list) => (
-                <div key={list.list_id}>
+                <div key={list.list_id} className='list-checkbox'>
                   <input type="checkbox" name={list.list_id} id={list.list_id} defaultChecked={list.checked} onChange={changeChecked} />
                   <label htmlFor={list.list_id}>{list.name}</label>
                 </div>
