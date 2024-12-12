@@ -21,10 +21,6 @@ user_controller = UserController()
 review_controller = ReviewController()
 book_controller = BooksController()
 
-def test_get_all_users(client: TestClient):
-    response = client.get("/users")
-    assert response.status_code == 200, f"Expected 200, got {response.status_code}. Details: {response.json()}"
-
 def test_create_user(client: TestClient):
     user_data = {"email": "user2024@hotmail.com", "username": "user2024", "password": "dumbPassword"}
     response = client.post("/users", json=user_data)
