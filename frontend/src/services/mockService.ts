@@ -31,6 +31,11 @@ const mockService = {
     },
     getListsWithBook: async (bookId: string) => {
         return listsWithBook;
+    },
+    updateListsWithBook: async (bookId: string, lists: any) => {
+        for (let list of listsWithBook) {
+            list.checked = lists[list.list_id]
+        }
     }
 }
 

@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import ShowBookService from '@/services/showBookService';
 import { useTimelineContext } from '@/contexts/TimelineContext';
 import BookReviewSection from '@/components/book_review_section';
-import AddToListsButton, { ListCheckboxProps } from '@/components/add_to_lists';
+import AddToListsButton, { ListCheckboxProps, UpdateListsInterface } from '@/components/add_to_lists';
 import mockService from '@/services/mockService';
 
 export interface Book {
@@ -52,7 +52,11 @@ const BookPage = () => {
 
   const newReviewCallback = () => {
     setNewReview(!newReview);
-  }
+  };
+
+  const addListsCallback = (updateChecks: UpdateListsInterface) => {
+    mockService.updateListsWithBook(bookId, updateChecks);
+  };
 
   return (
     <>
@@ -63,7 +67,7 @@ const BookPage = () => {
           <SearchBar placeholder="Search..." buttonLabel="Search" id='searchbar'>
             <>
                 <BookInformation book={book} />
-                <AddToListsButton lists={lists} callback={() => {}} />
+                <AddToListsButton lists={lists} callback={addListsCallback} />
                 <BookReviewSection book={book} callback={newReviewCallback} />
             </>
           </SearchBar>
