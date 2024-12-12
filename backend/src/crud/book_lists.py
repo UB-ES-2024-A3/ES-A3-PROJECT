@@ -42,7 +42,7 @@ def get_lists_by_user(user_id: str):
     supabase = get_db_client()
     try:
         result = supabase.table("book_lists").select("*").eq("user_id", user_id).execute()
-        return result.data or []
+        return result.data
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching lists for user: {e}")
 
