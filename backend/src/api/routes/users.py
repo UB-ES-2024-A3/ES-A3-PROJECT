@@ -7,15 +7,6 @@ from src.controllers.user_controller import UserController
 userController = UserController()
 router = APIRouter()
 
-# Endpoint to read all users
-@router.get("/users", response_model=List[User])
-async def get_all_users():
-    try:
-        users = userController.read_users_query()
-        return users
-    except Exception as e:
-        raise HTTPException(status_code=500, detail="Error fetching users")
-
 # Endpoint to create a new user
 @router.post("/users", response_model=User)
 async def add_new_user(user: User):
@@ -158,6 +149,17 @@ async def get_user_timeline(user_id: str):
     try:
         timeline = userController.get_user_timeline(user_id)
         return timeline
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail={e})
+    
+# Endpoint to get a user timeline
+@router.get("/users/followers_following/{user_id}")
+async def get_followed_following(user_id: str):
+    try:
+        followed_following = userController.get_followers_following(user_id)
+        return followed_following
     except HTTPException as e:
         raise e
     except Exception as e:
