@@ -37,13 +37,13 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, is
         setOwnListsList(ownLists);
     }, [ownLists]);
 
-    const handleOpenList = (id: string) => {
+    const handleOpenList = (id: string, name: string) => {
         if (isSelfUser) {
-            setTimelineState({page: "list_profile", data: id});
-            router.push("profile/list/" + id);
+            const combinedData = `${id}|${name}`;
+            setTimelineState({ page: "list_profile", data: combinedData }); 
+            router.push(`profile/list/${id}?name=${encodeURIComponent(name)}`); 
         }
-        console.log("Clicked list " + id);
-    };
+    };    
 
   return (
     <>
