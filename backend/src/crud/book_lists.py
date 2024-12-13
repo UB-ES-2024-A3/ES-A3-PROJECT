@@ -78,6 +78,29 @@ def remove_relationship(list_id: str, book_id: str):
         supabase.table("list_book_relationships").delete().eq("list_id", list_id).eq("book_id", book_id).execute()
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error removing relationship: {e}")
+        
+def fetch_lists_by_user(user_id: str):
+    supabase = get_db_client()
+    try:
+        result = supabase.table("book_lists").select("*").eq("user_id", user_id).execute()
+        return result.data if result.data else []
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching lists: {str(e)}")
+
+def check_book_in_list(list_id: str, book_id: str):
+    supabase = get_db_client()
+    try:
+        result = (
+            supabase.table("list_book_relationships")
+            .select("book_id")
+            .eq("list_id", list_id)
+            .eq("book_id", book_id)
+            .execute()
+        )
+        return len(result.data) > 0
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error checking book in list: {str(e)}")
+
 def get_user_lists(user_id: str):
     supabase = get_db_client()
     try:

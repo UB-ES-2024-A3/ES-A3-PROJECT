@@ -147,31 +147,106 @@ def test_update_book_list_duplicate_relationship():
     user_controller.delete_user_command(user.id)
     assert result.status_code == 500, f"Expected 500, got {result.status_code}. Details: {result.json()}"
 
+def test_get_book_list_with_relationship():
+    user_data = {
+        "email": "user2024@hotmail.com",
+        "username": "user2024",
+        "password": "securePassword123",
+    }
+    user = User(**user_data)
+    user_controller.create_user_command(user)
+
+    list_data = {"name": "Test Relationship List", "user_id": user.id}
+    list_result = client.post("/bookList", json=list_data)
+    book_list = list_result.json()
+    assert list_result.status_code == 200, f"Expected 200, got {list_result.status_code}. Details: {list_result.json()}"
+    book_id = "6c6c742a-f645-46b8-994e-3b71aae01372"  # Example book ID
+    relationship_data = {
+        "user_id": user.id,
+        "book_id": book_id,
+        "book_list": {book_list["id"]: True},
+    }
+    relationship_result = client.post("/booklist/update", json=relationship_data)
+    assert relationship_result.status_code == 200, f"Expected 200, got {relationship_result.status_code}. Details: {relationship_result.json()}"
+
+    # Step 4: Fetch Lists and Verify Relationship
+    get_result = client.get(
+        f"/user/booklists?user_id={user.id}&book_id={book_id}"
+    )
+    fetched_lists = get_result.json()
+    assert get_result.status_code == 200, f"Expected 200, got {get_result.status_code}. Details: {get_result.json()}"
+    assert any(
+        item["list_id"] == book_list["id"] and item["checked"] is True
+        for item in fetched_lists
+    ), "The book-list relationship was not fetched correctly."
+
+    # Step 5: Delete the Relationship
+    cleanup_data = {
+        "user_id": user.id,
+        "book_id": book_id,
+        "book_list": {book_list["id"]: False},
+    }
+    cleanup_result = client.post("/booklist/update", json=cleanup_data)
+    assert cleanup_result.status_code == 200, f"Expected 200, got {cleanup_result.status_code}. Details: {cleanup_result.json()}"
+
+    # Step 6: Delete the List
+    book_lists.delete_list(book_list["id"])
+
+    # Step 7: Delete the User
+    user_controller.delete_user_command(user.id)
+
+    # Step 8: Assertions
+    # Verify that the list no longer exists in the database
+    deleted_list = client.get(f"/user/booklists?user_id={user.id}&book_id={book_id}")
+    assert len(deleted_list.json()) == 0, "List was not properly deleted."
+
+def test_add_relationship_invalid_list_id():
+    user_data = {
+        "email": "user@hotmail.com",
+        "username": "user2024",
+        "password": "securePassword123",
+    }
+    user = User(**user_data)
+    user_controller.create_user_command(user)
+
+    # Use a nonexistent list ID
+    book_id = str(uuid.uuid4())
+    relationship_data = {
+        "user_id": user.id,
+        "book_id": book_id,
+        "book_list": {str(uuid.uuid4()): True},
+    }
+    result = client.post("/booklist/update", json=relationship_data)
+    user_controller.delete_user_command(user.id)
+
+    assert result.status_code == 500, f"Expected 500, got {result.status_code}. Details: {result.json()}"
+
+def test_create_list_missing_user_id():
+    list_data = {"name": "Missing User List"}
+    result = client.post("/bookList", json=list_data)
+    assert result.status_code == 422, f"Expected 422, got {result.status_code}. Details: {result.json()}"
 
 def test_get_user_lists():
     user_data = {"email": "user2024@hotmail.com", "username": "user2024", "password": "dumbPassword"}
     user = User(**user_data)
     user_controller.create_user_command(user)
-
     list_data = [{"name": "Second List", "user_id": user.id}, {"name": "First List", "user_id": user.id}]
     added_lists = []
     for l in list_data:
-        added_lists.append(client.post(f"/bookList", json = l).json())
-    
+        added_lists.append(client.post(f"/bookList", json=l).json())
     result = client.get(f"/bookList/{user.id}")
     result_data = result.json()
-
     for l in added_lists:
         book_lists.delete_list(l["id"])
-    user_controller.delete_user_command(user.id)    
+    user_controller.delete_user_command(user.id)
+
     assert result.status_code == 200, f"Expected 200, got {result.status_code}. Details: {result.json()}"
-    assert len(added_lists) == len(result.json())
+    assert len(added_lists) == len(result_data), f"Expected {len(added_lists)} lists, got {len(result_data)}. Data: {result_data}"
     for expected, real in zip(added_lists, result_data):
         assert expected["id"] == real["id"]
         assert expected["name"] == real["name"]
-    
+
 def test_get_user_lists_invalid_user():
     invalid_id = str(uuid.uuid4())
     result = client.get(f"/bookList/{invalid_id}")
-
-    assert result.status_code == 404, f"Expected 404, got {result.status_code}. Details: {result.json()}"         
+    assert result.status_code == 404, f"Expected 404, got {result.status_code}. Details: {result.json()}"
