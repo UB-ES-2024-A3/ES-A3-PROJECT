@@ -133,26 +133,30 @@ const FollowersFollowingPopup: React.FC<FollowersFollowingPopupFields> = ({amoun
                   padding: "1rem",
                   display: "flex",
                   flexDirection: "column",
-                  gap: "0.5rem"
+                  gap: "0.5rem",
+                  alignItems: "center"
                 }}>
-                  {(tabSelected === 'Followers' ? followers : following).map((user, index) => (
-                    <button
-                      key={index}
-                      style={{
-                        backgroundColor: "white",
-                        color: "black",
-                        width: "100%",
-                        padding: "0.75rem",
-                        textAlign: "left",
-                        borderRadius: "0.5rem",
-                        border: "1px solid var(--primary-beige)",
-                    
-                      }}
-                      onClick={() => handleClickUsername(user.user_id)}
-                    >
-                      {user.username}
-                    </button>
-                  ))}
+                  {(tabSelected === 'Followers' ? followers : following).length > 0 ? (
+                    (tabSelected === 'Followers' ? followers : following).map((user, index) => (
+                      <button
+                        key={index}
+                        style={{
+                          backgroundColor: "white",
+                          color: "var(--primary-green)",
+                          width: "100%",
+                          padding: "0.75rem",
+                          textAlign: "left",
+                          borderRadius: "0.5rem",
+                          border: "1px solid var(--primary-beige)",
+                        }}
+                        onClick={() => handleClickUsername(user.user_id)}
+                      >
+                        {user.username}
+                      </button>
+                    ))
+                  ) : (
+                    <p>{tabSelected === 'Followers' ? 'No users follow you yet' : "You don't follow any users yet"}</p>
+                  )}
                 </div>
               </div>
             </div>
