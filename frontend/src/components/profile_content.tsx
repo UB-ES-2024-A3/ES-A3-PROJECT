@@ -9,7 +9,8 @@ interface ProfileContentsProps {
     reviews: UserReviewCardProps[];
     ownLists: ListProps[];
     isSelfUser: boolean;
-    callback: (id: string) => void;
+    deleteReviewCallback: (id: string) => void;
+    createListCallback: () => void;
   }
 
 export interface ListProps { // TODO: should be moved to the visualize review page
@@ -17,7 +18,7 @@ export interface ListProps { // TODO: should be moved to the visualize review pa
     name: string;
 }
 
-const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, isSelfUser, callback }) => {
+const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, isSelfUser, deleteReviewCallback: deleteCallback, createListCallback }) => {
     const [activeTab, setActiveTab] = useState('reviews');
     const [reviewList, setReviewList] = useState(reviews);
     const [ownListsList, setOwnListsList] = useState<ListProps[]>(ownLists);
@@ -64,7 +65,7 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, is
                     book_id={review.book_id}
                     review_id={review.id}
                     user_id={review.user_id}
-                    callback={callback}
+                    callback={deleteCallback}
                 />
             ))):(
                 <div style={{margin: '5px', textAlign: 'center', justifyContent: 'center', height: '80vh', display: 'flex', flexDirection: 'column'}}> 
@@ -73,10 +74,10 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, is
             )}
             </div>
         ) }
-        {activeTab === 'lists' && (
+        {activeTab === 'created-lists' && (
             <>
                 <div style={{display: 'flex', flexDirection: 'column', alignItems: 'end'}}>
-                    <CreateListButton></CreateListButton>
+                    <CreateListButton callback={createListCallback}></CreateListButton>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                 {ownListsList.length ? (ownListsList.map(list => (
