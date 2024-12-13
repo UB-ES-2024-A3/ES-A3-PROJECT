@@ -2,10 +2,8 @@ import ProfileReviewCard from '@/components/profile_review_card';
 import ProfileNavBar from '@/components/profile_navbar';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useRouter } from 'next/router';
 import { UserReviewCardProps } from '@/pages/timeline/user/[userId]';
 import CreateListButton from './create_list_button';
-import { useTimelineContext } from '@/contexts/TimelineContext';
 import { useTimelineContext } from '@/contexts/TimelineContext';
 import ListBar from './listbar';
 
