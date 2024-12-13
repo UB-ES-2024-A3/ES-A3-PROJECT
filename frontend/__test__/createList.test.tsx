@@ -74,7 +74,7 @@ describe("Test list creation", () => {
         try {
             await loginAsUserTest(driver, userListTest);
             // Enter the lists section
-            let listsTab = await driver.findElement(By.id('profile-lists-tab'));
+            let listsTab = await driver.findElement(By.id('profile-created-lists-tab'));
             await listsTab.click();
 
             //Open create list pop-up
@@ -113,7 +113,7 @@ describe("Test list creation", () => {
         try {
             await loginAsUserTest(driver, userListTest);
             // Enter the lists section
-            let listsTab = await driver.findElement(By.id('profile-lists-tab'));
+            let listsTab = await driver.findElement(By.id('profile-created-lists-tab'));
             await listsTab.click();
 
             //Open create list pop-up

@@ -74,7 +74,7 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, is
             )}
             </div>
         ) }
-        {activeTab === 'created_lists' && (
+        {activeTab === 'created-lists' && (
             <>
                 <div style={{display: 'flex', flexDirection: 'column', alignItems: 'end'}}>
                     <CreateListButton callback={createListCallback}></CreateListButton>

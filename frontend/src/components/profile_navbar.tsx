@@ -15,7 +15,7 @@ const ProfileNavBar: React.FC<ProfileNavBarProps> = ({ activeTab, setActiveTab }
         icon: <Pen className="w-4 h-4" />
         },
         {
-        id: 'created_lists',
+        id: 'created-lists',
         label: 'CREATED LISTS',
         icon: <ListMusic className="w-4 h-4" />
         }
