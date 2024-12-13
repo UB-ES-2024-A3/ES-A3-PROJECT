@@ -2,7 +2,11 @@
 import { useState } from 'react'
 import ListService from '@/services/listService';
 
-const CreateListButton = () =>{
+interface ICreateListButton {
+  callback: () => void;
+}
+
+const CreateListButton: React.FC<ICreateListButton> = ({ callback }) =>{
   const [isOpen, setIsOpen] = useState(false);
   const [listName, setListName] = useState("");
   const [showError, setShowError] = useState(false);
@@ -17,6 +21,7 @@ const CreateListButton = () =>{
     else {
       ListService.createListRequest(listName.trim())
       .then(results => {
+        callback();
         handleCancel();
       })
       .catch(errorMsg => {
