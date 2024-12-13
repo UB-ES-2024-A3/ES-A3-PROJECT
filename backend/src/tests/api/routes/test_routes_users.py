@@ -291,7 +291,6 @@ def test_follow_user_valid_id(client: TestClient):
     crud.user.delete_user(created_user_1.id)
     crud.user.delete_user(created_user_2.id)
 
-    print(response_data)
     assert response_data["follower_id"] == created_user_1.id
     assert response_data["followed_id"] == created_user_2.id
     assert updated_user_1.following == (created_user_1.following + 1)

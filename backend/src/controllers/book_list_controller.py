@@ -18,7 +18,7 @@ class BookListController:
             return created_book
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
-        
+            
     def update_book_list_relationship(self, user_id: str, book_id: str, book_list: dict):
         user_lists = get_lists_by_user(user_id)
 
@@ -31,19 +31,16 @@ class BookListController:
         existing_list_ids = {rel["list_id"] for rel in existing_relationships}
 
         for list_id, should_add in book_list.items():
-            
             if should_add and list_id not in existing_list_ids:
                 add_relationship(list_id, book_id)
-
             elif not should_add and list_id in existing_list_ids:
-                remove_relationship(list_id, book_id)        
+                remove_relationship(list_id, book_id)
+
 
     def get_lists_with_book(self, user_id: str, book_id: str):
         try:
-            # Fetch all lists by the user
             user_lists = fetch_lists_by_user(user_id)
             
-            # Check if the book is in each list
             result = []
             for book_list in user_lists:
                 is_in_list = check_book_in_list(book_list['id'], book_id)
@@ -59,10 +56,20 @@ class BookListController:
     def get_user_lists(self, user_id: str):
         # Check if user exists
         user = search_by_id(user_id)
-        if user == -1:  # Or your logic to check user existence
+        if user == -1: 
             raise HTTPException(status_code=404, detail="User not found")
         try:
             lists = book_lists.get_user_lists(user_id)
             return lists
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
+        
+    def get_books_in_list(self, list_id: str):
+        try:
+            book_ids = book_lists.get_book_ids_by_list_id(list_id)
+            if not book_ids:
+                return []
+            books = book_lists.get_books_by_ids(book_ids)
+            return books
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Error fetching books in list: {str(e)}")
