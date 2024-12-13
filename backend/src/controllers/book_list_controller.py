@@ -17,7 +17,7 @@ class BookListController:
             created_book = book_lists.create_list(book_list)
             return created_book
         except Exception as e:
-            raise HTTPException(status_code=500, detail=f"Error creating list: {str(e)}")
+            raise HTTPException(status_code=500, detail=str(e))
         
     def update_book_list_relationship(self, user_id: str, book_id: str, book_list: dict):
         user_lists = get_lists_by_user(user_id)
@@ -36,7 +36,7 @@ class BookListController:
                 add_relationship(list_id, book_id)
 
             elif not should_add and list_id in existing_list_ids:
-                remove_relationship(list_id, book_id)
+                remove_relationship(list_id, book_id)        
 
     def get_lists_with_book(self, user_id: str, book_id: str):
         try:
@@ -44,7 +44,6 @@ class BookListController:
             user_lists = fetch_lists_by_user(user_id)
             if not user_lists:
                 return []
-            
             # Check if the book is in each list
             result = []
             for book_list in user_lists:
@@ -54,7 +53,17 @@ class BookListController:
                     "name": book_list['name'],
                     "checked": is_in_list
                 })
-            
             return result
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Error fetching lists: {str(e)}")
+
+    def get_user_lists(self, user_id: str):
+        # Check if user exists
+        user = search_by_id(user_id)
+        if user == -1:
+            raise HTTPException(status_code=404, detail="User not found")    
+        try:
+            lists = book_lists.get_user_lists(user_id)
+            return lists
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=str(e))

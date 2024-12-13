@@ -40,6 +40,11 @@ async def get_user_book_lists(user_id: str, book_id: str):
         result = bookListController.get_lists_with_book(user_id, book_id)
         return result
     except HTTPException as e:
-        raise e
-    except Exception as e:
         raise HTTPException(status_code=500, detail="Error fetching book lists")
+      
+@router.get("/bookList/{user_id}")
+async def add_new_book(user_id: str):
+    try:
+        result = bookListController.get_user_lists(user_id)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error fetching lists")

@@ -28,6 +28,17 @@ const ListService = {
                 throw "Unknown error. Please, try again.";
             }
         });
+    },
+    getUserLists: async (user_id: string) => {
+        return axios.get(
+            endpoint.dbURL + '/bookList/' + user_id
+        )
+        .then(res => {
+            return res.data;
+        })
+        .catch(except => {
+            throw except.response.data.detail;
+        });
     }
 };
 export default ListService;

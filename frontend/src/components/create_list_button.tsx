@@ -2,7 +2,11 @@
 import { useState } from 'react'
 import ListService from '@/services/listService';
 
-const CreateListButton = () =>{
+interface ICreateListButton {
+  callback: () => void;
+}
+
+const CreateListButton: React.FC<ICreateListButton> = ({ callback }) =>{
   const [isOpen, setIsOpen] = useState(false);
   const [listName, setListName] = useState("");
   const [showError, setShowError] = useState(false);
@@ -17,6 +21,7 @@ const CreateListButton = () =>{
     else {
       ListService.createListRequest(listName.trim())
       .then(results => {
+        callback();
         handleCancel();
       })
       .catch(errorMsg => {
@@ -48,6 +53,7 @@ const CreateListButton = () =>{
               </h2>
               <div style={{ position: 'relative' }}>
                 <textarea
+                  id = 'list-name-textarea'
                   value={listName}
                   onChange={(e) => {
                     if (e.target.value.length <= maxChars) {
@@ -70,7 +76,7 @@ const CreateListButton = () =>{
                 />
               </div>
               {showError && (
-                <p className="mt-1 text-sm text-red-500">{errorMessage}</p>
+                <p id="createlist-errorMessage" className="mt-1 text-sm text-red-500">{errorMessage}</p>
               )}
 
               <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
