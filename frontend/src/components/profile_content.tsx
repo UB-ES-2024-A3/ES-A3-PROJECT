@@ -2,8 +2,10 @@ import ProfileReviewCard from '@/components/profile_review_card';
 import ProfileNavBar from '@/components/profile_navbar';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { UserReviewCardProps } from '@/pages/timeline/user/[userId]';
 import CreateListButton from './create_list_button';
+import { useTimelineContext } from '@/contexts/TimelineContext';
 import { useTimelineContext } from '@/contexts/TimelineContext';
 import ListBar from './listbar';
 
@@ -28,6 +30,7 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, is
     const no_reviews_message = isSelfUser? "You have no reviews yet." : "This user has not made any reviews yet.";
     const no_lists_message = isSelfUser? "You have no lists yet." : "This user has not made any lists yet.";
     const {timelineState,setTimelineState} = useTimelineContext();
+    const {timelineState,setTimelineState} = useTimelineContext();
     
     useEffect(() => {
         setReviewList(reviews);
@@ -38,6 +41,10 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, is
     }, [ownLists]);
 
     const handleOpenList = (id: string) => {
+        if (isSelfUser) {
+            setTimelineState({page: "list_profile", data: id});
+            router.push("profile/list/" + id);
+        }
         if (isSelfUser) {
             setTimelineState({page: "list_profile", data: id});
             router.push("profile/list/" + id);
