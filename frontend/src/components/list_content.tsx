@@ -21,7 +21,8 @@ const ListContents: React.FC<ListContentsProps> = () => {
     // TODO: for the moment we use this query
     const search = 'scholastic';
     const router = useRouter();
-    let listId = router.query.listId as string;
+    const { listId } = router.query;
+    const name = router.query.name as string; 
     const [username, setUsername] = useState('username');
 
      
@@ -67,7 +68,7 @@ const ListContents: React.FC<ListContentsProps> = () => {
                 justifyContent: 'center', 
                 alignItems: 'center'
             }}>
-                <span>{listId}</span>
+                <span>{name}</span>
                 <span style={{ margin: '0 30px' }}>|</span>
                 <span>{username}</span>
             </div>

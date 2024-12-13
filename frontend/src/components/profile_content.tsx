@@ -28,7 +28,6 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, is
     const no_reviews_message = isSelfUser? "You have no reviews yet." : "This user has not made any reviews yet.";
     const no_lists_message = isSelfUser? "You have no lists yet." : "This user has not made any lists yet.";
     const {timelineState,setTimelineState} = useTimelineContext();
-    const {timelineState,setTimelineState} = useTimelineContext();
     
     useEffect(() => {
         setReviewList(reviews);
@@ -38,17 +37,13 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, is
         setOwnListsList(ownLists);
     }, [ownLists]);
 
-    const handleOpenList = (id: string) => {
+    const handleOpenList = (id: string, name: string) => {
         if (isSelfUser) {
-            setTimelineState({page: "list_profile", data: id});
-            router.push("profile/list/" + id);
+            const combinedData = `${id}|${name}`;
+            setTimelineState({ page: "list_profile", data: combinedData }); 
+            router.push(`profile/list/${id}?name=${encodeURIComponent(name)}`); 
         }
-        if (isSelfUser) {
-            setTimelineState({page: "list_profile", data: id});
-            router.push("profile/list/" + id);
-        }
-        console.log("Clicked list " + id);
-    };
+    };    
 
   return (
     <>

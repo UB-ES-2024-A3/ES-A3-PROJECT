@@ -3,12 +3,12 @@ import React from 'react';
 interface ListBarProps{
     id: string;
     name: string;
-    handleOpenList: (id:string) => void;
+    handleOpenList: (id:string, name:string) => void;
 }
 
 const ListBar: React.FC<ListBarProps> = ({id, name, handleOpenList}) => {
     const handleClickList = () => {
-        handleOpenList(id);
+        handleOpenList(id, name);
     };
 
     return (
