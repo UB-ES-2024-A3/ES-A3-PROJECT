@@ -7,7 +7,7 @@ import ShowBookService from '@/services/showBookService';
 import { useTimelineContext } from '@/contexts/TimelineContext';
 import BookReviewSection from '@/components/book_review_section';
 import AddToListsButton, { ListCheckboxProps, UpdateListsInterface } from '@/components/add_to_lists';
-import mockService from '@/services/mockService';
+import ListService from '@/services/listService';
 
 export interface Book {
     id: string;
@@ -25,6 +25,7 @@ const BookPage = () => {
 
   const [book, setBook] = useState<Book>({author: "", title: "", description: "", genres: [], id:"", avgstars:0, numreviews: 0 });
   const [newReview, setNewReview] = useState<boolean>(false);
+  const [listUpdate, setListUpdate] = useState<boolean>(false);
 
   const [lists, setLists] = useState<ListCheckboxProps[]>([]);
  
@@ -40,22 +41,32 @@ const BookPage = () => {
   }, [bookId, newReview]);
 
   useEffect(() => {
-    mockService.getListsWithBook(bookId)
+    ListService.getListsWithBook(bookId)
       .then(retLists => {
-        setLists(retLists);
+        setLists(
+          // Sort list in alphabetic order
+          retLists.sort((a: ListCheckboxProps, b: ListCheckboxProps) => {
+            return a.name.localeCompare(b.name);
+          })
+        );
       })
       .catch(except => {
         console.log(except);
         setLists([]);
       });
-  }, [bookId]);
+  }, [bookId, listUpdate]);
 
   const newReviewCallback = () => {
     setNewReview(!newReview);
   };
 
   const addListsCallback = (updateChecks: UpdateListsInterface) => {
-    mockService.updateListsWithBook(bookId, updateChecks);
+    ListService.updateListsWithBook(bookId, updateChecks)
+    .then(success => {
+      if (success) {
+        setListUpdate(!listUpdate);
+      }
+    });
   };
 
   return (

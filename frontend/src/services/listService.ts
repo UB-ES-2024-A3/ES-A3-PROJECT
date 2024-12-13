@@ -1,5 +1,6 @@
 import endpoint from "@/endpoints.config";
 import axios from 'axios';
+import { headers } from "next/headers";
 
 const ListService = {
     createListRequest: async (listName: string) => {
@@ -38,6 +39,42 @@ const ListService = {
         })
         .catch(except => {
             throw except.response.data.detail;
+        });
+    },
+    getListsWithBook: async (book_id: string) => {
+        const user_id = localStorage.getItem('userId');
+        return axios.get(
+            endpoint.dbURL + '/user/booklists',
+            {
+                params: {user_id: user_id, book_id: book_id}
+            } 
+        )
+        .then(response => {
+            return response.data;
+        })
+        .catch(except => {
+            throw except.response.data.detail;
+        });
+    },
+    updateListsWithBook: async(book_id: string, updateList: any) => {
+        const user_id = localStorage.getItem('userId');
+        const header = {'Content-Type': 'application/json'};
+        const data = {
+            user_id: user_id,
+            book_id: book_id,
+            book_list: updateList
+        };
+
+        return axios.post(
+            endpoint.dbURL + '/booklist/update',
+            data,
+            {headers: header}
+        )
+        .then(response => {
+            return response.data;
+        })
+        .catch(except => {
+            console.log(except.response.data.detail);
         });
     }
 };
