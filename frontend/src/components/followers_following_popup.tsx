@@ -1,30 +1,48 @@
 
 import { useState, useEffect } from 'react'
 import { X } from 'lucide-react'
+import FollowersService from '@/services/followersService';
+import { useTimelineContext } from '@/contexts/TimelineContext';
+import { useRouter } from 'next/router';
 
 interface FollowersFollowingPopupFields {
     amount: number | null;
     _tabSelected: string;
+    userId: string | null;
 }
 
 interface User {
-    userId: string;
+    user_id: string;
     username: string;
 }
 
-const FollowersFollowingPopup: React.FC<FollowersFollowingPopupFields> = ({amount, _tabSelected}) =>{
+const FollowersFollowingPopup: React.FC<FollowersFollowingPopupFields> = ({amount, _tabSelected, userId}) =>{
   const [isOpen, setIsOpen] = useState(false)
   const [tabSelected, setTabSelected] = useState("")
   const [followers, setFollowers] = useState<User[]>([])
   const [following, setFollowing] = useState<User[]>([])
+  const {setTimelineState} = useTimelineContext();
+  const router = useRouter();
 
   useEffect(() => {
     setTabSelected(_tabSelected);
-    const _followers = [{username: "Fanny", userId: "1234"}, {username: "Blai", userId: "1334"}, {username: "Alba", userId: "1434"}, {username: "Fanny", userId: "1234"}, {username: "Blai", userId: "1334"}, {username: "Alba", userId: "1434"}, {username: "Fanny", userId: "1234"}, {username: "Blai", userId: "1334"}, {username: "Alba", userId: "1434"}, {username: "Fanny", userId: "1234"}, {username: "Blai", userId: "1334"}, {username: "Alba", userId: "1434"}, {username: "Fanny", userId: "1234"}, {username: "Blai", userId: "1334"}, {username: "Alba", userId: "1434"}]
-    const _following = [{username: "Laura", userId: "1224"}, {username: "David", userId: "1314"}, {username: "Joaquin", userId: "1424"}]
-    setFollowers(_followers);
-    setFollowing(_following);
-    }, []);
+    if (userId) {
+      FollowersService.getFollowersFollowing(userId)
+      .then(response => {
+        console.log(response)
+        setFollowers(response.followers);
+        setFollowing(response.following);
+      })
+      .catch(except => {
+          console.log(except);
+      });
+    }
+    }, [userId]);
+
+    const handleClickUsername = (user_id: string) => {
+      setTimelineState({page: 'user', data: user_id});
+      router.push("/timeline/user/" + user_id);
+    }
 
   return (
     <div>
@@ -107,8 +125,8 @@ const FollowersFollowingPopup: React.FC<FollowersFollowingPopupFields> = ({amoun
               </div>
           
               <div style={{
-                height: "400px",
-                maxHeight: "400px",
+                height: "25rem",
+                maxHeight: "25rem",
                 overflowY: "scroll"
               }}>
                 <div style={{
@@ -130,6 +148,7 @@ const FollowersFollowingPopup: React.FC<FollowersFollowingPopupFields> = ({amoun
                         border: "1px solid var(--primary-beige)",
                     
                       }}
+                      onClick={() => handleClickUsername(user.user_id)}
                     >
                       {user.username}
                     </button>

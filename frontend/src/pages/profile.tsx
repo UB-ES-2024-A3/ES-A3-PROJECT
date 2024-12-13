@@ -92,8 +92,8 @@ const Profile = () => {
                             gap: '10px'
                             }}
                         >
-                            <FollowersFollowingPopup amount={userData.followers} _tabSelected='Followers'></FollowersFollowingPopup>
-                            <FollowersFollowingPopup amount={userData.following} _tabSelected='Following'></FollowersFollowingPopup>
+                            <FollowersFollowingPopup amount={userData.followers} _tabSelected='Followers' userId={userId}></FollowersFollowingPopup>
+                            <FollowersFollowingPopup amount={userData.following} _tabSelected='Following' userId={userId}></FollowersFollowingPopup>
                         </div>
                     </div>                    
                     <button id="logout_button" onClick={handleLogout}>Logout</button>
