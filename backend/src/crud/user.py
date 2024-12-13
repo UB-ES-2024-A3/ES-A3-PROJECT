@@ -91,10 +91,11 @@ def delete_user(user_id: str):
     supabase = get_db_client()
     try:
         supabase.table("reviews").delete().eq("user_id", user_id).execute()
-        supabase.table("users").delete().eq("id", user_id).execute()
+        supabase.table("book_lists").delete().eq("user_id", user_id).execute()
         # If a user is deleted it should be deleted from the 'followers' and 'following' lists
         supabase.table("followers").delete().eq("follower_id", user_id).execute()
         supabase.table("followers").delete().eq("followed_id", user_id).execute()
+        supabase.table("users").delete().eq("id", user_id).execute()
 
         return True
     except Exception as e:
