@@ -27,6 +27,7 @@ const ProfileNavBar: React.FC<ProfileNavBarProps> = ({ activeTab, setActiveTab }
         <button
           className={`navigation ${activeTab === tab.id ? 'active' : ''}`}
           key={tab.id}
+          id={'profile-' + tab.id + '-tab'}
           onClick={() => setActiveTab(tab.id)}
         >
           {tab.icon}
