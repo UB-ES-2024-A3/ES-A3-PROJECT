@@ -12,7 +12,7 @@ const ListBar: React.FC<ListBarProps> = ({id, name, handleOpenList}) => {
     };
 
     return (
-        <button id={id} className="secondaryButton" onClick={handleClickList} style={{textAlign: 'left', borderBottom: '1px solid #ccc', width: '100%', minHeight: '64px', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+        <button id={id} className="secondaryButton" onClick={handleClickList} style={{textAlign: 'left', borderBottom: '1px solid #ccc', width: '100%', minHeight: '64px', display: 'flow', justifyContent: 'space-between'}}>
             <div> 
                 <div style={{ margin: 'auto 0' }}> {name} </div>
             </div>
