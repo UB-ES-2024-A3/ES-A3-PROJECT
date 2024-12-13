@@ -1,8 +1,10 @@
 import ProfileReviewCard from '@/components/profile_review_card';
 import ProfileNavBar from '@/components/profile_navbar';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { UserReviewCardProps } from '@/pages/timeline/user/[userId]';
 import CreateListButton from './create_list_button';
+import { useTimelineContext } from '@/contexts/TimelineContext';
 import ListBar from './listbar';
 
 interface ProfileContentsProps {
@@ -18,11 +20,13 @@ export interface ListProps { // TODO: should be moved to the visualize review pa
 }
 
 const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, isSelfUser, callback }) => {
+    const router = useRouter();
     const [activeTab, setActiveTab] = useState('reviews');
     const [reviewList, setReviewList] = useState(reviews);
     const [ownListsList, setOwnListsList] = useState<ListProps[]>(ownLists);
     const no_reviews_message = isSelfUser? "You have no reviews yet." : "This user has not made any reviews yet.";
     const no_lists_message = isSelfUser? "You have no lists yet." : "This user has not made any lists yet.";
+    const {timelineState,setTimelineState} = useTimelineContext();
     
     useEffect(() => {
         setReviewList(reviews);
@@ -33,6 +37,10 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, is
     }, [ownLists]);
 
     const handleOpenList = (id: string) => {
+        if (isSelfUser) {
+            setTimelineState({page: "list_profile", data: id});
+            router.push("profile/list/" + id);
+        }
         console.log("Clicked list " + id);
     };
 
