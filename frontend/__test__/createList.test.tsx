@@ -4,7 +4,7 @@ import { createClient } from '@supabase/supabase-js'
 import {supabaseResponses, createWebDriver, loginAsUserTest} from "./test.utils";
 
 // Increase Jest's default timeout to handle Selenium operations
-jest.setTimeout(30000);
+jest.setTimeout(40000);
 
 let supabaseURL = process.env.SUPABASE_URL || "not_found";
 let supabaseKey = process.env.SUPABASE_KEY || "not_found";
@@ -64,9 +64,6 @@ afterAll(async () => {
     expect(messageUser["status"]).toBe(supabaseResponses.deleteStatus)
     expect(messageUser["statusText"]).toBe(supabaseResponses.deleteStatusText)
 
-
-
-
 });
 
 describe("Test list creation", () => {
@@ -91,6 +88,8 @@ describe("Test list creation", () => {
             //Press the post up button
             let postButton = await driver.findElement(By.id("post-list-btn"));
             await postButton.click();
+
+            await driver.sleep(5000);
 
             const messageList = await supabase
             .from('book_lists')
