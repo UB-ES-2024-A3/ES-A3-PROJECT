@@ -6,6 +6,8 @@ import UserService from '@/services/userService';
 import { UserReviewCardProps } from './timeline/user/[userId]';
 import ProfileContents, { ListProps } from '@/components/profile_content';
 import ListService from '@/services/listService';
+import FollowersFollowingPopup from '@/components/followers_following_popup';
+
 
 const Profile = () => {
   const router = useRouter();
@@ -90,10 +92,8 @@ const Profile = () => {
                             gap: '10px'
                             }}
                         >
-                            <span style={{ fontWeight: 'bold', fontSize: '0.85rem' }}>{userData.followers}</span>
-                            <span style={{ fontSize: '0.85rem', color: '#6b7280' }}>Followers</span>
-                            <span style={{ fontWeight: 'bold', fontSize: '0.85rem', marginLeft: '10px' }}>{userData.following}</span>
-                            <span style={{ fontSize: '0.85rem', color: '#6b7280' }}>Following</span>
+                            <FollowersFollowingPopup amount={userData.followers} _tabSelected='Followers'></FollowersFollowingPopup>
+                            <FollowersFollowingPopup amount={userData.following} _tabSelected='Following'></FollowersFollowingPopup>
                         </div>
                     </div>                    
                     <button id="logout_button" onClick={handleLogout}>Logout</button>
