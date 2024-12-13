@@ -230,26 +230,23 @@ def test_get_user_lists():
     user_data = {"email": "user2024@hotmail.com", "username": "user2024", "password": "dumbPassword"}
     user = User(**user_data)
     user_controller.create_user_command(user)
-
     list_data = [{"name": "Second List", "user_id": user.id}, {"name": "First List", "user_id": user.id}]
     added_lists = []
     for l in list_data:
-        added_lists.append(client.post(f"/bookList", json = l).json())
-    
+        added_lists.append(client.post(f"/bookList", json=l).json())
     result = client.get(f"/bookList/{user.id}")
     result_data = result.json()
-
     for l in added_lists:
         book_lists.delete_list(l["id"])
-    user_controller.delete_user_command(user.id)    
+    user_controller.delete_user_command(user.id)
+
     assert result.status_code == 200, f"Expected 200, got {result.status_code}. Details: {result.json()}"
-    assert len(added_lists) == len(result.json())
+    assert len(added_lists) == len(result_data), f"Expected {len(added_lists)} lists, got {len(result_data)}. Data: {result_data}"
     for expected, real in zip(added_lists, result_data):
         assert expected["id"] == real["id"]
         assert expected["name"] == real["name"]
-    
+
 def test_get_user_lists_invalid_user():
     invalid_id = str(uuid.uuid4())
     result = client.get(f"/bookList/{invalid_id}")
-
-    assert result.status_code == 404, f"Expected 404, got {result.status_code}. Details: {result.json()}"         
+    assert result.status_code == 404, f"Expected 404, got {result.status_code}. Details: {result.json()}"

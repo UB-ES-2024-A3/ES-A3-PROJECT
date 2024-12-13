@@ -42,8 +42,7 @@ class BookListController:
         try:
             # Fetch all lists by the user
             user_lists = fetch_lists_by_user(user_id)
-            if not user_lists:
-                return []
+            
             # Check if the book is in each list
             result = []
             for book_list in user_lists:
@@ -60,10 +59,10 @@ class BookListController:
     def get_user_lists(self, user_id: str):
         # Check if user exists
         user = search_by_id(user_id)
-        if user == -1:
-            raise HTTPException(status_code=404, detail="User not found")    
+        if user == -1:  # Or your logic to check user existence
+            raise HTTPException(status_code=404, detail="User not found")
         try:
             lists = book_lists.get_user_lists(user_id)
             return lists
         except Exception as e:
-            raise HTTPException(status_code=400, detail=str(e))
+            raise HTTPException(status_code=500, detail=str(e))
