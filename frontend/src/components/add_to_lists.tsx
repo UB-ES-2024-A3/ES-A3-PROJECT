@@ -34,7 +34,7 @@ const AddToListsButton: React.FC<AddToListsButtonFields> = ({lists, callback}) =
     setIsOpen(false);
   };
   
-  const handleCancelReview = () => {
+  const handleCancelUpdate = () => {
     setIsOpen(false);
   };
 
@@ -44,13 +44,13 @@ const AddToListsButton: React.FC<AddToListsButtonFields> = ({lists, callback}) =
 
   return (
     <div style={{ padding: '1rem' }}>
-      <button id='add-review-btn' onClick={() => setIsOpen(true)}>
+      <button id='add-to-lists-btn' onClick={() => setIsOpen(true)}>
         Add to my lists
       </button>
 
       {isOpen && (
         <div style={{ position: 'fixed', inset: '0', backgroundColor: 'rgba(0, 0, 0, 0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem',}}>
-          <div id='add-to_lists-popup' style={{ backgroundColor: 'white', borderRadius: '0.5rem', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', width: '100%', height: 'fit-content', maxWidth: '35%'}}>
+          <div id='add-to-lists-popup' style={{ backgroundColor: 'white', borderRadius: '0.5rem', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', width: '100%', height: 'fit-content', maxWidth: '35%'}}>
             <div style={{ padding: '1.5rem' }}>
               <div style={{ position: 'relative' }}>
               {listsCheckbox.length ? (listsCheckbox.map((list) => (
@@ -63,13 +63,13 @@ const AddToListsButton: React.FC<AddToListsButtonFields> = ({lists, callback}) =
               )}
               </div>
               {showError && (
-                <p className="mt-1 text-sm text-red-500">{"There have been an error submiting your review. Please try again later."}</p>
+                <p className="mt-1 text-sm text-red-500">{"There have been an error submiting the changes. Please try again later."}</p>
               )}
 
               <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
                 <button
                   id='cancel-update-lists-btn'
-                  onClick={handleCancelReview}
+                  onClick={handleCancelUpdate}
                   className='secondaryButton'
                 >
                   Cancel
