@@ -1,3 +1,4 @@
+import { UpdateListsInterface } from "@/components/add_to_lists";
 import endpoint from "@/endpoints.config";
 import axios from 'axios';
 
@@ -55,7 +56,7 @@ const ListService = {
             throw except.response.data.detail;
         });
     },
-    updateListsWithBook: async(book_id: string, updateList: any) => {
+    updateListsWithBook: async(book_id: string, updateList: UpdateListsInterface[]) => {
         const user_id = localStorage.getItem('userId');
         const header = {'Content-Type': 'application/json'};
         const data = {
