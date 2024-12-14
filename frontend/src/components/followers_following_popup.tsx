@@ -18,6 +18,7 @@ interface User {
 
 const FollowersFollowingPopup: React.FC<FollowersFollowingPopupFields> = ({amount, _tabSelected, userId}) =>{
   const [isOpen, setIsOpen] = useState(false)
+  const [buttonName, setButtonName] = useState("")
   const [tabSelected, setTabSelected] = useState("")
   const [followers, setFollowers] = useState<User[]>([])
   const [following, setFollowing] = useState<User[]>([])
@@ -25,11 +26,11 @@ const FollowersFollowingPopup: React.FC<FollowersFollowingPopupFields> = ({amoun
   const router = useRouter();
 
   useEffect(() => {
+    setButtonName(_tabSelected);
     setTabSelected(_tabSelected);
     if (userId) {
       FollowersService.getFollowersFollowing(userId)
       .then(response => {
-        console.log(response)
         setFollowers(response.followers);
         setFollowing(response.following);
       })
@@ -48,7 +49,7 @@ const FollowersFollowingPopup: React.FC<FollowersFollowingPopupFields> = ({amoun
     <div>
       <div id='followers-btn' onClick={() => setIsOpen(true)} style={{display: 'flex', gap: '10px', cursor: 'pointer'}}>
         <span style={{ fontWeight: 'bold', fontSize: '0.85rem' }}>{amount}</span>
-        <span style={{ fontSize: '0.85rem', color: '#6b7280', marginRight: '10px'}}>{tabSelected}</span>
+        <span style={{ fontSize: '0.85rem', color: '#6b7280', marginRight: '10px'}}>{buttonName}</span>
       </div>
 
       {isOpen && (
