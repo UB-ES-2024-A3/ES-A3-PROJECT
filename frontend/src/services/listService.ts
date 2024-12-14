@@ -76,6 +76,17 @@ const ListService = {
         .catch(except => {
             console.log(except.response.data.detail);
         });
+    },
+    getBooksOfList: async (list_id: string) => {
+        return axios.get(
+            endpoint.dbURL + '/bookList/'+list_id+'/books'
+        )
+        .then (res => {
+            return res.data;
+        })
+        .catch(except => {
+            throw except.response.data.detail;
+        });
     }
 };
 export default ListService;
