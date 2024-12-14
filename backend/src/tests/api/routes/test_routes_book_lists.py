@@ -160,7 +160,7 @@ def test_get_book_list_with_relationship():
     list_result = client.post("/bookList", json=list_data)
     book_list = list_result.json()
     assert list_result.status_code == 200, f"Expected 200, got {list_result.status_code}. Details: {list_result.json()}"
-    book_id = "6c6c742a-f645-46b8-994e-3b71aae01372"  # Example book ID
+    book_id = "6c6c742a-f645-46b8-994e-3b71aae01372"  # hotmail book ID
     relationship_data = {
         "user_id": user.id,
         "book_id": book_id,
@@ -307,3 +307,141 @@ def test_get_books_in_nonexistent_list():
     assert result.status_code == 200, f"Expected 200, got {result.status_code}. Details: {result.json()}"
     assert books_in_list == [], f"Expected empty list, got {books_in_list}"
     assert username == None
+
+def test_follow_list():
+    # Create list owner
+    owner_data = {
+        "email": "owner@example.com",
+        "username": "owner",
+        "password": "securePassword123",
+    }
+    owner = User(**owner_data)
+    user_controller.create_user_command(owner)
+
+    # Create follower
+    follower_data = {
+        "email": "follower@example.com",
+        "username": "follower",
+        "password": "securePassword123",
+    }
+    follower = User(**follower_data)
+    user_controller.create_user_command(follower)
+
+    # Create a list by the owner
+    list_data = {"name": "Followable List", "user_id": owner.id}
+    list_result = client.post("/bookList", json=list_data)
+    book_list = list_result.json()
+
+    # Follower follows the list
+    follow_result = client.post(f"/list/follow?user_id={follower.id}&list_id={book_list['id']}")
+
+    # Unfollow and clean up
+    client.post(f"/list/unfollow?user_id={follower.id}&list_id={book_list['id']}")
+    book_lists.delete_list(book_list["id"])
+    user_controller.delete_user_command(owner.id)
+    user_controller.delete_user_command(follower.id)
+
+    assert list_result.status_code == 200, f"Expected 200, got {list_result.status_code}. Details: {list_result.json()}"
+    assert follow_result.status_code == 200, f"Expected 200, got {follow_result.status_code}. Details: {follow_result.json()}"
+
+def test_unfollow_list():
+    # Create list owner
+    owner_data = {
+        "email": "unfoll@gmail.com",
+        "username": "walhv",
+        "password": "securePassword123",
+    }
+    owner = User(**owner_data)
+    user_controller.create_user_command(owner)
+
+    # Create follower
+    follower_data = {
+        "email": "llow@gmail.com",
+        "username": "cqalknnsf",
+        "password": "securePassword123",
+    }
+    follower = User(**follower_data)
+    user_controller.create_user_command(follower)
+
+    # Create a list by the owner
+    list_data = {"name": "Unfollowable List", "user_id": owner.id}
+    list_result = client.post("/bookList", json=list_data)
+    book_list = list_result.json()
+
+    # Follower follows the list
+    client.post(f"/list/follow?user_id={follower.id}&list_id={book_list['id']}")
+
+    # Follower unfollows the list
+    unfollow_result = client.post(f"/list/unfollow?user_id={follower.id}&list_id={book_list['id']}")
+
+    # Cleanup
+    book_lists.delete_list(book_list["id"])
+    user_controller.delete_user_command(owner.id)
+    user_controller.delete_user_command(follower.id)
+
+    assert list_result.status_code == 200, f"Expected 200, got {list_result.status_code}. Details: {list_result.json()}"
+    assert unfollow_result.status_code == 200, f"Expected 200, got {unfollow_result.status_code}. Details: {unfollow_result.json()}"
+
+
+def test_follow_own_list():
+    user_data = {
+        "email": "own@example.com",
+        "username": "test_own",
+        "password": "securePassword123",
+    }
+    user = User(**user_data)
+    user_controller.create_user_command(user)
+
+    list_data = {"name": "Own List", "user_id": user.id}
+    list_result = client.post("/bookList", json=list_data)
+    book_list = list_result.json()
+
+    # Attempt to follow own list
+    follow_result = client.post(f"/list/follow?user_id={user.id}&list_id={book_list['id']}")
+
+    # Cleanup
+    book_lists.delete_list(book_list["id"])
+    user_controller.delete_user_command(user.id)
+
+    assert list_result.status_code == 200, f"Expected 200, got {list_result.status_code}. Details: {list_result.json()}"
+    assert follow_result.status_code == 400, f"Expected 400, got {follow_result.status_code}. Details: {follow_result.json()}"
+
+def test_follow_already_followed_list():
+    # Create list owner
+    owner_data = {
+        "email": "repeat@gmail.com",
+        "username": "qpfwht",
+        "password": "securePassword123",
+    }
+    owner = User(**owner_data)
+    user_controller.create_user_command(owner)
+
+    # Create follower
+    follower_data = {
+        "email": "rep@gmail.com",
+        "username": "ojwnoqfn",
+        "password": "securePassword123",
+    }
+    follower = User(**follower_data)
+    user_controller.create_user_command(follower)
+
+    # Create a list by the owner
+    list_data = {"name": "Redundant Follow List", "user_id": owner.id}
+    list_result = client.post("/bookList", json=list_data)
+    book_list = list_result.json()
+
+    # Follower follows the list
+    follow_result = client.post(f"/list/follow?user_id={follower.id}&list_id={book_list['id']}")
+
+    # Follower tries to follow the list again
+    redundant_follow_result = client.post(f"/list/follow?user_id={follower.id}&list_id={book_list['id']}")
+
+    # Cleanup
+    client.post(f"/list/unfollow?user_id={follower.id}&list_id={book_list['id']}")
+    book_lists.delete_list(book_list["id"])
+    user_controller.delete_user_command(owner.id)
+    user_controller.delete_user_command(follower.id)
+
+    assert list_result.status_code == 200, f"Expected 200, got {list_result.status_code}. Details: {list_result.json()}"
+    assert follow_result.status_code == 200, f"Expected 200, got {follow_result.status_code}. Details: {follow_result.json()}"
+    assert redundant_follow_result.status_code == 400, f"Expected 400, got {redundant_follow_result.status_code}. Details: {redundant_follow_result.json()}"
