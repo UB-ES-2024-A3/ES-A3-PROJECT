@@ -22,7 +22,7 @@ const ListContents: React.FC<ListContentsProps> = () => {
     const router = useRouter();
     const { listId } = router.query;
     const name = router.query.name as string; 
-    const [username, setUsername] = useState('username');
+    const [username, setUsername] = useState('');
 
      
     const handleOpenBook = (id: string) =>{
@@ -36,8 +36,9 @@ const ListContents: React.FC<ListContentsProps> = () => {
         setIsLoadingBooks(true);
         const id = listId as string;
         ListService.getBooksOfList(id)
-        .then(booksList => {
-          setBookResults(booksList);
+        .then(result => {
+          setUsername(result.username);
+          setBookResults(result.books);
           setIsLoadingBooks(false);
         })
         .catch(except => {
@@ -55,14 +56,13 @@ const ListContents: React.FC<ListContentsProps> = () => {
                 textAlign: 'center', 
                 fontSize: '2em', 
                 display: 'flex', 
-                justifyContent: 'center', 
-                alignItems: 'center'
+                justifyContent: 'center'
             }}>
-                <span>{name}</span>
-                <span style={{ margin: '0 30px' }}>|</span>
-                <span>{username}</span>
+                <span style={{flex: 1, textAlign: 'right'}}>{name}</span>
+                <span style={{ margin: '0 30px', alignSelf: 'center', flex: 0}}>|</span>
+                <span style={{flex: 1, textAlign: 'left'}}>{username}</span>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column'}}>
+            <div>
               {bookResults.length > 0 ? (
                 <div style={{display: 'flex', flexDirection: 'column', margin: '0px 30px'}}>
                   {bookResults.map((book) => (
@@ -72,7 +72,7 @@ const ListContents: React.FC<ListContentsProps> = () => {
                   ))}
                 </div>
               ):(
-                <div style={{margin: '5px', textAlign: 'center', justifyContent: 'center', height: '80vh', display: 'flex', flexDirection: 'column'}}> 
+                <div style={{margin: '5px', textAlign: 'center', justifyContent: 'center', height: '70vh', display: 'flex', flexDirection: 'column'}}> 
                   {isLoadingBooks ? (
                     <h2 style={{fontSize: '1.5em', color: 'grey'}}> Loading... </h2>
                   ):(
