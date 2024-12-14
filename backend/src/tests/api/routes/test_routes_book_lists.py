@@ -250,3 +250,56 @@ def test_get_user_lists_invalid_user():
     invalid_id = str(uuid.uuid4())
     result = client.get(f"/bookList/{invalid_id}")
     assert result.status_code == 404, f"Expected 404, got {result.status_code}. Details: {result.json()}"
+
+def test_get_books_in_list():
+    user_data = {
+        "email": "user2024@hotmail.com",
+        "username": "user2024",
+        "password": "securePassword123",
+    }
+    user = User(**user_data)
+    user_controller.create_user_command(user)
+
+    list_data = {"name": "Test Relationship List", "user_id": user.id}
+    list_result = client.post("/bookList", json=list_data)
+    book_list = list_result.json()
+    book_id = "6c6c742a-f645-46b8-994e-3b71aae01372"
+    relationship_data = {
+        "user_id": user.id,
+        "book_id": book_id,
+        "book_list": {book_list["id"]: True}, 
+    }
+    relationship_result = client.post("/booklist/update", json=relationship_data)
+    relationships = book_lists.get_relationships_by_book(book_id, {book_list["id"]})
+
+    get_books_result = client.get(f"/bookList/{book_list['id']}/books")
+    books_in_list = get_books_result.json()
+
+    # Limpieza
+    cleanup_data = {
+        "user_id": user.id,
+        "book_id": book_id,
+        "book_list": {book_list["id"]: False},
+    }
+    cleanup_result = client.post("/booklist/update", json=cleanup_data)
+    book_lists.delete_list(book_list["id"])
+    user_controller.delete_user_command(user.id)
+
+    assert len(relationships) > 0, f"No relationships found: {relationships}"
+    assert relationship_result.status_code == 200
+    assert list_result.status_code == 200
+    assert get_books_result.status_code == 200
+    assert len(books_in_list) == 1
+    assert books_in_list[0]["id"] == book_id
+    assert books_in_list[0]["title"] == "By a Spider's Thread"
+    assert books_in_list[0]["author"] == "Lippman, Laura"
+    assert cleanup_result.status_code == 200
+
+
+def test_get_books_in_nonexistent_list():
+    nonexistent_list_id = str(uuid.uuid4())
+    result = client.get(f"/bookList/{nonexistent_list_id}/books")
+    books_in_list = result.json()
+
+    assert result.status_code == 200, f"Expected 200, got {result.status_code}. Details: {result.json()}"
+    assert books_in_list == [], f"Expected empty list, got {books_in_list}"
