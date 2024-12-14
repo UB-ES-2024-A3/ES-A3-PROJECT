@@ -51,7 +51,7 @@ async def get_user_lists(user_id: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error fetching lists")
     
-@router.get("/bookList/{list_id}/books", response_model=list)
+@router.get("/bookList/{list_id}/books", response_model=dict)
 async def get_books_in_list(list_id: str):
     try:
         result = bookListController.get_books_in_list(list_id)

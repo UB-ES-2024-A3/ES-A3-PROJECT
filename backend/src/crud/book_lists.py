@@ -134,3 +134,18 @@ def get_books_by_ids(book_ids: list):
         return result.data if result.data else []
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching books: {str(e)}")
+
+def get_username_by_list_id(list_id: str):
+    supabase = get_db_client()
+    try:
+        result = (
+            supabase.table("book_lists")
+            .select("user_id, users(id, username)")
+            .eq("id", list_id)
+            .execute()
+        )
+        if not result.data:
+            return None
+        return result.data[0]["users"]["username"]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching user: {str(e)}")
