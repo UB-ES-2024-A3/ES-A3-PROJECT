@@ -70,6 +70,8 @@ class BookListController:
             if not book_ids:
                 return []
             books = book_lists.get_books_by_ids(book_ids)
+            if books:
+                books = sorted(books, key=lambda book: book['title'])
             return books
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Error fetching books in list: {str(e)}")
