@@ -273,7 +273,8 @@ def test_get_books_in_list():
     relationships = book_lists.get_relationships_by_book(book_id, {book_list["id"]})
 
     get_books_result = client.get(f"/bookList/{book_list['id']}/books")
-    books_in_list = get_books_result.json()
+    books_in_list = get_books_result.json()["books"]
+    username = get_books_result.json()["username"]
 
     # Limpieza
     cleanup_data = {
@@ -284,7 +285,7 @@ def test_get_books_in_list():
     cleanup_result = client.post("/booklist/update", json=cleanup_data)
     book_lists.delete_list(book_list["id"])
     user_controller.delete_user_command(user.id)
-
+    
     assert len(relationships) > 0, f"No relationships found: {relationships}"
     assert relationship_result.status_code == 200
     assert list_result.status_code == 200
@@ -293,13 +294,16 @@ def test_get_books_in_list():
     assert books_in_list[0]["id"] == book_id
     assert books_in_list[0]["title"] == "By a Spider's Thread"
     assert books_in_list[0]["author"] == "Lippman, Laura"
+    assert username == user.username
     assert cleanup_result.status_code == 200
 
 
 def test_get_books_in_nonexistent_list():
     nonexistent_list_id = str(uuid.uuid4())
     result = client.get(f"/bookList/{nonexistent_list_id}/books")
-    books_in_list = result.json()
-
+    print(result.json())
+    books_in_list = result.json()["books"]
+    username = result.json()["username"]
     assert result.status_code == 200, f"Expected 200, got {result.status_code}. Details: {result.json()}"
     assert books_in_list == [], f"Expected empty list, got {books_in_list}"
+    assert username == None

@@ -66,12 +66,13 @@ class BookListController:
         
     def get_books_in_list(self, list_id: str):
         try:
+            username = book_lists.get_username_by_list_id(list_id)
             book_ids = book_lists.get_book_ids_by_list_id(list_id)
             if not book_ids:
-                return []
+                return {"username": username, "books": []}
             books = book_lists.get_books_by_ids(book_ids)
             if books:
                 books = sorted(books, key=lambda book: book['title'])
-            return books
+            return {"username": username, "books": books}
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Error fetching books in list: {str(e)}")
