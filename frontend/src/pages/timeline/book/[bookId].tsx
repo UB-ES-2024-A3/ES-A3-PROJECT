@@ -6,6 +6,8 @@ import { useEffect, useState } from 'react';
 import ShowBookService from '@/services/showBookService';
 import { useTimelineContext } from '@/contexts/TimelineContext';
 import BookReviewSection from '@/components/book_review_section';
+import AddToListsButton, { ListCheckboxProps, UpdateListsInterface } from '@/components/add_to_lists';
+import ListService from '@/services/listService';
 
 export interface Book {
     id: string;
@@ -23,6 +25,8 @@ const BookPage = () => {
 
   const [book, setBook] = useState<Book>({author: "", title: "", description: "", genres: [], id:"", avgstars:0, numreviews: 0 });
   const [newReview, setNewReview] = useState<boolean>(false);
+
+  const [lists, setLists] = useState<ListCheckboxProps[]>([]);
  
   useEffect(() => {
       ShowBookService.getBookRequest(bookId)
@@ -35,9 +39,38 @@ const BookPage = () => {
           });
   }, [bookId, newReview]);
 
+  useEffect(() => {
+    loadListsChecbox();
+  }, [bookId]);
+  
+  async function loadListsChecbox() {
+    return ListService.getListsWithBook(bookId)
+      .then(retLists => {
+        setLists(
+          // Sort list in alphabetic order
+          retLists.sort((a: ListCheckboxProps, b: ListCheckboxProps) => {
+            return a.name.localeCompare(b.name);
+          })
+        );
+      })
+      .catch(except => {
+        console.log(except);
+        setLists([]);
+      });
+  }
+
   const newReviewCallback = () => {
     setNewReview(!newReview);
-  }
+  };
+
+  const addListsCallback = async (updateChecks: UpdateListsInterface) => {
+    return ListService.updateListsWithBook(bookId, updateChecks)
+    .then(async success => {
+      if (success) {
+        await loadListsChecbox();
+      }
+    });
+  };
 
   return (
     <>
@@ -48,6 +81,7 @@ const BookPage = () => {
           <SearchBar placeholder="Search..." buttonLabel="Search" id='searchbar'>
             <>
                 <BookInformation book={book} />
+                <AddToListsButton lists={lists} callback={addListsCallback} />
                 <BookReviewSection book={book} callback={newReviewCallback} />
             </>
           </SearchBar>
