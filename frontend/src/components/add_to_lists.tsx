@@ -2,7 +2,7 @@ import { ChangeEvent, ChangeEventHandler, useEffect, useState } from 'react'
 
 interface AddToListsButtonFields {
   lists: ListCheckboxProps[];
-  callback: (updateChecks: UpdateListsInterface) => void;
+  callback: (updateChecks: UpdateListsInterface) => Promise<void>;
 }
 
 export interface ListCheckboxProps {
@@ -19,6 +19,7 @@ const AddToListsButton: React.FC<AddToListsButtonFields> = ({lists, callback}) =
   const [isOpen, setIsOpen] = useState(false);
   const [listsCheckbox, setListsCheckbox] = useState<ListCheckboxProps[]>(lists);
   const [showError, setShowError] = useState(false);
+  const [sending, setSending] = useState(false);
   let listCheckState: UpdateListsInterface = {};
 
   useEffect(() => {
@@ -30,7 +31,9 @@ const AddToListsButton: React.FC<AddToListsButtonFields> = ({lists, callback}) =
   }, [lists]);
 
   const  handleSubmit = async () => {
-    callback(listCheckState);
+    setSending(true);
+    await callback(listCheckState);
+    setSending(false);
     setIsOpen(false);
   };
   
@@ -76,6 +79,8 @@ const AddToListsButton: React.FC<AddToListsButtonFields> = ({lists, callback}) =
                 </button>
                 <button
                   id='update-lists-btn'
+                  className={sending ? 'waiting' : ''}
+                  disabled={sending}
                   onClick={handleSubmit}
                 >
                   Accept

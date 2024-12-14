@@ -97,3 +97,8 @@
       margin: 16px;
     }
   }
+
+  button.waiting {
+    cursor: progress;
+    background-color: var(--hover-green);
+  }

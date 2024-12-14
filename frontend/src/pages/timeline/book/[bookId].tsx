@@ -25,7 +25,6 @@ const BookPage = () => {
 
   const [book, setBook] = useState<Book>({author: "", title: "", description: "", genres: [], id:"", avgstars:0, numreviews: 0 });
   const [newReview, setNewReview] = useState<boolean>(false);
-  const [listUpdate, setListUpdate] = useState<boolean>(false);
 
   const [lists, setLists] = useState<ListCheckboxProps[]>([]);
  
@@ -41,7 +40,11 @@ const BookPage = () => {
   }, [bookId, newReview]);
 
   useEffect(() => {
-    ListService.getListsWithBook(bookId)
+    loadListsChecbox();
+  }, [bookId]);
+  
+  async function loadListsChecbox() {
+    return ListService.getListsWithBook(bookId)
       .then(retLists => {
         setLists(
           // Sort list in alphabetic order
@@ -54,17 +57,17 @@ const BookPage = () => {
         console.log(except);
         setLists([]);
       });
-  }, [bookId, listUpdate]);
+  }
 
   const newReviewCallback = () => {
     setNewReview(!newReview);
   };
 
-  const addListsCallback = (updateChecks: UpdateListsInterface) => {
-    ListService.updateListsWithBook(bookId, updateChecks)
-    .then(success => {
+  const addListsCallback = async (updateChecks: UpdateListsInterface) => {
+    return ListService.updateListsWithBook(bookId, updateChecks)
+    .then(async success => {
       if (success) {
-        setListUpdate(!listUpdate);
+        await loadListsChecbox();
       }
     });
   };
