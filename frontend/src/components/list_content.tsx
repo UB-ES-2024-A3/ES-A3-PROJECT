@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
 import BookBar from '@/components/bookbar';
 //TODO: temporal service
-import SearchService from '@/services/searchService';
+import ListService from '@/services/listService';
 
 interface ListContentsProps{
 
@@ -19,7 +19,6 @@ const ListContents: React.FC<ListContentsProps> = () => {
     const [isLoadingBooks, setIsLoadingBooks] = useState(false);
     const {timelineState,setTimelineState} = useTimelineContext();
     // TODO: for the moment we use this query
-    const search = 'scholastic';
     const router = useRouter();
     const { listId } = router.query;
     const name = router.query.name as string; 
@@ -31,39 +30,30 @@ const ListContents: React.FC<ListContentsProps> = () => {
       setTimelineState({page: "book", data: id});
       router.push("/timeline/book/"+ id)
     }
-    // Since I don't have the endpoint I am retrieving books like in the list of searched books
+
     useEffect(() => {
-      if (search.trim()) {
+      if(listId){
         setIsLoadingBooks(true);
-        const debounceTimeout = setTimeout(() => {
-          SearchService.bookRequest(search, null)
-            .then(results => {
-              const books = results.map((book: Book) => ({
-                id: book.id,
-                title: book.title,
-                author: book.author
-              }));
-              setBookResults(books);
-              setIsLoadingBooks(false);
-            })
-            .catch(errorMsgs => {
-              console.log(errorMsgs);
-              setBookResults([]);
-              setIsLoadingBooks(false);
-            });
-        }, 300); // 300 ms debounce
-        return () => clearTimeout(debounceTimeout);
-      } else {
-        setBookResults([]);
-      }
-    }, [search]);
+        const id = listId as string;
+        ListService.getBooksOfList(id)
+        .then(booksList => {
+          setBookResults(booksList);
+          setIsLoadingBooks(false);
+        })
+        .catch(except => {
+            console.log(except);
+            setBookResults([]);
+            setIsLoadingBooks(false);
+        });
+      } 
+    }, [listId]);
 
     return(
         <div style={{ width: '100%', marginTop: '0px', display: 'flex', flexDirection: 'column'}}>
             <div style={{ 
                 margin: '20px', 
                 textAlign: 'center', 
-                fontSize: '28pt', 
+                fontSize: '2em', 
                 display: 'flex', 
                 justifyContent: 'center', 
                 alignItems: 'center'
@@ -82,11 +72,11 @@ const ListContents: React.FC<ListContentsProps> = () => {
                   ))}
                 </div>
               ):(
-                <div style={{padding: '5px'}}> 
+                <div style={{margin: '5px', textAlign: 'center', justifyContent: 'center', height: '80vh', display: 'flex', flexDirection: 'column'}}> 
                   {isLoadingBooks ? (
-                    <div> Loading... </div>
+                    <h2 style={{fontSize: '1.5em', color: 'grey'}}> Loading... </h2>
                   ):(
-                    <div> No books added </div>
+                    <h2 style={{fontSize: '1.5em', color: 'grey'}}> No books added </h2>
                   )}
                 </div>
               )}
