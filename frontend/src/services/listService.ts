@@ -1,6 +1,5 @@
 import endpoint from "@/endpoints.config";
 import axios from 'axios';
-import { headers } from "next/headers";
 
 const ListService = {
     createListRequest: async (listName: string) => {
