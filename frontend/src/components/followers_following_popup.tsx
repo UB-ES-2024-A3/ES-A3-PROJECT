@@ -46,7 +46,7 @@ const FollowersFollowingPopup: React.FC<FollowersFollowingPopupFields> = ({amoun
 
   return (
     <div>
-      <div id='followers-btn' onClick={() => setIsOpen(true)} style={{display: 'flex', gap: '10px', cursor: 'pointer'}}>
+      <div id={_tabSelected + '-btn'} onClick={() => setIsOpen(true)} style={{display: 'flex', gap: '10px', cursor: 'pointer'}}>
         <span style={{ fontWeight: 'bold', fontSize: '0.85rem' }}>{amount}</span>
         <span style={{ fontSize: '0.85rem', color: '#6b7280', marginRight: '10px'}}>{tabSelected}</span>
       </div>
