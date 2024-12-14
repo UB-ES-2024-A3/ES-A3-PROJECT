@@ -307,3 +307,34 @@ def test_get_books_in_nonexistent_list():
     assert result.status_code == 200, f"Expected 200, got {result.status_code}. Details: {result.json()}"
     assert books_in_list == [], f"Expected empty list, got {books_in_list}"
     assert username == None
+
+# def test_is_user_following_list():
+#     owner_data = {
+#         "email": "check@example.com",
+#         "username": "vbeof",
+#         "password": "securePassword123",
+#     }
+#     owner = User(**owner_data)
+#     user_controller.create_user_command(owner)
+#     follower_data = {
+#         "email": "aawibhf@example.com",
+#         "username": "ojnafw",
+#         "password": "securePassword123",
+#     }
+#     follower = User(**follower_data)
+#     user_controller.create_user_command(follower)
+
+#     list_data = {"name": "Check Follow List", "user_id": owner.id}
+#     list_result = client.post("/bookList", json=list_data)
+#     book_list = list_result.json()
+#     print(book_list)
+#     response=client.post(f"/list/follow?user_id={follower.id}&list_id={book_list['id']}")
+#     print(response)
+#     follow_status = client.get(f"/list/is-following?user_id={follower.id}&list_id={book_list['id']}")
+#     client.post(f"/list/unfollow?user_id={follower.id}&list_id={book_list['id']}")
+#     book_lists.delete_list(book_list["id"])
+#     user_controller.delete_user_command(owner.id)
+#     user_controller.delete_user_command(follower.id)
+
+#     assert follow_status.status_code == 200, f"Expected 200, got {follow_status.status_code}. Details: {follow_status.json()}"
+#     assert follow_status.json() is True

@@ -76,3 +76,8 @@ class BookListController:
             return {"username": username, "books": books}
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Error fetching books in list: {str(e)}")
+    def is_user_following_list(self, user_id: str, list_id: str) -> bool:
+        try:
+            return check_existing_follow(user_id, list_id)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Error checking follow status: {str(e)}")
