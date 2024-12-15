@@ -15,8 +15,8 @@ const ProfileNavBar: React.FC<ProfileNavBarProps> = ({ activeTab, setActiveTab }
         icon: <Pen className="w-4 h-4" />
         },
         {
-        id: 'lists',
-        label: 'LISTS',
+        id: 'created-lists',
+        label: 'CREATED LISTS',
         icon: <ListMusic className="w-4 h-4" />
         }
     ]
@@ -27,6 +27,7 @@ const ProfileNavBar: React.FC<ProfileNavBarProps> = ({ activeTab, setActiveTab }
         <button
           className={`navigation ${activeTab === tab.id ? 'active' : ''}`}
           key={tab.id}
+          id={'profile-' + tab.id + '-tab'}
           onClick={() => setActiveTab(tab.id)}
         >
           {tab.icon}

@@ -1,3 +1,4 @@
+import { UpdateListsInterface } from "@/components/add_to_lists";
 import endpoint from "@/endpoints.config";
 import axios from 'axios';
 
@@ -27,6 +28,64 @@ const ListService = {
                 console.log(except);
                 throw "Unknown error. Please, try again.";
             }
+        });
+    },
+    getUserLists: async (user_id: string) => {
+        return axios.get(
+            endpoint.dbURL + '/bookList/' + user_id
+        )
+        .then(res => {
+            return res.data;
+        })
+        .catch(except => {
+            throw except.response.data.detail;
+        });
+    },
+    getListsWithBook: async (book_id: string) => {
+        const user_id = localStorage.getItem('userId');
+        return axios.get(
+            endpoint.dbURL + '/user/booklists',
+            {
+                params: {user_id: user_id, book_id: book_id}
+            } 
+        )
+        .then(response => {
+            return response.data;
+        })
+        .catch(except => {
+            throw except.response.data.detail;
+        });
+    },
+    updateListsWithBook: async(book_id: string, updateList: UpdateListsInterface) => {
+        const user_id = localStorage.getItem('userId');
+        const header = {'Content-Type': 'application/json'};
+        const data = {
+            user_id: user_id,
+            book_id: book_id,
+            book_list: updateList
+        };
+
+        return axios.post(
+            endpoint.dbURL + '/booklist/update',
+            data,
+            {headers: header}
+        )
+        .then(response => {
+            return response.data;
+        })
+        .catch(except => {
+            console.log(except.response.data.detail);
+        });
+    },
+    getBooksOfList: async (list_id: string) => {
+        return axios.get(
+            endpoint.dbURL + '/bookList/'+list_id+'/books'
+        )
+        .then (res => {
+            return res.data;
+        })
+        .catch(except => {
+            throw except.response.data.detail;
         });
     }
 };

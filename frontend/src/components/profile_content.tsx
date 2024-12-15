@@ -1,15 +1,18 @@
 import ProfileReviewCard from '@/components/profile_review_card';
 import ProfileNavBar from '@/components/profile_navbar';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { UserReviewCardProps } from '@/pages/timeline/user/[userId]';
 import CreateListButton from './create_list_button';
+import { useTimelineContext } from '@/contexts/TimelineContext';
 import ListBar from './listbar';
 
 interface ProfileContentsProps {
     reviews: UserReviewCardProps[];
     ownLists: ListProps[];
     isSelfUser: boolean;
-    callback: (id: string) => void;
+    deleteReviewCallback: (id: string) => void;
+    createListCallback: () => void;
   }
 
 export interface ListProps { // TODO: should be moved to the visualize review page
@@ -17,12 +20,14 @@ export interface ListProps { // TODO: should be moved to the visualize review pa
     name: string;
 }
 
-const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, isSelfUser, callback }) => {
+const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, isSelfUser, deleteReviewCallback: deleteCallback, createListCallback }) => {
+    const router = useRouter();
     const [activeTab, setActiveTab] = useState('reviews');
     const [reviewList, setReviewList] = useState(reviews);
     const [ownListsList, setOwnListsList] = useState<ListProps[]>(ownLists);
     const no_reviews_message = isSelfUser? "You have no reviews yet." : "This user has not made any reviews yet.";
     const no_lists_message = isSelfUser? "You have no lists yet." : "This user has not made any lists yet.";
+    const {timelineState,setTimelineState} = useTimelineContext();
     
     useEffect(() => {
         setReviewList(reviews);
@@ -32,9 +37,13 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, is
         setOwnListsList(ownLists);
     }, [ownLists]);
 
-    const handleOpenList = (id: string) => {
-        console.log("Clicked list " + id);
-    };
+    const handleOpenList = (id: string, name: string) => {
+        if (isSelfUser) {
+            const combinedData = `${id}|${name}`;
+            setTimelineState({ page: "list_profile", data: combinedData }); 
+            router.push(`profile/list/${id}?name=${encodeURIComponent(name)}`); 
+        }
+    };    
 
   return (
     <>
@@ -64,7 +73,7 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, is
                     book_id={review.book_id}
                     review_id={review.id}
                     user_id={review.user_id}
-                    callback={callback}
+                    callback={deleteCallback}
                 />
             ))):(
                 <div style={{margin: '5px', textAlign: 'center', justifyContent: 'center', height: '80vh', display: 'flex', flexDirection: 'column'}}> 
@@ -73,10 +82,10 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, is
             )}
             </div>
         ) }
-        {activeTab === 'lists' && (
+        {activeTab === 'created-lists' && (
             <>
                 <div style={{display: 'flex', flexDirection: 'column', alignItems: 'end'}}>
-                    <CreateListButton></CreateListButton>
+                    <CreateListButton callback={createListCallback}></CreateListButton>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                 {ownListsList.length ? (ownListsList.map(list => (

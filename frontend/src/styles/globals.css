@@ -87,3 +87,18 @@
     color: black;
   }
   
+  .list-checkbox {
+    display: flex;
+    align-items: center;
+    & > label {
+      font-size: 1.25rem;
+    }
+    & > input {
+      margin: 16px;
+    }
+  }
+
+  button.waiting {
+    cursor: progress;
+    background-color: var(--hover-green);
+  }

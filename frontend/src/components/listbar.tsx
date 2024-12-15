@@ -3,17 +3,17 @@ import React from 'react';
 interface ListBarProps{
     id: string;
     name: string;
-    handleOpenList: (id:string) => void;
+    handleOpenList: (id:string, name:string) => void;
 }
 
 const ListBar: React.FC<ListBarProps> = ({id, name, handleOpenList}) => {
     const handleClickList = () => {
-        handleOpenList(id);
+        handleOpenList(id, name);
     };
 
     return (
-        <button id={id} className="secondaryButton" onClick={handleClickList} style={{textAlign: 'left', borderBottom: '1px solid #ccc', width: '100%', minHeight: '64px', display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-            <div style = {{display: 'flex', flexDirection: 'column'}}> 
+        <button id={id} className="secondaryButton" onClick={handleClickList} style={{textAlign: 'left', borderBottom: '1px solid #ccc', width: '100%', minHeight: '64px', display: 'flow', justifyContent: 'space-between'}}>
+            <div> 
                 <div style={{ margin: 'auto 0' }}> {name} </div>
             </div>
         </button>
