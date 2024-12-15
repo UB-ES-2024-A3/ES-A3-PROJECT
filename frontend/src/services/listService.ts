@@ -87,6 +87,45 @@ const ListService = {
         .catch(except => {
             throw except.response.data.detail;
         });
+    },
+    getIsListFollowed: async (list_id: string) => {
+        const user_id = localStorage.getItem('userId');
+        return axios.get(
+            endpoint.dbURL + '/list/is-following',
+            {
+                params: {user_id: user_id, list_id: list_id}
+            }
+        )
+        .then(response => {
+            return response.data;
+        })
+        .catch(except => {
+            throw except.response.data.detail;
+        });
+    },
+    followList: async (list_id: string) => {
+        const user_id = localStorage.getItem('userId');
+        return axios.post(
+            endpoint.dbURL + `/list/follow?user_id=${user_id}&list_id=${list_id}`
+        )
+        .then(response => {
+            return response.data;
+        })
+        .catch(except => {
+            throw except.response.data.detail;
+        });
+    },
+    unfollowList: async (list_id: string) => {
+        const user_id = localStorage.getItem('userId');
+        return axios.post(
+            endpoint.dbURL + `/list/unfollow?user_id=${user_id}&list_id=${list_id}`
+        )
+        .then(response => {
+            return response.data;
+        })
+        .catch(except => {
+            throw except.response.data.detail;
+        });
     }
 };
 export default ListService;
