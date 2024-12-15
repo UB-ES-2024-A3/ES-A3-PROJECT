@@ -3,6 +3,7 @@ import NavBar from '@/components/navbar';
 import SearchBar from '@/components/searchbar';
 import BookInformation from '@/components/book_information';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import ShowBookService from '@/services/showBookService';
 import { useTimelineContext } from '@/contexts/TimelineContext';
 import BookReviewSection from '@/components/book_review_section';
@@ -21,7 +22,8 @@ export interface Book {
 
 const BookPage = () => {
   const {timelineState} = useTimelineContext();
-  const  bookId  = timelineState.data;
+  const router = useRouter();
+  const  bookId  = router.query.bookId as string;
 
   const [book, setBook] = useState<Book>({author: "", title: "", description: "", genres: [], id:"", avgstars:0, numreviews: 0 });
   const [newReview, setNewReview] = useState<boolean>(false);
