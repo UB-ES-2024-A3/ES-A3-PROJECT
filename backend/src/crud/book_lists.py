@@ -150,6 +150,15 @@ def get_username_by_list_id(list_id: str):
         return result.data[0]["users"]["username"]
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching user: {str(e)}")
+    
+def check_existing_follow(user_id: str, list_id: str) -> bool:
+    client = get_db_client()
+    try:
+        result = client.table("followers_list").select("id").eq("user_id", user_id).eq("list_id", list_id).execute()
+        print(result)
+        return len(result.data) > 0
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error checking existing follow: {e}")
 
 def add_follower(user_id: str, list_id: str):
     client = get_db_client()

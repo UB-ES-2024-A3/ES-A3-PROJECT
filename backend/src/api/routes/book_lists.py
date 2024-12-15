@@ -61,6 +61,15 @@ async def get_books_in_list(list_id: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching books in list: {str(e)}")
     
+@router.get("/list/is-following", response_model=bool)
+async def is_following(user_id: str, list_id: str):
+    try:
+        return bookListController.is_user_following_list(user_id, list_id)
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error checking follow status")
+
 @router.post("/list/follow")
 async def follow_list(user_id: str, list_id: str):
     try:
