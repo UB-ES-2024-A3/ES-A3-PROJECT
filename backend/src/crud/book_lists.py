@@ -1,3 +1,4 @@
+import uuid
 from fastapi import HTTPException
 from src.models.list_book_relationship import ListBookRelationship
 from src.models.book_list import BookList
@@ -149,3 +150,22 @@ def get_username_by_list_id(list_id: str):
         return result.data[0]["users"]["username"]
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching user: {str(e)}")
+
+def add_follower(user_id: str, list_id: str):
+    client = get_db_client()
+    data = {"id":str(uuid.uuid4()),"user_id": user_id, "list_id": list_id}
+    return client.table("followers_list").insert(data).execute()
+
+def remove_follower(user_id: str, list_id: str):
+    client = get_db_client()
+    return client.table("followers_list").delete().eq("user_id", user_id).eq("list_id", list_id).execute()
+    
+def check_existing_follow(user_id: str, list_id: str):
+    client = get_db_client()
+    result = client.table("followers_list").select("id").eq("user_id", user_id).eq("list_id", list_id).execute()
+    return len(result.data) > 0
+
+def check_ownership(user_id: str, list_id: str):
+    client = get_db_client()
+    result = client.table("book_lists").select("id").eq("user_id", user_id).eq("id", list_id).execute()
+    return len(result.data) > 0
