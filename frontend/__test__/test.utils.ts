@@ -6,7 +6,7 @@ import chrome from 'selenium-webdriver/chrome';
 export const createWebDriver = async (): Promise<WebDriver> => {
   const options = new chrome.Options();
   options.addArguments(
-    '--headless',
+    //'--headless',
     '--no-sandbox',
     '--disable-dev-shm-usage',
     '--disable-gpu',
@@ -54,6 +54,8 @@ export const supabaseResponses = {
     insertStatusText: "Created",
     deleteStatus: 200,
     deleteStatusText: "OK",
+    fetchStatus: 200,
+    fetchStatusText: "OK",
 };
 
 export const loginAsUserTest = async (driver: WebDriver, user: {username: string, password: string}) => {
