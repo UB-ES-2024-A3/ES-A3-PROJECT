@@ -81,3 +81,24 @@ class BookListController:
             return check_existing_follow(user_id, list_id)
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Error checking follow status: {str(e)}")
+    def follow_list(self, user_id: str, list_id: str):
+        if check_ownership(user_id, list_id):
+            raise HTTPException(status_code=400, detail="User cannot follow their own list")
+        if check_existing_follow(user_id, list_id):
+            raise HTTPException(status_code=400, detail="User already follows this list")
+        try:
+            result = add_follower(user_id, list_id)
+            print(result)
+            return result
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Error following list: {e}")
+
+    def unfollow_list(self, user_id: str, list_id: str):
+        if not check_existing_follow(user_id, list_id):
+            raise HTTPException(status_code=400, detail="User is not following this list")
+        try:
+           result = remove_follower(user_id, list_id)
+           print(result)
+           return result
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Error unfollowing list: {e}")

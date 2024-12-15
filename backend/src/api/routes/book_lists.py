@@ -69,3 +69,25 @@ async def is_following(user_id: str, list_id: str):
         raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error checking follow status")
+
+@router.post("/list/follow")
+async def follow_list(user_id: str, list_id: str):
+    try:
+        result = bookListController.follow_list(user_id, list_id)
+        if (result):
+            return True
+        else:
+            return False    
+    except HTTPException as e:
+        raise e
+
+@router.post("/list/unfollow")
+async def unfollow_list(user_id: str, list_id: str):
+    try:
+        result = bookListController.unfollow_list(user_id, list_id)
+        if (result):
+            return True
+        else:
+            return False
+    except HTTPException as e:
+        raise e
