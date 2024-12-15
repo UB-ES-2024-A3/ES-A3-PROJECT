@@ -5,16 +5,13 @@ import BookBar from '@/components/bookbar';
 //TODO: temporal service
 import ListService from '@/services/listService';
 
-interface ListContentsProps{
-
-}
 interface Book {
     id: string;
     title: string;
     author: string;
 }
 
-const ListContents: React.FC<ListContentsProps> = () => {
+const ListContents: React.FC = () => {
     const [bookResults, setBookResults] = useState<Book[]>([]);
     const [isLoadingBooks, setIsLoadingBooks] = useState(false);
     const {timelineState,setTimelineState} = useTimelineContext();
