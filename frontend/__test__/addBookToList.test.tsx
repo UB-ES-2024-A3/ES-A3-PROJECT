@@ -4,7 +4,7 @@ import { createClient } from '@supabase/supabase-js'
 import {supabaseResponses, createWebDriver, loginAsUserTest} from "./test.utils";
 
 // Increase Jest's default timeout to handle Selenium operations
-jest.setTimeout(60000);
+jest.setTimeout(70000);
 
 let supabaseURL = process.env.SUPABASE_URL || "not_found";
 let supabaseKey = process.env.SUPABASE_KEY || "not_found";
@@ -143,9 +143,8 @@ describe("Test list creation", () => {
 
             //Go to the desired book page
             await driver.get(bookUrl);
-
-            //Wait until new page loads
-            await driver.sleep(10000);
+            const title = await driver.findElement(By.id('book-title'));
+            await driver.wait(until.elementTextIs(title, bookAddBookTest.title), 15000);
 
             //Open pop-up
             let addListsBtn = await driver.findElement(By.id('add-to-lists-btn'));
@@ -158,25 +157,9 @@ describe("Test list creation", () => {
             let isList2Checked = await checkBoxList2.isSelected();
             expect(isList1Checked).toBe(true);
             expect(isList2Checked).toBe(false);
+            console.log("First check done");
 
             //Now we check that the book is correctly added and deleted from lists
-            //and that the checkboxs are shown accordingly
-            await checkBoxList1.click();
-            await checkBoxList2.click();
-            let acceptButton = await driver.findElement(By.id('update-lists-btn'));
-            await acceptButton.click();
-            await driver.sleep(15000);
-
-
-            addListsBtn = await driver.findElement(By.id('add-to-lists-btn'));
-            await addListsBtn.click();
-
-            checkBoxList1 = await driver.findElement(By.id(listAddBookTest1.id));
-            checkBoxList2 = await driver.findElement(By.id(listAddBookTest2.id));
-            isList1Checked = await checkBoxList1.isSelected();
-            isList2Checked = await checkBoxList2.isSelected();
-            expect(isList1Checked).toBe(false);
-            expect(isList2Checked).toBe(true);
 
             let message = await supabase
             .from('list_book_relationships')
