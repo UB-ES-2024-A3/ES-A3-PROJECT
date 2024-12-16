@@ -20,6 +20,7 @@ export interface ListProps { // TODO: should be moved to the visualize review pa
     id: string;
     name: string;
     username?: string;
+    list_id?: string;
 }
 
 const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, followedLists, isSelfUser, deleteReviewCallback: deleteCallback, createListCallback }) => {

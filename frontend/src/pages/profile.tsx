@@ -66,8 +66,12 @@ const Profile = () => {
         });
         ListService.getFollowedLists(userId)
         .then(lists => {
+            const updatedLists = lists.map(list => ({
+                ...list,
+                id: list.list_id, 
+            }));
             console.log(lists)
-            setFollowedLists(lists);
+            setFollowedLists(updatedLists);
         })
         .catch(except => {
             console.log(except);
