@@ -38,6 +38,17 @@ const Profile = () => {
     setNewList(!newList);
   };
 
+  function getOwnLists(userId: string) {
+    ListService.getUserLists(userId)
+    .then(lists => {
+      setOwnLists(lists);
+    })
+    .catch(except => {
+      console.log(except);
+      setOwnLists([]);
+    });
+  }
+
   useEffect(() => {
     if (userId){
         ReviewService.getUserReviews(userId)
@@ -55,27 +66,13 @@ const Profile = () => {
         .catch(except => {
             console.log(except);
         });
-        ListService.getUserLists(userId)
-        .then(lists => {
-            setOwnLists(lists);
-        })
-        .catch(except => {
-            console.log(except);
-            setOwnLists([]);
-        });
+        getOwnLists(userId);
     }
   }, [userId]);
 
   useEffect(() => {
     if (userId)
-        ListService.getUserLists(userId)
-        .then(lists => {
-            setOwnLists(lists);
-        })
-        .catch(except => {
-            console.log(except);
-            setOwnLists([]);
-        });
+      getOwnLists(userId);
   }, [newList]);
 
   return (
