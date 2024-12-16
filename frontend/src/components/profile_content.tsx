@@ -43,6 +43,11 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, is
             setTimelineState({ page: "list_profile", data: combinedData }); 
             router.push(`profile/list/${id}?name=${encodeURIComponent(name)}`); 
         }
+        else {
+            const combinedData = `${id}|${name}`;
+            setTimelineState({ page: "list_timeline", data: combinedData }); 
+            router.push(`/timeline/list/${id}?name=${encodeURIComponent(name)}`); 
+        }
     };    
 
   return (
@@ -83,10 +88,14 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, is
             </div>
         ) }
         {activeTab === 'created-lists' && (
-            <>
-                <div style={{display: 'flex', flexDirection: 'column', alignItems: 'end'}}>
-                    <CreateListButton callback={createListCallback}></CreateListButton>
-                </div>
+            <>  
+                { isSelfUser? (
+                    <div style={{display: 'flex', flexDirection: 'column', alignItems: 'end'}}>
+                        <CreateListButton callback={createListCallback}></CreateListButton>
+                    </div>
+                ):(
+                    <></>
+                )}
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                 {ownListsList.length ? (ownListsList.map(list => (
                     <div key={list.id} style={{ margin: '3px' }}>

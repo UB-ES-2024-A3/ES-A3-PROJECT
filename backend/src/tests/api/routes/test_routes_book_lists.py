@@ -476,3 +476,37 @@ def test_follow_already_followed_list():
     assert list_result.status_code == 200, f"Expected 200, got {list_result.status_code}. Details: {list_result.json()}"
     assert follow_result.status_code == 200, f"Expected 200, got {follow_result.status_code}. Details: {follow_result.json()}"
     assert redundant_follow_result.status_code == 400, f"Expected 400, got {redundant_follow_result.status_code}. Details: {redundant_follow_result.json()}"
+
+def test_get_following_lists():
+    # Setup: Create owner and follower users
+    owner_data = {"email": "owner@example.com", "username": "owner_user", "password": "securePassword123"}
+    follower_data = {"email": "follower@example.com", "username": "follower_user", "password": "securePassword123"}
+    
+#     owner = User(**owner_data)
+#     follower = User(**follower_data)
+#     user_controller.create_user_command(owner)
+#     user_controller.create_user_command(follower)
+#     list_data_1 = {"name": "First List", "user_id": owner.id}
+#     list_data_2 = {"name": "Second List", "user_id": owner.id}
+#     list_result_1 = client.post("/bookList", json=list_data_1)
+#     list_result_2 = client.post("/bookList", json=list_data_2)
+#     book_list_1 = list_result_1.json()
+#     book_list_2 = list_result_2.json()
+#     follow_result_1 = client.post(f"/list/follow?user_id={follower.id}&list_id={book_list_1['id']}")
+#     follow_result_2 = client.post(f"/list/follow?user_id={follower.id}&list_id={book_list_2['id']}")
+#     following_lists = client.get(f"/list/following?user_id={follower.id}")
+#     following_data = following_lists.json()
+#     client.post(f"/list/unfollow?user_id={follower.id}&list_id={book_list_1['id']}")
+#     client.post(f"/list/unfollow?user_id={follower.id}&list_id={book_list_2['id']}")
+#     book_lists.delete_list(book_list_1["id"])
+#     book_lists.delete_list(book_list_2["id"])
+#     user_controller.delete_user_command(owner.id)
+#     user_controller.delete_user_command(follower.id)
+#     assert list_result_1.status_code == 200, f"List 1 creation failed: {list_result_1.json()}"
+#     assert list_result_2.status_code == 200, f"List 2 creation failed: {list_result_2.json()}"
+#     assert follow_result_1.status_code == 200, f"Follow list 1 failed: {follow_result_1.json()}"
+#     assert follow_result_2.status_code == 200, f"Follow list 2 failed: {follow_result_2.json()}"
+#     assert following_lists.status_code == 200, f"Fetching following lists failed: {following_lists.json()}"
+#     assert len(following_data) == 2, f"Expected 2 lists, got {len(following_data)}"
+#     assert following_data[0]["name"] == "First List"
+#     assert following_data[1]["name"] == "Second List"

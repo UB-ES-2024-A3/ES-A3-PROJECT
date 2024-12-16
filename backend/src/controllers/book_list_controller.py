@@ -88,7 +88,6 @@ class BookListController:
             raise HTTPException(status_code=400, detail="User already follows this list")
         try:
             result = add_follower(user_id, list_id)
-            print(result)
             return result
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Error following list: {e}")
@@ -98,7 +97,12 @@ class BookListController:
             raise HTTPException(status_code=400, detail="User is not following this list")
         try:
            result = remove_follower(user_id, list_id)
-           print(result)
            return result
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Error unfollowing list: {e}")
+
+    def get_lists_user_is_following(self, user_id: str):
+        try:
+            return get_lists_user_is_following(user_id)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Error retrieving followed lists: {str(e)}")

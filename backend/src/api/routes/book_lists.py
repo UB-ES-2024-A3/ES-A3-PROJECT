@@ -91,3 +91,12 @@ async def unfollow_list(user_id: str, list_id: str):
             return False
     except HTTPException as e:
         raise e
+    
+@router.get("/list/following", response_model=list)
+async def get_following_lists(user_id: str):
+    try:
+        return bookListController.get_lists_user_is_following(user_id)
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error retrieving followed lists")
