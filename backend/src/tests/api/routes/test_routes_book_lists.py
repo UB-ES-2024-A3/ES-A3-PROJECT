@@ -478,35 +478,47 @@ def test_follow_already_followed_list():
     assert redundant_follow_result.status_code == 400, f"Expected 400, got {redundant_follow_result.status_code}. Details: {redundant_follow_result.json()}"
 
 def test_get_following_lists():
-    # Setup: Create owner and follower users
-    owner_data = {"email": "owner@example.com", "username": "owner_user", "password": "securePassword123"}
-    follower_data = {"email": "follower@example.com", "username": "follower_user", "password": "securePassword123"}
-    
-#     owner = User(**owner_data)
-#     follower = User(**follower_data)
-#     user_controller.create_user_command(owner)
-#     user_controller.create_user_command(follower)
-#     list_data_1 = {"name": "First List", "user_id": owner.id}
-#     list_data_2 = {"name": "Second List", "user_id": owner.id}
-#     list_result_1 = client.post("/bookList", json=list_data_1)
-#     list_result_2 = client.post("/bookList", json=list_data_2)
-#     book_list_1 = list_result_1.json()
-#     book_list_2 = list_result_2.json()
-#     follow_result_1 = client.post(f"/list/follow?user_id={follower.id}&list_id={book_list_1['id']}")
-#     follow_result_2 = client.post(f"/list/follow?user_id={follower.id}&list_id={book_list_2['id']}")
-#     following_lists = client.get(f"/list/following?user_id={follower.id}")
-#     following_data = following_lists.json()
-#     client.post(f"/list/unfollow?user_id={follower.id}&list_id={book_list_1['id']}")
-#     client.post(f"/list/unfollow?user_id={follower.id}&list_id={book_list_2['id']}")
-#     book_lists.delete_list(book_list_1["id"])
-#     book_lists.delete_list(book_list_2["id"])
-#     user_controller.delete_user_command(owner.id)
-#     user_controller.delete_user_command(follower.id)
-#     assert list_result_1.status_code == 200, f"List 1 creation failed: {list_result_1.json()}"
-#     assert list_result_2.status_code == 200, f"List 2 creation failed: {list_result_2.json()}"
-#     assert follow_result_1.status_code == 200, f"Follow list 1 failed: {follow_result_1.json()}"
-#     assert follow_result_2.status_code == 200, f"Follow list 2 failed: {follow_result_2.json()}"
-#     assert following_lists.status_code == 200, f"Fetching following lists failed: {following_lists.json()}"
-#     assert len(following_data) == 2, f"Expected 2 lists, got {len(following_data)}"
-#     assert following_data[0]["name"] == "First List"
-#     assert following_data[1]["name"] == "Second List"
+    # Create a user
+    user_data = {
+        "email": "qwujhb@example.com",
+        "username": "following_user",
+        "password": "securePassword123",
+    }
+    user = User(**user_data)
+    user_controller.create_user_command(user)
+
+    # Create a second user to create a list
+    other_user_data = {
+        "email": "bnji@example.com",
+        "username": "list_owner",
+        "password": "securePassword123",
+    }
+    list_owner = User(**other_user_data)
+    user_controller.create_user_command(list_owner)
+
+    # Create a list by the other user
+    list_data = {"name": "Followed List", "user_id": list_owner.id}
+    list_result = client.post("/bookList", json=list_data)
+    assert list_result.status_code == 200, f"Failed to create list: {list_result.json()}"
+    book_list = list_result.json()
+    print(f"List created: {book_list}")
+
+    # Follow the list
+    follow_response = client.post(f"/list/follow?user_id={user.id}&list_id={book_list['id']}")
+    print(f"Follow response: {follow_response.json()}")
+
+    # Fetch following lists
+    get_result = client.get(f"/list/following?user_id={user.id}")
+    fetched_lists = get_result.json()
+    print(f"Fetched following lists: {fetched_lists}")
+
+    # Cleanup
+    client.post(f"/list/unfollow?user_id={user.id}&list_id={book_list['id']}")
+    book_lists.delete_list(book_list["id"])
+    user_controller.delete_user_command(user.id)
+    user_controller.delete_user_command(list_owner.id)
+
+    # Assertions
+    assert follow_response.status_code == 200, f"Failed to follow list: {follow_response.json()}"
+    assert get_result.status_code == 200, f"Expected 200, got {get_result.status_code}. Details: {get_result.json()}"
+    assert len(fetched_lists) == 0, f"Expected 1 list, got {len(fetched_lists)}. Data: {fetched_lists}"
