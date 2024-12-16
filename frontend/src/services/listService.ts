@@ -41,6 +41,20 @@ const ListService = {
             throw except.response.data.detail;
         });
     },
+    getFollowedLists: async (user_id: string) => {
+        return axios.get(
+            endpoint.dbURL + "/list/following",
+            {
+                params: {user_id: user_id}
+            }
+        )
+        .then(res => {
+            return res.data;
+        })
+        .catch(except => {
+            throw except.response.data.detail;
+        });
+    },
     getListsWithBook: async (book_id: string) => {
         const user_id = localStorage.getItem('userId');
         return axios.get(

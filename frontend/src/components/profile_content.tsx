@@ -10,6 +10,7 @@ import ListBar from './listbar';
 interface ProfileContentsProps {
     reviews: UserReviewCardProps[];
     ownLists: ListProps[];
+    followedLists: ListProps[];
     isSelfUser: boolean;
     deleteReviewCallback: (id: string) => void;
     createListCallback: () => void;
@@ -18,9 +19,10 @@ interface ProfileContentsProps {
 export interface ListProps { // TODO: should be moved to the visualize review page
     id: string;
     name: string;
+    username?: string;
 }
 
-const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, isSelfUser, deleteReviewCallback: deleteCallback, createListCallback }) => {
+const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, followedLists, isSelfUser, deleteReviewCallback: deleteCallback, createListCallback }) => {
     const router = useRouter();
     const [activeTab, setActiveTab] = useState('reviews');
     const [reviewList, setReviewList] = useState(reviews);
@@ -118,12 +120,12 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, is
         {activeTab === 'followed-lists' && (
             <>  
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {ownListsList.length ? (ownListsList.map(list => (
+                {followedLists.length ? (followedLists.map(list => (
                     <div key={list.id} style={{ margin: '3px' }}>
                         <ListBar
                             key={list.id}
                             id={list.id}
-                            author= "pepita"
+                            username= {list.username}
                             name={list.name}
                             handleOpenList={handleOpenList}
                         />
