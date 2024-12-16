@@ -41,8 +41,8 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, fo
         setOwnListsList(ownLists);
     }, [ownLists]);
 
-    const handleOpenList = (id: string, name: string) => {
-        if (isSelfUser) {
+    const handleOpenList = (id: string, name: string, ownLists: boolean) => {
+        if (ownLists) {
             const combinedData = `${id}|${name}`;
             setTimelineState({ page: "list_profile", data: combinedData }); 
             router.push(`profile/list/${id}?name=${encodeURIComponent(name)}`); 
@@ -108,6 +108,7 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, fo
                             id={list.id}
                             name={list.name}
                             handleOpenList={handleOpenList}
+                            ownLists={true}
                         />
                     </div>
                 ))):(
@@ -129,6 +130,7 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, fo
                             username= {list.username}
                             name={list.name}
                             handleOpenList={handleOpenList}
+                            ownLists={false}
                         />
                     </div>
                 ))):(

@@ -4,12 +4,13 @@ interface ListBarProps{
     id: string;
     name: string;
     username?: string;
-    handleOpenList: (id:string, name:string) => void;
+    handleOpenList: (id:string, name:string, ownLists: boolean) => void;
+    ownLists: boolean;
 }
 
-const ListBar: React.FC<ListBarProps> = ({id, name, username, handleOpenList}) => {
+const ListBar: React.FC<ListBarProps> = ({id, name, username, handleOpenList, ownLists}) => {
     const handleClickList = () => {
-        handleOpenList(id, name);
+        handleOpenList(id, name, ownLists);
     };
 
     return (
