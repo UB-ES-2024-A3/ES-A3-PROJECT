@@ -20,13 +20,54 @@ const ListContents: React.FC = () => {
     const { listId } = router.query;
     const name = router.query.name as string; 
     const [username, setUsername] = useState('');
+    const [followButton, setFollowButton] = useState({state: false, label: '', class: ''});
+    const [isLoadingFollow, setIsLoadingFollow] = useState(true);
+    const isOtherUserList = router.pathname.startsWith('/timeline');
 
      
     const handleOpenBook = (id: string) =>{
       setBookResults([]);
       setTimelineState({page: "book", data: id});
       router.push("/timeline/book/"+ id)
-    }
+    };
+
+    const handleClickButton = async () => {
+      setIsLoadingFollow(true);
+      setFollowButton({...followButton, class: 'waiting'});
+      const isFollowing = followButton.state;
+      const id = listId as string;
+      if (isFollowing) {
+        ListService.unfollowList(id)
+        .then(success => {
+          if (success) {
+            setFollowButton({state: false, label: 'Follow list', class: ''});
+          } else {
+            setFollowButton({...followButton, class: 'secondaryButton'});
+          }
+        })
+        .catch(except => {
+          console.log(except);
+          setFollowButton({...followButton, class: 'secondaryButton'});
+        })
+        .finally(() => setIsLoadingFollow(false));
+      } else {
+        ListService.followList(id)
+        .then(success => {
+          if (success) {
+            setFollowButton({state: true, label: 'Unfollow list', class: 'secondaryButton'});
+          } else {
+            setFollowButton({...followButton, class: ''});
+          }
+          setIsLoadingBooks(false);
+        })
+        .catch(except => {
+          console.log(except);
+          setFollowButton({...followButton, class: ''});
+          setIsLoadingFollow(false);
+        })
+        .finally(() => setIsLoadingFollow(false));
+      }
+    };
 
     useEffect(() => {
       if(listId){
@@ -43,11 +84,35 @@ const ListContents: React.FC = () => {
             setBookResults([]);
             setIsLoadingBooks(false);
         });
+        ListService.getIsListFollowed(id)
+        .then(isFollowed => {
+          if (isFollowed) {
+            setFollowButton({state: true, label: 'Unfollow list', class: 'secondaryButton'});
+          } else {
+            setFollowButton({...followButton, label: 'Follow list'});
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        })
+        .finally(() => setIsLoadingFollow(false));
       } 
     }, [listId]);
 
     return(
         <div style={{ width: '100%', marginTop: '0px', display: 'flex', flexDirection: 'column'}}>
+            {isOtherUserList && (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'end', margin: '20px 33px 0px 0px' }}>
+                <button
+                    id="follow-list-btn"
+                    className={followButton.class}
+                    onClick={handleClickButton}
+                    disabled={isLoadingFollow}
+                >
+                      {followButton.label}
+                </button>
+            </div>
+            )}
             <div style={{ 
                 margin: '20px', 
                 textAlign: 'center', 
