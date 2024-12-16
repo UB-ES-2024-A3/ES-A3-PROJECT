@@ -26,8 +26,9 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, is
     const [reviewList, setReviewList] = useState(reviews);
     const [ownListsList, setOwnListsList] = useState<ListProps[]>(ownLists);
     const no_reviews_message = isSelfUser? "You have no reviews yet." : "This user has not made any reviews yet.";
-    const no_lists_message = isSelfUser? "You have no lists yet." : "This user has not made any lists yet.";
-    const {timelineState,setTimelineState} = useTimelineContext();
+    const user_no_lists_message = isSelfUser? "You have no lists yet." : "This user has not made any lists yet.";
+    const followed_no_lists_message = isSelfUser? "No lists followed." : "This user doesn't follow any lists.";
+    const {setTimelineState} = useTimelineContext();
     
     useEffect(() => {
         setReviewList(reviews);
@@ -108,7 +109,28 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, is
                     </div>
                 ))):(
                     <div style={{margin: '5px', textAlign: 'center', justifyContent: 'center', height: '80vh', display: 'flex', flexDirection: 'column'}}> 
-                        <h2 style={{fontSize: '2em', color: 'grey'}}>{no_lists_message}</h2>
+                        <h2 style={{fontSize: '2em', color: 'grey'}}>{user_no_lists_message}</h2>
+                    </div>
+                )}
+                </div>
+            </>
+        )}
+        {activeTab === 'followed-lists' && (
+            <>  
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                {ownListsList.length ? (ownListsList.map(list => (
+                    <div key={list.id} style={{ margin: '3px' }}>
+                        <ListBar
+                            key={list.id}
+                            id={list.id}
+                            author= "pepita"
+                            name={list.name}
+                            handleOpenList={handleOpenList}
+                        />
+                    </div>
+                ))):(
+                    <div style={{margin: '5px', textAlign: 'center', justifyContent: 'center', height: '80vh', display: 'flex', flexDirection: 'column'}}> 
+                        <h2 style={{fontSize: '2em', color: 'grey'}}>{followed_no_lists_message}</h2>
                     </div>
                 )}
                 </div>
