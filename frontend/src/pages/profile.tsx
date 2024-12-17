@@ -13,6 +13,7 @@ const Profile = () => {
   const router = useRouter();
   const [reviews, setReviews] = useState<UserReviewCardProps[]>([]);
   const [ownLists, setOwnLists] = useState<ListProps[]>([]);
+  const [followedLists, setFollowedLists] = useState<ListProps[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
   const [userData, setUserData] = useState({"username": '', "followers": null, "following": null});
   const [newList, setNewList] = useState(false);
@@ -67,6 +68,24 @@ const Profile = () => {
             console.log(except);
         });
         getOwnLists(userId);
+        ListService.getFollowedLists(userId)
+        .then((lists: ListProps[]) => {
+            const updatedLists = lists
+                ?.filter(list => list.list_id !== undefined) 
+                .map(list => ({
+                    ...list,
+                    id: list.list_id as string, 
+                }));
+    
+            console.log(updatedLists);
+            if (updatedLists) {
+                setFollowedLists(updatedLists as ListProps[]); 
+            }
+        })
+        .catch(except => {
+            console.log(except);
+            setFollowedLists([]);
+        });
     }
   }, [userId]);
 
@@ -98,6 +117,7 @@ const Profile = () => {
                 <ProfileContents
                     reviews={reviews}
                     ownLists={ownLists}
+                    followedLists={followedLists}
                     isSelfUser={true}
                     deleteReviewCallback={deleteReviewCallback}
                     createListCallback={updateLists}

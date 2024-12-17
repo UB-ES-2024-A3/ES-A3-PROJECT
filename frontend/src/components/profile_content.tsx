@@ -10,6 +10,7 @@ import ListBar from './listbar';
 interface ProfileContentsProps {
     reviews: UserReviewCardProps[];
     ownLists: ListProps[];
+    followedLists: ListProps[];
     isSelfUser: boolean;
     deleteReviewCallback: (id: string) => void;
     createListCallback: () => void;
@@ -18,16 +19,20 @@ interface ProfileContentsProps {
 export interface ListProps { // TODO: should be moved to the visualize review page
     id: string;
     name: string;
+    username?: string;
+    list_id?: string;
+    user_id: string;
 }
 
-const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, isSelfUser, deleteReviewCallback: deleteCallback, createListCallback }) => {
+const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, followedLists, isSelfUser, deleteReviewCallback: deleteCallback, createListCallback }) => {
     const router = useRouter();
     const [activeTab, setActiveTab] = useState('reviews');
     const [reviewList, setReviewList] = useState(reviews);
     const [ownListsList, setOwnListsList] = useState<ListProps[]>(ownLists);
     const no_reviews_message = isSelfUser? "You have no reviews yet." : "This user has not made any reviews yet.";
-    const no_lists_message = isSelfUser? "You have no lists yet." : "This user has not made any lists yet.";
-    const {timelineState,setTimelineState} = useTimelineContext();
+    const user_no_lists_message = isSelfUser? "You have no lists yet." : "This user has not made any lists yet.";
+    const followed_no_lists_message = isSelfUser? "No lists followed." : "This user doesn't follow any lists.";
+    const {setTimelineState} = useTimelineContext();
     
     useEffect(() => {
         setReviewList(reviews);
@@ -37,11 +42,12 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, is
         setOwnListsList(ownLists);
     }, [ownLists]);
 
-    const handleOpenList = (id: string, name: string) => {
-        if (isSelfUser) {
+    const handleOpenList = (id: string, name: string, username: string | undefined, user_id: string) => {
+        const storedUserId = localStorage.getItem('userId');
+        if ((!username && isSelfUser) || (!isSelfUser && user_id == storedUserId)) {
             const combinedData = `${id}|${name}`;
             setTimelineState({ page: "list_profile", data: combinedData }); 
-            router.push(`profile/list/${id}?name=${encodeURIComponent(name)}`); 
+            router.push(`/profile/list/${id}?name=${encodeURIComponent(name)}`); 
         }
         else {
             const combinedData = `${id}|${name}`;
@@ -103,12 +109,35 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, is
                             key={list.id}
                             id={list.id}
                             name={list.name}
+                            user_id={list.user_id}
                             handleOpenList={handleOpenList}
                         />
                     </div>
                 ))):(
                     <div style={{margin: '5px', textAlign: 'center', justifyContent: 'center', height: '80vh', display: 'flex', flexDirection: 'column'}}> 
-                        <h2 style={{fontSize: '2em', color: 'grey'}}>{no_lists_message}</h2>
+                        <h2 style={{fontSize: '2em', color: 'grey'}}>{user_no_lists_message}</h2>
+                    </div>
+                )}
+                </div>
+            </>
+        )}
+        {activeTab === 'followed-lists' && (
+            <>  
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                {followedLists.length ? (followedLists.map(list => (
+                    <div key={list.id} style={{ margin: '3px' }}>
+                        <ListBar
+                            key={list.id}
+                            id={list.id}
+                            username= {list.username}
+                            name={list.name}
+                            user_id={list.user_id}
+                            handleOpenList={handleOpenList}
+                        />
+                    </div>
+                ))):(
+                    <div style={{margin: '5px', textAlign: 'center', justifyContent: 'center', height: '80vh', display: 'flex', flexDirection: 'column'}}> 
+                        <h2 style={{fontSize: '2em', color: 'grey'}}>{followed_no_lists_message}</h2>
                     </div>
                 )}
                 </div>
