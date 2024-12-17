@@ -37,6 +37,17 @@ const FollowersService = {
             throw except;
         });
     },
+    getFollowersFollowing : async (selfUserId: string) => {
+        return axios.get(
+            endpoint.dbURL + '/users/followers_following/' + selfUserId 
+        )
+        .then(response => {
+            return response.data;
+        })
+        .catch(except => {
+            throw except;
+        });
+    },
 };
 
 export default FollowersService;

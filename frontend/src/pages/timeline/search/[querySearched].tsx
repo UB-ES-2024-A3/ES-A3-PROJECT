@@ -31,8 +31,8 @@ const ListSearch: React.FC<ListSearchProps> = () => {
     const [isLoadingBooks, setIsLoadingBooks] = useState(false);
     const [isLoadingUsers, setIsLoadingUsers] = useState(false);
     const {timelineState,setTimelineState} = useTimelineContext();
-    const search = timelineState.data;
     const router = useRouter();
+    const search = router.query.querySearched as string;
     const [activeTab, setActiveTab] = useState('books');
 
      

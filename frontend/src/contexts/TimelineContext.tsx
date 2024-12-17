@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from 'react';
 
 type TimelineState = {
-  page: 'book' | 'search' | 'user';
+  page: 'book' | 'search' | 'user' | 'list_profile' | 'list_timeline';
   data: string ;
 };
 

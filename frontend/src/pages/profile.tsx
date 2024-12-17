@@ -4,13 +4,20 @@ import { useRouter } from 'next/router';
 import ReviewService from '@/services/reviewService';
 import UserService from '@/services/userService';
 import { UserReviewCardProps } from './timeline/user/[userId]';
-import ProfileContents from '@/components/profile_content';
+import ProfileContents, { ListProps } from '@/components/profile_content';
+import ListService from '@/services/listService';
+import FollowersFollowingPopup from '@/components/followers_following_popup';
+
 
 const Profile = () => {
   const router = useRouter();
   const [reviews, setReviews] = useState<UserReviewCardProps[]>([]);
+  const [ownLists, setOwnLists] = useState<ListProps[]>([]);
+  const [followedLists, setFollowedLists] = useState<ListProps[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
   const [userData, setUserData] = useState({"username": '', "followers": null, "following": null});
+  const [newList, setNewList] = useState(false);
+
   useEffect(() => {
     const storedUserId = localStorage.getItem('userId');
     setUserId(storedUserId); 
@@ -27,6 +34,21 @@ const Profile = () => {
     });
     setReviews(reviews.slice(0, reviewIndex).concat(reviews.slice(reviewIndex + 1)));
   };
+
+  const updateLists = () => {
+    setNewList(!newList);
+  };
+
+  function getOwnLists(userId: string) {
+    ListService.getUserLists(userId)
+    .then(lists => {
+      setOwnLists(lists);
+    })
+    .catch(except => {
+      console.log(except);
+      setOwnLists([]);
+    });
+  }
 
   useEffect(() => {
     if (userId){
@@ -45,8 +67,33 @@ const Profile = () => {
         .catch(except => {
             console.log(except);
         });
+        getOwnLists(userId);
+        ListService.getFollowedLists(userId)
+        .then((lists: ListProps[]) => {
+            const updatedLists = lists
+                ?.filter(list => list.list_id !== undefined) 
+                .map(list => ({
+                    ...list,
+                    id: list.list_id as string, 
+                }));
+    
+            console.log(updatedLists);
+            if (updatedLists) {
+                setFollowedLists(updatedLists as ListProps[]); 
+            }
+        })
+        .catch(except => {
+            console.log(except);
+            setFollowedLists([]);
+        });
     }
-}, [userId]);
+  }, [userId]);
+
+  useEffect(() => {
+    if (userId)
+      getOwnLists(userId);
+  }, [newList]);
+
   return (
     <NavBar>
         <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -61,15 +108,20 @@ const Profile = () => {
                             gap: '10px'
                             }}
                         >
-                            <span style={{ fontWeight: 'bold', fontSize: '0.85rem' }}>{userData.followers}</span>
-                            <span style={{ fontSize: '0.85rem', color: '#6b7280' }}>Followers</span>
-                            <span style={{ fontWeight: 'bold', fontSize: '0.85rem', marginLeft: '10px' }}>{userData.following}</span>
-                            <span style={{ fontSize: '0.85rem', color: '#6b7280' }}>Following</span>
+                            <FollowersFollowingPopup amount={userData.followers} _tabSelected='Followers' userId={userId}></FollowersFollowingPopup>
+                            <FollowersFollowingPopup amount={userData.following} _tabSelected='Following' userId={userId}></FollowersFollowingPopup>
                         </div>
                     </div>                    
                     <button id="logout_button" onClick={handleLogout}>Logout</button>
                 </header>
-                <ProfileContents reviews={reviews} isSelfUser={true} callback={deleteReviewCallback}/>
+                <ProfileContents
+                    reviews={reviews}
+                    ownLists={ownLists}
+                    followedLists={followedLists}
+                    isSelfUser={true}
+                    deleteReviewCallback={deleteReviewCallback}
+                    createListCallback={updateLists}
+                />
             </div>
         </div>
     </NavBar>

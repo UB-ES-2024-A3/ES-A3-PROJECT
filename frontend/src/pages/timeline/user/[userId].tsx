@@ -3,8 +3,9 @@ import NavBar from '@/components/navbar';
 import { useRouter } from 'next/router';
 import ReviewService from '@/services/reviewService';
 import UserService from '@/services/userService';
-import ProfileContents from '@/components/profile_content';
+import ProfileContents, { ListProps } from '@/components/profile_content';
 import FollowersService from '@/services/followersService';
+import ListService from '@/services/listService';
 
 export interface UserReviewCardProps {
     title: string,
@@ -20,12 +21,15 @@ export interface UserReviewCardProps {
 
 const UserProfile = () => {
   const [reviews, setReviews] = useState<UserReviewCardProps[]>([]);
+  const [ownLists, setOwnLists] = useState<ListProps[]>([]);
   const router = useRouter()
   let userId = router.query.userId as string;
   const [selfUserId, setSelfUserId] = useState('');
   const [userData, setUserData] = useState({"username": '', "followers": null, "following": null});
   const [follows, setFollows] = useState<boolean|null>(null);
   const [followButton, setFollowButton] = useState({label: "Follow", style: ""});
+  const [followedLists, setFollowedLists] = useState<ListProps[]>([]);
+  
 
   useEffect(() => {
     const storedUserId = localStorage.getItem('userId') as string;
@@ -72,6 +76,32 @@ const UserProfile = () => {
         })
         .catch(except => {
             console.log(except);
+        });
+        ListService.getUserLists(userId)
+        .then(lists => {
+            setOwnLists(lists);
+        })
+        .catch(except => {
+            console.log(except);
+            setOwnLists([]);
+        });
+        ListService.getFollowedLists(userId)
+        .then((lists: ListProps[]) => {
+            const updatedLists = lists
+                ?.filter(list => list.list_id !== undefined) 
+                .map(list => ({
+                    ...list,
+                    id: list.list_id as string, 
+                }));
+    
+            console.log(updatedLists);
+            if (updatedLists) {
+                setFollowedLists(updatedLists as ListProps[]); 
+            }
+        })
+        .catch(except => {
+            console.log(except);
+            setFollowedLists([]);
         });
     }
 }, [userId, router.isReady, follows]);
@@ -126,7 +156,14 @@ const handleFollow = () => {
                         <button onClick={handleFollow} id={"follow"} className={followButton.style}>{followButton.label}</button>
                     }
                 </header>
-                <ProfileContents reviews={reviews} isSelfUser={false} callback={() => {}}/>
+                <ProfileContents
+                    followedLists={followedLists}
+                    reviews={reviews}
+                    ownLists={ownLists}
+                    isSelfUser={false}
+                    deleteReviewCallback={() => {}}
+                    createListCallback={() => {}}
+                />
             </div>
         </div>
     </NavBar>
