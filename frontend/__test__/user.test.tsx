@@ -169,10 +169,6 @@ describe("Button Text Test", () => {
     const driver = await createWebDriver();
     try{
         await driver.get(profileUrl);
-        await driver.executeScript(`
-          localStorage.setItem('isAuthenticated', 'true');
-          localStorage.setItem('userId', '${userTest.id}');
-        `);
         
         let followed_lists_tab = driver.wait(
           until.elementLocated(By.id("profile-followed-lists-tab")), 120000
