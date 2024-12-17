@@ -17,15 +17,15 @@ class UserController:
         # Check email validity
         if not re.match(r"[^@]+@[^@]+\.[^@]+", user.email):
             raise HTTPException(status_code=400, detail="Invalid email format")
-        if len(user.email) > 20:
+        if len(user.email) > 50:
             raise HTTPException(
-                status_code=400, detail="Email cannot be longer than 20 characters"
+                status_code=400, detail="Email cannot be longer than 50 characters"
             )
 
         # Check username length
-        if len(user.username) > 15:
+        if len(user.username) > 35:
             raise HTTPException(
-                status_code=400, detail="Username cannot be longer than 15 characters"
+                status_code=400, detail="Username cannot be longer than 35 characters"
             )
 
         # Check if username and email are unique
@@ -157,9 +157,9 @@ class UserController:
 
     def search_by_username(self, username: str):
         # Validate username length
-        if len(username) > 15:
+        if len(username) > 35:
             raise HTTPException(
-                status_code=400, detail="Username cannot be longer than 15 characters"
+                status_code=400, detail="Username cannot be longer than 35 characters"
             )
 
         # Searches for a user by username
@@ -189,9 +189,9 @@ class UserController:
             return False
     def search_users_by_partial_username(self, username: str, max_num: int):
         # Validate username length
-        if len(username) < 1 or len(username) > 15:
+        if len(username) < 1 or len(username) > 35:
             raise HTTPException(
-                status_code=400, detail="Username must be between 1 and 15 characters."
+                status_code=400, detail="Username must be between 1 and 35 characters."
             )
         
         # Validate max_num is within the allowed range
