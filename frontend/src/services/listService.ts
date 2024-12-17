@@ -35,7 +35,7 @@ const ListService = {
             endpoint.dbURL + '/bookList/' + user_id
         )
         .then(res => {
-            return res.data;
+            return res.data.reverse();
         })
         .catch(except => {
             throw except.response.data.detail;
