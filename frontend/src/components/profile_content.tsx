@@ -21,6 +21,7 @@ export interface ListProps { // TODO: should be moved to the visualize review pa
     name: string;
     username?: string;
     list_id?: string;
+    user_id: string;
 }
 
 const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, followedLists, isSelfUser, deleteReviewCallback: deleteCallback, createListCallback }) => {
@@ -41,11 +42,12 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, fo
         setOwnListsList(ownLists);
     }, [ownLists]);
 
-    const handleOpenList = (id: string, name: string, ownLists: boolean) => {
-        if (ownLists) {
+    const handleOpenList = (id: string, name: string, username: string | undefined, user_id: string) => {
+        const storedUserId = localStorage.getItem('userId');
+        if ((!username && isSelfUser) || (!isSelfUser && user_id == storedUserId)) {
             const combinedData = `${id}|${name}`;
             setTimelineState({ page: "list_profile", data: combinedData }); 
-            router.push(`profile/list/${id}?name=${encodeURIComponent(name)}`); 
+            router.push(`/profile/list/${id}?name=${encodeURIComponent(name)}`); 
         }
         else {
             const combinedData = `${id}|${name}`;
@@ -107,8 +109,8 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, fo
                             key={list.id}
                             id={list.id}
                             name={list.name}
+                            user_id={list.user_id}
                             handleOpenList={handleOpenList}
-                            ownLists={true}
                         />
                     </div>
                 ))):(
@@ -129,8 +131,8 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, fo
                             id={list.id}
                             username= {list.username}
                             name={list.name}
+                            user_id={list.user_id}
                             handleOpenList={handleOpenList}
-                            ownLists={false}
                         />
                     </div>
                 ))):(
