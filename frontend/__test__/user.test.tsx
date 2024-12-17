@@ -164,4 +164,33 @@ describe("Button Text Test", () => {
         await driver.quit();
     }
   });
+  test("Check go to followed lists", async () => {
+
+    const driver = await createWebDriver();
+    try{
+        await driver.get(profileUrl);
+        await driver.executeScript(`
+          localStorage.setItem('isAuthenticated', 'true');
+          localStorage.setItem('userId', '${userTest.id}');
+        `);
+        
+        let followed_lists_tab = driver.wait(
+          until.elementLocated(By.id("profile-followed-lists-tab")), 120000
+        );
+
+        await followed_lists_tab.click();
+
+        let followed_no_lists_message = driver.wait(
+            until.elementLocated(By.id("followed_no_lists_message")), 120000
+          );
+          let messageText = followed_no_lists_message.getText();
+
+          messageText.then((text) => {
+            expect(text).toEqual("No lists followed.");
+          });
+
+    } finally{
+        await driver.quit();
+    }
+  });
 });
