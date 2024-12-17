@@ -75,6 +75,7 @@ const ListContents: React.FC = () => {
         const id = listId as string;
         ListService.getBooksOfList(id)
         .then(result => {
+          console.log(result)
           setUsername(result.username);
           setBookResults(result.books);
           setIsLoadingBooks(false);

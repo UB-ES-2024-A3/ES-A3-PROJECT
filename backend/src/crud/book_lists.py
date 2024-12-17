@@ -180,39 +180,16 @@ def check_ownership(user_id: str, list_id: str):
     return len(result.data) > 0
 
 def get_lists_user_is_following(user_id: str):
-    client = get_db_client()
+    supabase = get_db_client()
     
     try:
-        result = (
-            client.table("book_lists")
-            .select("id, name, user_id")
-            .eq("user_id", user_id)
-            .execute()
-        )
-        if not result.data:
-            return []
-        list_data = result.data
-
-        user_ids = list(set(entry["user_id"] for entry in list_data))
-        user_details = (
-            client.table("users")
-            .select("id, username")
-            .in_("id", user_ids)
-            .execute()
-        )
-        if not user_details.data:
-            return []
-        user_map = {user["id"]: user["username"] for user in user_details.data}
-        result = [
+        followed_lists = supabase.rpc(
+            "get_followed_lists",
             {
-                "id": list_item["id"],
-                "name": list_item["name"],
-                "user_id": list_item["user_id"],
-                "username": user_map.get(list_item["user_id"], "Unknown")
+                "given_id": user_id
             }
-            for list_item in list_data
-        ]
-        result.sort(key=lambda x: x["name"].lower())
-        return result
+        ).execute()
+        return followed_lists.data
+        
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error retrieving followed lists: {str(e)}")
