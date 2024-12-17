@@ -521,4 +521,4 @@ def test_get_following_lists():
     # Assertions
     assert follow_response.status_code == 200, f"Failed to follow list: {follow_response.json()}"
     assert get_result.status_code == 200, f"Expected 200, got {get_result.status_code}. Details: {get_result.json()}"
-    assert len(fetched_lists) == 0, f"Expected 1 list, got {len(fetched_lists)}. Data: {fetched_lists}"
+    assert len(fetched_lists) == 1, f"Expected 1 list, got {len(fetched_lists)}. Data: {fetched_lists}"
