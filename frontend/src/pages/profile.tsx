@@ -13,6 +13,7 @@ const Profile = () => {
   const router = useRouter();
   const [reviews, setReviews] = useState<UserReviewCardProps[]>([]);
   const [ownLists, setOwnLists] = useState<ListProps[]>([]);
+  const [followedLists, setFollowedLists] = useState<ListProps[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
   const [userData, setUserData] = useState({"username": '', "followers": null, "following": null});
   const [newList, setNewList] = useState(false);
@@ -38,6 +39,17 @@ const Profile = () => {
     setNewList(!newList);
   };
 
+  function getOwnLists(userId: string) {
+    ListService.getUserLists(userId)
+    .then(lists => {
+      setOwnLists(lists);
+    })
+    .catch(except => {
+      console.log(except);
+      setOwnLists([]);
+    });
+  }
+
   useEffect(() => {
     if (userId){
         ReviewService.getUserReviews(userId)
@@ -55,27 +67,31 @@ const Profile = () => {
         .catch(except => {
             console.log(except);
         });
-        ListService.getUserLists(userId)
-        .then(lists => {
-            setOwnLists(lists);
+        getOwnLists(userId);
+        ListService.getFollowedLists(userId)
+        .then((lists: ListProps[]) => {
+            const updatedLists = lists
+                ?.filter(list => list.list_id !== undefined) 
+                .map(list => ({
+                    ...list,
+                    id: list.list_id as string, 
+                }));
+    
+            console.log(updatedLists);
+            if (updatedLists) {
+                setFollowedLists(updatedLists as ListProps[]); 
+            }
         })
         .catch(except => {
             console.log(except);
-            setOwnLists([]);
+            setFollowedLists([]);
         });
     }
   }, [userId]);
 
   useEffect(() => {
     if (userId)
-        ListService.getUserLists(userId)
-        .then(lists => {
-            setOwnLists(lists);
-        })
-        .catch(except => {
-            console.log(except);
-            setOwnLists([]);
-        });
+      getOwnLists(userId);
   }, [newList]);
 
   return (
@@ -101,6 +117,7 @@ const Profile = () => {
                 <ProfileContents
                     reviews={reviews}
                     ownLists={ownLists}
+                    followedLists={followedLists}
                     isSelfUser={true}
                     deleteReviewCallback={deleteReviewCallback}
                     createListCallback={updateLists}

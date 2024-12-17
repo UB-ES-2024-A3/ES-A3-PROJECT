@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pen, ListMusic } from 'lucide-react'
+import { Pen, ListMusic, ListPlus } from 'lucide-react'
 
 
 interface ProfileNavBarProps {
@@ -18,6 +18,11 @@ const ProfileNavBar: React.FC<ProfileNavBarProps> = ({ activeTab, setActiveTab }
         id: 'created-lists',
         label: 'CREATED LISTS',
         icon: <ListMusic className="w-4 h-4" />
+        },
+        {
+        id: 'followed-lists',
+        label: 'FOLLOWED LISTS',
+        icon: <ListPlus className="w-4 h-4" />
         }
     ]
     

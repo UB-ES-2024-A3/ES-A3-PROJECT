@@ -35,6 +35,20 @@ const ListService = {
             endpoint.dbURL + '/bookList/' + user_id
         )
         .then(res => {
+            return res.data.reverse();
+        })
+        .catch(except => {
+            throw except.response.data.detail;
+        });
+    },
+    getFollowedLists: async (user_id: string) => {
+        return axios.get(
+            endpoint.dbURL + "/list/following",
+            {
+                params: {user_id: user_id}
+            }
+        )
+        .then(res => {
             return res.data;
         })
         .catch(except => {
