@@ -173,34 +173,26 @@ describe("Button Text Test", () => {
           localStorage.setItem('isAuthenticated', 'true');
           localStorage.setItem('userId', '${userTest.id}');
         `);
-
-        await driver.get(otherUserUrl);
-
-        
-        let follow_button = driver.wait(
-          until.elementLocated(By.id("follow")), 120000
+        const followedListsTab = await driver.wait(
+          until.elementLocated(By.id('profile-followed-lists-tab')),
+          10000 // 10 seconds
         );
-
-        let followButtonText = await follow_button.getText(); 
-        await follow_button.click();
-        await driver.wait(async () => {
-          let currentFollowButtonText = await follow_button.getText(); 
-          return currentFollowButtonText !== followButtonText;
-        }, 100000);
-        followButtonText = await follow_button.getText(); 
-
-        expect(followButtonText).toBe("Unfollow");
-
-        await follow_button.click();
-        await driver.wait(async () => {
-          let currentFollowButtonText = await follow_button.getText(); 
-          return currentFollowButtonText !== followButtonText;
-        }, 1000000);
-        followButtonText = await follow_button.getText(); 
-        expect(followButtonText).toBe("Follow");
-
-    } finally{
+    
+        // Click the FOLLOWED LISTS tab
+        await followedListsTab.click();
+    
+        // Wait for the "No lists followed." message to appear
+        const noListsMessage = await driver.wait(
+          until.elementLocated(By.id('followed_no_lists_message')),
+          10000 // 10 seconds
+        );
+    
+        // Verify the message text
+        const messageText = await noListsMessage.getText();
+        expect(messageText).toBe('No lists followed.');
+      } finally {
+        // Quit the WebDriver
         await driver.quit();
-    }
+      }
   });
 });
