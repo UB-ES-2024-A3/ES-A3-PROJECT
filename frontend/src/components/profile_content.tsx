@@ -137,7 +137,7 @@ const ProfileContents: React.FC<ProfileContentsProps> = ({ reviews, ownLists, fo
                     </div>
                 ))):(
                     <div style={{margin: '5px', textAlign: 'center', justifyContent: 'center', height: '80vh', display: 'flex', flexDirection: 'column'}}> 
-                        <h2 style={{fontSize: '2em', color: 'grey'}}>{followed_no_lists_message}</h2>
+                        <h2 id="followed_no_lists_message" style={{fontSize: '2em', color: 'grey'}}>{followed_no_lists_message}</h2>
                     </div>
                 )}
                 </div>
