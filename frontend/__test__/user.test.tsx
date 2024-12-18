@@ -164,4 +164,58 @@ describe("Button Text Test", () => {
         await driver.quit();
     }
   });
+  test("Check go to followed lists", async () => {
+
+    const driver = await createWebDriver();
+    try{
+        await driver.get(profileUrl);
+        await driver.executeScript(`
+          localStorage.setItem('isAuthenticated', 'true');
+          localStorage.setItem('userId', '${userTest.id}');
+        `);
+        const followedListsTab = await driver.wait(
+          until.elementLocated(By.id('profile-followed-lists-tab')),
+          10000 
+        );
+    
+        await followedListsTab.click();
+    
+        const noListsMessage = await driver.wait(
+          until.elementLocated(By.id('followed_no_lists_message')),
+          10000 
+        );
+    
+        const messageText = await noListsMessage.getText();
+        expect(messageText).toBe('No lists followed.');
+      } finally {
+        await driver.quit();
+      }
+  });
+  test("Check go to created lists", async () => {
+
+    const driver = await createWebDriver();
+    try{
+        await driver.get(profileUrl);
+        await driver.executeScript(`
+          localStorage.setItem('isAuthenticated', 'true');
+          localStorage.setItem('userId', '${userTest.id}');
+        `);
+        const followedListsTab = await driver.wait(
+          until.elementLocated(By.id('profile-created-lists-tab')),
+          10000 
+        );
+    
+        await followedListsTab.click();
+    
+        const noListsMessage = await driver.wait(
+          until.elementLocated(By.id('user_no_lists_message')),
+          10000 
+        );
+    
+        const messageText = await noListsMessage.getText();
+        expect(messageText).toBe('You have no lists yet.');
+      } finally {
+        await driver.quit();
+      }
+  });
 });
